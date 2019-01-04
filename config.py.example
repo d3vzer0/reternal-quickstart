@@ -1,0 +1,16 @@
+import os
+
+config = {
+    "mongodb": {
+        "database": "",
+        "address": "",
+        "port": ""
+    },
+    "mitre": {
+        "url":"https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
+    },
+    "metta": {
+        "exec": "exec_shell",
+        "path": "./metta"
+    }
+}

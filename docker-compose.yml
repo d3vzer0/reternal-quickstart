@@ -1,0 +1,71 @@
+# Example compose file starting all reternal components
+# Binds all interface on localhost with their default ports in a custom rtrnal network
+#
+# WARNING: This is compose uses the Development branch. Some components
+# do not have authentication enabled (mongodb, redis, flask-backend).
+# Don't be silly and run this when you didn't review the Dev branch code >:(
+
+version: '2'
+services:
+
+  mongodb:
+    image: mongo
+    restart: unless-stopped
+    networks:
+      - rtn-backend
+    ports:
+      - "127.0.0.1::27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  redis-service:
+    image: redis
+    restart: unless-stopped
+    networks:
+      - rtn-backend
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  reternal-api:
+    build: https://github.com/d3vzer0/reternal-backend.git#development
+    depends_on:
+      - mongodb
+      - redis-service
+    networks:
+      - rtn-frontend
+      - rtn-backend
+    ports:
+      - "127.0.0.1:5000:5000"
+
+    # Set the JWT_SECRET and FLASK_SECRET with... something secret obviously
+    environment:
+      JWT_SECRET: ""
+      FLASK_SECRET: ""
+
+  reternal-agent:
+    build: https://github.com/d3vzer0/reternal-agent.git#development
+    depends_on:
+      - redis-service
+      - reternal-api
+    networks:
+      - rtn-backend
+
+
+ reternal-ui:
+    build: https://github.com/d3vzer0/reternal-ui.git#development
+    depends_on:
+      - reternal-api
+    networks:
+      - rtn-frontend
+    ports:
+      - "127.0.0.1:80:80"
+
+volumes:
+  mongodb-data:
+    driver: local
+
+networks: 
+  rtn-frontend:
+    driver: local
+  rtn-backend:
+    driver: local
