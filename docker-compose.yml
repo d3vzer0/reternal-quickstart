@@ -51,13 +51,13 @@ services:
       - rtn-backend
 
 
- reternal-ui:
-    build: https://github.com/d3vzer0/reternal-ui.git#development
-    depends_on:
-      - reternal-api
-    networks:
-      - rtn-frontend
-    ports:
+  reternal-ui:
+      build: https://github.com/d3vzer0/reternal-ui.git#development
+      depends_on:
+        - reternal-api
+      networks:
+        - rtn-frontend
+      ports:
       - "127.0.0.1:80:80"
 
 volumes:
@@ -66,6 +66,6 @@ volumes:
 
 networks: 
   rtn-frontend:
-    driver: local
+    driver: bridge
   rtn-backend:
-    driver: local
+    driver: bridge
