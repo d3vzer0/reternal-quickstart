@@ -60,6 +60,7 @@ class MitreCommands(db.Document):
     commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
     metta_id = db.StringField(max_length=105)
     platform = db.StringField(max_length=30, choices=PLATFORMS, required=True)
+    name = db.StringField(max_length=100, required=True) 
 
 
 class MitreReferences(db.EmbeddedDocument):

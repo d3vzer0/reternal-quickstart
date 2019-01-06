@@ -13,6 +13,7 @@ class ImportMetta:
                 yaml_object = yaml.load(yamlfile)
                 try:
                     platform = yaml_object['os']
+                    name = yaml_object['meta']['mitre_attack_technique']
                     attack_phase = yaml_object['meta']['mitre_attack_phase']
                     technique = yaml_object['meta']['mitre_attack_technique']
                     commands = yaml_object['meta']['purple_actions']
@@ -32,7 +33,7 @@ class ImportMetta:
                         technique_input  = value.replace('cmd.exe /c', '').strip()
                         mitre_commands.append({"type":mitre_object_id['data'], "name":"exec_shell", "input":technique_input, "sleep":1})
 
-                    task_object = MitreCommand.create(mitre_object_id['data'], platform_mapping[platform], mitre_commands, metta_id, mitre_technique_id, attack_phase)
+                    task_object = MitreCommand.create(mitre_object_id['data'], platform_mapping[platform], mitre_commands, metta_id, mitre_technique_id, attack_phase, name)
 
 
                 except Exception as err:

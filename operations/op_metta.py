@@ -2,16 +2,17 @@ from operations.models import MitreCommands
 import mongoengine
 
 class MitreCommand:
-    def create(technique_id, platform, commands, metta_id, external_id, attack_phase):
+    def create(technique_id, platform, commands, metta_id, external_id, attack_phase, name):
         try:
             mitre_object = MitreCommands(
-                        technique_id = technique_id,
-                        external_id = external_id,
-                        commands = commands,
-                        platform = platform,
-                        metta_id = metta_id,
-                        kill_chain_phase = attack_phase
-                    ).save()
+                name = name,
+                technique_id = technique_id,
+                external_id = external_id,
+                commands = commands,
+                platform = platform,
+                metta_id = metta_id,
+                kill_chain_phase = attack_phase
+            ).save()
                     
             result = {"result":"success", "message":"Succesfully added Mitre command/technique reference to DB"}
 
