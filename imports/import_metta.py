@@ -1,4 +1,4 @@
-from operations import MitreCommand
+from operations import MitreCommand, Mitre
 from generic import FindFiles
 from config import config
 import glob
@@ -13,18 +13,26 @@ class ImportMetta:
                 yaml_object = yaml.load(yamlfile)
                 try:
                     platform = yaml_object['os']
-                    category = yaml_object['meta']['mitre_attack_phase']
+                    attack_phase = yaml_object['meta']['mitre_attack_phase']
                     technique = yaml_object['meta']['mitre_attack_technique']
                     commands = yaml_object['meta']['purple_actions']
+                    mitre_link = yaml_object['meta']['mitre_link']
+                    mitre_technique_id = mitre_link.split('/')[-1]
+                    metta_id = yaml_object['uuid']
+
                     platform_mapping = {
                         "windows":"Windows",
                         "linux":"Linux",
                         "osx":"macOS"
                     }
-
+                
+                    mitre_object_id = Mitre.get(mitre_technique_id)
+                    mitre_commands = []
                     for key, value in commands.items():
                         technique_input  = value.replace('cmd.exe /c', '').strip()
-                        task_object = MitreCommand.create(config['metta']['exec'], technique_input, 0)
+                        mitre_commands.append({"type":mitre_object_id['data'], "name":"exec_shell", "input":technique_input, "sleep":1})
+
+                    task_object = MitreCommand.create(mitre_object_id['data'], platform_mapping[platform], mitre_commands, metta_id, mitre_technique_id, attack_phase)
 
 
                 except Exception as err:

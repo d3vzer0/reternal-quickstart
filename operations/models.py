@@ -45,12 +45,21 @@ class Commands(db.Document):
     platform = db.ListField(db.StringField(max_length=50, default="all"))
 
 
-class MitreCommands(db.Document):
-    technique_id = db.StringField(max_length=100, required=True, unique=True)
-    command = db.StringField(max_length=100, required=True)
+class TaskCommands(db.EmbeddedDocument):
+    type = db.StringField(max_length=100, required=True)
+    name = db.StringField(max_length=150, required=True)
     input = db.StringField(max_length=900, required=False)
-    idle_time = db.IntField()
-    metta_id = db.StringField(max_length=35)
+    sleep = db.IntField(default=0)
+
+
+PLATFORMS = ('Windows', 'Linux', 'All', 'macOS')
+class MitreCommands(db.Document):
+    technique_id = db.StringField(max_length=200, required=True)
+    external_id = db.StringField(max_length=100, required=True)
+    kill_chain_phase = db.StringField(max_length=100, required=True)
+    commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
+    metta_id = db.StringField(max_length=105)
+    platform = db.StringField(max_length=30, choices=PLATFORMS, required=True)
 
 
 class MitreReferences(db.EmbeddedDocument):
