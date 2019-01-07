@@ -1,7 +1,7 @@
 #  RE:TERNAL
 -------------
 
-<img src="readme_img/reternal.png" alt="Drawing" style="width: 300px;"/>
+<img src="https://i.postimg.cc/7hwhx4Dp/reternal.png" alt="Drawing" style="width: 300px;"/>
 
 ![VueJS](https://img.shields.io/badge/VueJS-2-green.svg)
 ![version](https://img.shields.io/badge/Version-Alpha_0.0.1-orange.svg)
