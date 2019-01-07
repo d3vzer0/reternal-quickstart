@@ -54,3 +54,18 @@ This project has been re-developed so many times, it will probably never really 
   - MITRE ATT&CK - Framework used for mapping simulations: https://attack.mitre.org/wiki/Main_Page
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
 
+
+### Screenshots
+#### Technique mapping
+![alt text](https://i.postimg.cc/nrgvrNWp/technique-mapping.png)
+
+
+#### Recipe builder
+![alt text](https://i.postimg.cc/qRBc5snV/recipe-builder.png)
+
+#### Interactive terminal
+![alt text](https://i.postimg.cc/V679QJBS/reternal-terminal.png)
+
+
+#### Task History
+![alt text](https://i.postimg.cc/kMpNTtgz/task-history.png)
