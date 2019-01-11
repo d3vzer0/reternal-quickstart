@@ -18,6 +18,7 @@ and import Mitre and Metta databases.
 - **UI:** https://github.com/d3vzer0/reternal-ui.git
 - **Agent:** https://github.com/d3vzer0/reternal-agent.git
 - **Quickstart:** https://github.com/d3vzer0/reternal-quickstart.git
+- **Mitre/Command Mapping:** https://github.com/d3vzer0/reternal-mitre.git
 
 #### Component installation
 Reternal components are primarily aimed to be run as docker containers since the component configuration depends on environment variables set by docker-compose or the dockerfile. A docker-compose with all the default options can be found on the reternal-quickstart repository. If you don't want to run the service within containers, adjust the config.py files with your own custom values.
