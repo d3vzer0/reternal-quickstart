@@ -1,4 +1,4 @@
-from imports import ImportMetta, ImportMitre, ImportUser, ImportCommand
+from imports import Mapping, ImportMitre, ImportUser, ImportCommand
 import argparse, getpass
 
 
@@ -6,8 +6,8 @@ function_mapping = {
     "mitre": {
         "import":ImportMitre.update
     },
-    "metta": {
-        "import":ImportMetta.update
+    "mapping": {
+        "import":Mapping.update
     },
     "user":{
         "create":ImportUser.create

@@ -5,7 +5,7 @@ class Mitre:
     def get(reference_id):
         try:
             mitre_object = MitreDB.objects.get(references__external_id=reference_id)
-            result = {"result":"success", "data":mitre_object.technique_id}
+            result = {"result":"success", "data":mitre_object}
 
         except mongoengine.errors.DoesNotExist:
                 result = {"result":"failed", "data":"Mitre technique does not exist"}

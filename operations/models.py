@@ -10,57 +10,53 @@ db.connect(
     port=int(config['mongodb']['port'])
 )
 
-ROLE_OPTIONS = ('user', 'admin')
+
+PLATFORMS = ('Windows', 'Linux', 'All', 'macOS')
+STATUSOPTIONS = ('Processed', 'Open', 'Processing')
+TYPEOPTIONS = ('Manual', 'Mitre', 'Actor')
+ROLEOPTIONS = ('User', 'Admin')
+
+
 class Users(db.Document):
     username = db.StringField(max_length=50, required=True, unique=True)
     password = db.StringField(max_length=128, required=True)
     salt = db.StringField(default=Random.create(20), max_length=20, required=True)
-
-    role = db.StringField(max_length=20, required=True, default="user", choices=ROLE_OPTIONS)
+    role = db.StringField(max_length=20, required=True, default="User", choices=ROLEOPTIONS)
     email = db.EmailField(required=True)
 
     meta = {
         'ordering': ['-username'],
     }
 
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.username
-
-
-class Commands(db.Document):
-    name = db.StringField(max_length=100, required=True, unique=True)
-    type = db.StringField(max_length=20, required=True)
-    platform = db.ListField(db.StringField(max_length=50, default="all"))
 
 
 class TaskCommands(db.EmbeddedDocument):
-    type = db.StringField(max_length=100, required=True)
+    reference = db.StringField(max_length=100, required=False, default=None)
+    type = db.StringField(max_length=50, required=True, choices=TYPEOPTIONS)
     name = db.StringField(max_length=150, required=True)
     input = db.StringField(max_length=900, required=False)
     sleep = db.IntField(default=0)
 
 
-PLATFORMS = ('Windows', 'Linux', 'All', 'macOS')
-class MitreCommands(db.Document):
+class Commands(db.Document):
+    name = db.StringField(max_length=100, required=True, unique=True)
+    reference = db.StringField(max_length=100, required=False, default=None)
+    type = db.StringField(max_length=20, required=True, choices=TYPEOPTIONS)
+    platform = db.ListField(db.StringField(max_length=50, default="all"))
+
+
+class CommandMapping(db.Document):
+    author = db.StringField(max_length=100, required=False)
+    name = db.StringField(max_length=100, required=True, unique_with=['technique_id', 'platform', 'kill_chain_phase'])
+    description = db.StringField(max_length=200, required=False)
+    reference = db.StringField(max_length=100, required=False, default=None)
+
     technique_id = db.StringField(max_length=200, required=True)
+    technique_name = db.StringField(max_length=100, required=True)
     external_id = db.StringField(max_length=100, required=True)
     kill_chain_phase = db.StringField(max_length=100, required=True)
-    commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
-    metta_id = db.StringField(max_length=105)
     platform = db.StringField(max_length=30, choices=PLATFORMS, required=True)
-    name = db.StringField(max_length=100, required=True) 
+    commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
 
 
 class MitreReferences(db.EmbeddedDocument):
@@ -70,7 +66,6 @@ class MitreReferences(db.EmbeddedDocument):
     description = db.StringField(max_length=1000)
 
 
-PLATFORMS = ('Windows', 'Linux', 'All', 'macOS')
 class Mitre(db.Document):
     references = db.EmbeddedDocumentListField('MitreReferences')
     platforms = db.ListField(db.StringField(max_length=50, default="all"))
@@ -81,13 +76,3 @@ class Mitre(db.Document):
     description = db.StringField(max_length=9000)
     data_sources = db.ListField(db.StringField(max_length=100))
     detection = db.StringField(max_length=1000)
-
-
-class RecipeTechniques(db.EmbeddedDocument):
-    technique = db.ReferenceField('Mitre')
-    idle_time = db.IntField()
-
-
-class Recipe(db.Document):
-    name = db.StringField(max_length=100)
-    techniques = db.EmbeddedDocumentListField(RecipeTechniques)
