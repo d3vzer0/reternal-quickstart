@@ -18,6 +18,7 @@ services:
     volumes:
       - mongodb-data:/data/db
 
+
   redis-service:
     image: redis
     restart: unless-stopped
@@ -25,6 +26,7 @@ services:
       - rtn-backend
     ports:
       - "127.0.0.1:6379:6379"
+
 
   reternal-api:
     build: https://github.com/d3vzer0/reternal-backend.git#development
@@ -41,6 +43,21 @@ services:
     environment:
       JWT_SECRET: ""
       FLASK_SECRET: ""
+
+
+  api-socket:
+    build: https://github.com/d3vzer0/reternal-backend.git#development
+    depends_on:
+      - redis-service
+    networks:
+      - rtn-backend
+
+    # Set the JWT_SECRET and FLASK_SECRET with... something secret obviously
+    environment:
+      JWT_SECRET: ""
+      FLASK_SECRET: ""
+    command: ["celery", "-A", "app.tasks.listener.celery", "worker", "-Q", "api"]
+
 
   reternal-agent:
     build: https://github.com/d3vzer0/reternal-agent.git#development
@@ -59,6 +76,7 @@ services:
         - rtn-frontend
       ports:
       - "127.0.0.1:80:80"
+
 
 volumes:
   mongodb-data:
