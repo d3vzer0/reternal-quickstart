@@ -2,7 +2,7 @@ from operations.models import Commands
 import mongoengine
 
 class Command:
-    def create(name, command_type="manual"):
+    def create(name, command_type="Manual"):
         try:
             commands = Commands(
               name=name,
