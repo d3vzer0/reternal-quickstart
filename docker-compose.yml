@@ -83,7 +83,7 @@ services:
       - redis-service
       - mongodb
 
-    # Set the FLASK_SECRET with... something secret obviously
+    # Set the C2_SECRET with... something secret obviously
     environment:
       C2_SECRET: ""
       C2_PORT: 9000

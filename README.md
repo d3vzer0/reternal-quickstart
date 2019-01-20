@@ -39,25 +39,34 @@ Reternal components are primarily aimed to be run as docker containers since the
 
 #### Pre-Requirements
   - docker
-  - pip: mongoengine and pyyaml
+  - docker-compose
+  - python3
+  - pip (3)
 
 #### Getting started
-- **Clone this repository to any location on your system:** git clone https://github.com/d3vzer0/reternal-quickstart
-- **Clone the reternal-mitre repo containing pre-defined simulations:** git clone https://github.com/d3vzer0/reternal-mitre
-- **Navigate to the reternal-quickstart directory:** cd reternal-quickstart
-- **Rename config.py.example to config.py:** mv config.py.example config.py
-- **Adjust the settings in the config.py file:**
-  -	Add the MonggoDB address, database and port (will be changed to enforce credentials soon)
-  -	Change the 'mapping' variable in the config.py settings to the directory where you cloned the reternal-mitre repository, usually ../reternal-mitre
+- **Clone the quickstart repo to your system:** `git clone https://github.com/d3vzer0/reternal-quickstart`
+- **Clone the reternal-mitre repo containing pre-defined simulations:** `git clone https://github.com/d3vzer0/reternal-mitre`
+- **Navigate to the reternal-quickstart directory:** `cd reternal-quickstart`
+- **Open the docker-compose.yml file and change the following variables:** 
+  - JWT_SECRET
+  - C2_SECRET
+  - FLASK_SECRET
 
-Adjust the JWT_SECRET and FLASK_SECRET variables in the docker-compose.yml to secret keys that are used for session randomization and JWT token generation. When done, simply execute 'docker-compose up -d' to run all the services. The latest version from the Development branch will be pulled and build.
+The secret keys are used for session randomization and JWT token generation.
+
+When done, execute '`docker-compose up -d --build`' to run all the services. The latest version from the Development branch will be pulled and build.
 
 #### Post-install
-When the docker containers are live, create your RE:TERNAL user via the included import.py script
-- **create user:** python import.py -a create -t user
-- **import mitre db:** python import.py -a import -t mitre
-- **import techniques:** python import.py -a import -t mapping
-- **create default commands:** python import.py -a create -t ccommand
+The quickstart repo contains a management script called 'import.py'. You can use this script to create your first user and import already existing techniques. You will need three python dependencies to use the script. You can use pip to install the dependencies via: 
+`pip3 install -r requirements.txt`
+
+- **Create user:** `python import.py -a create -t user`
+- **Import Mitre DB:** `python import.py -a import -t mitre`
+- **Import Techniques:** `python import.py -a import -t mapping`
+- **Create Default commands:** `python import.py -a create -t ccommand`
+
+Open a browser of your choice and navigate to http://localhost after creating your first user (and importing the commands/techniques)
+
 
 #### Feature Requests & Bugs
 We use the Github to manage Feature requests and Bug reports.

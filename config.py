@@ -2,9 +2,9 @@ import os
 
 config = {
     "mongodb": {
-        "database": "",
-        "address": "",
-        "port": ""
+        "database": "reternal",
+        "address": "localhost",
+        "port": "27017"
     },
     "mitre": {
         "url":"https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
