@@ -16,8 +16,6 @@ red-teaming techniques in order to test blue-teaming capabilities. The simulatio
 the compose file in order to set up the reternal platform via docker. An additional import script is available to create your first user
 and import Mitre and Metta databases.
 
-![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)
-
 #### Reternal components
 | Component        | Description | Code           | Build  |
 | ------------- |:-------------- |:--------------| :------| 
