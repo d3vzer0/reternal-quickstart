@@ -8,6 +8,8 @@
 
 ---------------------
 
+#### Note: Still under development, only use for testing and do not expose interfaces #####
+
 RE:TERNAL is a centralised purple team simulation platform. Reternal uses agents installed on a simulation network to execute various known
 red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
 the compose file in order to set up the reternal platform via docker. An additional import script is available to create your first user
@@ -25,22 +27,29 @@ and import Mitre and Metta databases.
 
 
 #### Component installation
-Reternal components are primarily aimed to be run as docker containers since the component configuration depends on environment variables set by docker-compose or the dockerfile. A docker-compose with all the default options can be found on the reternal-quickstart repository. If you don't want to run the service within containers, adjust the config.py files with your own custom values.
-
+Reternal components are primarily aimed to be run as docker containers since the component configuration depends on environment variables set by docker-compose or the dockerfile. A docker-compose with all the default options can be found in this repository.
 
 #### Pre-Requirements
   - docker
-  - docker-compose
   - pip: mongoengine and pyyaml
 
 #### Getting started
-Rename the config.py.example file to config.py. Open the file with your favourite editor and add the required configuration values. These are your MongoDB IP address, port, and database name. Note: Authentication to mongo is strongly advised and will be enforced later. Adjust the JWT_SECRET and FLASK_SECRET variables in the docker-compose.yml to secret keys that are used for session randomization and JWT token generation. When done, simply execute 'docker-compose up -d' to run all the services. The latest version from the Development branch will be pulled and build.
+- **Clone this repository to any location on your system:** git clone https://github.com/d3vzer0/reternal-quickstart
+- **Clone the reternal-mitre repo containing pre-defined simulations:** git clone https://github.com/d3vzer0/reternal-mitre
+- **Navigate to the reternal-quickstart directory:** cd reternal-quickstart
+- **Rename config.py.example to config.py:** mv config.py.example config.py
+- **Adjust the settings in the config.py file:**
+  -	Add the MonggoDB address, database and port (will be changed to enforce credentials soon)
+  -	Change the 'mapping' variable in the config.py settings to the directory where you cloned the reternal-mitre repository, usually ../reternal-mitre
+
+Adjust the JWT_SECRET and FLASK_SECRET variables in the docker-compose.yml to secret keys that are used for session randomization and JWT token generation. When done, simply execute 'docker-compose up -d' to run all the services. The latest version from the Development branch will be pulled and build.
 
 #### Post-install
-When the docker containers are live, create your RE:TERNAL user via the included import.py script. The following commands are available (at this monent):
-  - To create a new user for the admin portal: python import.py -a create -t user
-  - To import all Mitre techniques for the Mitre archive: python import.py -a import -t mitre
-  - To import existing Metta commands for Agent execution: python import.py -a import -t metta
+When the docker containers are live, create your RE:TERNAL user via the included import.py script
+- **create user:** python import.py -a create -t user
+- **import mitre db:** python import.py -a import -t mitre
+- **import techniques:** python import.py -a import -t mapping
+- **create default commands:** python import.py -a create -t ccommand
 
 #### Feature Requests & Bugs
 We use the Github to manage Feature requests and Bug reports.
