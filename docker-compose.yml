@@ -28,7 +28,7 @@ services:
       - "127.0.0.1:6379:6379"
 
 
-  reternal-api:
+  api:
     build: https://github.com/d3vzer0/reternal-backend.git#development
     depends_on:
       - mongodb
@@ -59,24 +59,38 @@ services:
     command: ["celery", "-A", "app.tasks.listener.celery", "worker", "-Q", "api"]
 
 
-  reternal-agent:
+  compiler:
     build: https://github.com/d3vzer0/reternal-agent.git#development
     depends_on:
       - redis-service
-      - reternal-api
+      - api
     networks:
       - rtn-backend
 
 
-  reternal-ui:
+  ui:
       build: https://github.com/d3vzer0/reternal-ui.git#development
       depends_on:
-        - reternal-api
+        - api
       networks:
         - rtn-frontend
       ports:
       - "127.0.0.1:80:80"
 
+  c2:
+    build: https://github.com/d3vzer0/reternal-c2.git#development
+    depends_on:
+      - redis-service
+      - mongodb
+
+    # Set the FLASK_SECRET with... something secret obviously
+    environment:
+      C2_SECRET: ""
+      C2_PORT: 9000
+    networks:
+      - rtn-backend
+    ports:
+      - "127.0.0.1:9000:9000"
 
 volumes:
   mongodb-data:
