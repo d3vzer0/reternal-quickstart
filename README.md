@@ -3,8 +3,9 @@
 
 <img src="https://i.postimg.cc/7hwhx4Dp/reternal.png" alt="Drawing" style="width: 300px;"/>
 
-![VueJS](https://img.shields.io/badge/VueJS-2-green.svg)
 ![version](https://img.shields.io/badge/Version-Alpha_0.0.1-orange.svg)
+
+
 
 ---------------------
 
@@ -15,13 +16,22 @@ red-teaming techniques in order to test blue-teaming capabilities. The simulatio
 the compose file in order to set up the reternal platform via docker. An additional import script is available to create your first user
 and import Mitre and Metta databases.
 
+![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)
+
 #### Reternal components
-- **API:** https://github.com/d3vzer0/reternal-backend.git
-- **UI:** https://github.com/d3vzer0/reternal-ui.git
-- **Agent:** https://github.com/d3vzer0/reternal-agent.git
-- **C2:** https://github.com/d3vzer0/reternal-c2.git
-- **Quickstart:** https://github.com/d3vzer0/reternal-quickstart.git
-- **Mitre/Command Mapping:** https://github.com/d3vzer0/reternal-mitre.git
+| Component        | Description | Code           | Build  |
+| ------------- |:-------------- |:--------------| :------| 
+| [API](https://github.com/d3vzer0/reternal-api)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development) |
+| [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)|
+| [C2](https://github.com/d3vzer0/reternal-c2) | Seperate API endpoint that agents use to communicate with | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-c2.svg?branch=development) |
+| [Agent Compiler](https://github.com/d3vzer0/reternal-agent) | Service that compiles the agent (Golang) payloads| ![Python](https://img.shields.io/badge/Python-3.6-green.svg) ![Go](https://img.shields.io/badge/Go-1.11.4-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-agent.svg?branch=development) |
+
+
+#### Additional components
+| Component        | Description           | 
+| ------------- |:--------------| 
+| [Quickstart](https://github.com/d3vzer0/reternal-quickstart)      | Quickstart repo that contains the compose-file and management tools to create users, techniques etc |
+| [Mitre](https://github.com/d3vzer0/reternal-mitre)     | Repository containing already existing mapped techniques for reternal |
 
 <img src="https://i.postimg.cc/15nGCgws/Untitled-Diagram-3.png" alt="Drawing" style="width: 600px;"/>
 
