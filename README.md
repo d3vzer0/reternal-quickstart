@@ -62,15 +62,15 @@ When done, execute '`docker-compose up -d --build`' to run all the services. The
 #### Post-setup
 The quickstart repo contains a management script called 'manage.py'. You can use this script to create your first user and import already existing techniques. 
 
-- **Configure all variables and create first user:** `python manage.py -a install -t all`
+- **Configure all variables and create first user:** `python3 manage.py -a install -t all`
 
 You can now open a browser of choice and navigate to http://localhost. Use the credentials you just created via the manage.py script.
 
 ##### Individual options
-- **Create user:** `python import.py -a create -t user`
-- **Import Mitre DB:** `python import.py -a import -t mitre`
-- **Import Techniques:** `python import.py -a import -t mapping`
-- **Create Default commands:** `python import.py -a create -t ccommand`
+- **Create user:** `python3 manage.py -a create -t user`
+- **Import Mitre DB:** `python3 manage.py -a import -t mitre`
+- **Import Techniques:** `python3 manage.py -a import -t mapping`
+- **Create Default commands:** `python3 manage.py -a create -t command`
 
 
 #### Feature Requests & Bugs
