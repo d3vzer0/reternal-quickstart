@@ -25,6 +25,13 @@ and import Mitre and Metta databases.
 | [Agent Compiler](https://github.com/d3vzer0/reternal-agent) | Service that compiles the agent (Golang) payloads| ![Python](https://img.shields.io/badge/Python-3.6-green.svg) ![Go](https://img.shields.io/badge/Go-1.11.4-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-agent.svg?branch=development) |
 
 
+#### Compose Status
+| Component        | Description | Build  |
+| ------------- |:-------------- | :------| 
+| Total Stack | Build verifying entire stack via docker-compose in this repository | [![Build Status](https://travis-ci.com/d3vzer0/reternal-quickstart.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-quickstart) |
+
+
+
 #### Additional components
 | Component        | Description           | 
 | ------------- |:--------------| 
