@@ -47,25 +47,23 @@ Reternal components are primarily aimed to be run as docker containers since the
 - **Clone the quickstart repo to your system:** `git clone https://github.com/d3vzer0/reternal-quickstart`
 - **Clone the reternal-mitre repo containing pre-defined simulations:** `git clone https://github.com/d3vzer0/reternal-mitre`
 - **Navigate to the reternal-quickstart directory:** `cd reternal-quickstart`
-- **Open the docker-compose.yml file and change the following variables:** 
-  - JWT_SECRET
-  - C2_SECRET
-  - FLASK_SECRET
-
-The secret keys are used for session randomization and JWT token generation.
+- **Install pip dependencies:** `pip3 install requirements.txt`
+- **Create unique keys for JWT and Session tokens:** `python manage.py -a update -t compose`
 
 When done, execute '`docker-compose up -d --build`' to run all the services. The latest version from the Development branch will be pulled and build.
 
-#### Post-install
-The quickstart repo contains a management script called 'import.py'. You can use this script to create your first user and import already existing techniques. You will need three python dependencies to use the script. You can use pip to install the dependencies via: 
-`pip3 install -r requirements.txt`
+#### Post-setup
+The quickstart repo contains a management script called 'manage.py'. You can use this script to create your first user and import already existing techniques. 
 
+- **Configure all variables and create first user:** `python manage.py -a install -t all`
+
+You can now open a browser of choice and navigate to http://localhost. Use the credentials you just created via the manage.py script.
+
+##### Individual options
 - **Create user:** `python import.py -a create -t user`
 - **Import Mitre DB:** `python import.py -a import -t mitre`
 - **Import Techniques:** `python import.py -a import -t mapping`
 - **Create Default commands:** `python import.py -a create -t ccommand`
-
-Open a browser of your choice and navigate to http://localhost after creating your first user (and importing the commands/techniques)
 
 
 #### Feature Requests & Bugs
