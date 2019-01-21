@@ -2,20 +2,17 @@ from operations.models import CommandMapping
 import mongoengine
  
 class MapCommand:
-    def create(name, technique_id, technique_name, external_id, kill_chain_phase, platform, commands, reference=None, author=None, description=None):
+    def __init__(self, name):
+        self.name = name
+
+    def create(self, technique_id, technique_name, external_id, kill_chain_phase, platform, commands, reference=None, author=None, description=None):
         try:
             mitre_object = CommandMapping(
-                name = name,
-                technique_id = technique_id,
-                technique_name = technique_name,
-                external_id = external_id,
-                kill_chain_phase = kill_chain_phase,
-                platform = platform,
-                commands = commands,
-                reference = reference,
-                author = author,
-                description = description
-            ).save()
+                name = self.name, technique_id = technique_id,
+                technique_name = technique_name, external_id = external_id,
+                kill_chain_phase = kill_chain_phase, platform = platform,
+                commands = commands, reference = reference,
+                author = author, description = description).save()
                     
             result = {"result":"success", "message":"Succesfully added Mitre command/technique reference to DB"}
 

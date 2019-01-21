@@ -2,10 +2,13 @@ from operations.models import Commands
 import mongoengine
 
 class Command:
-    def create(name, command_type="Manual"):
+    def __init__(self, name):
+        self.name = name
+
+    def create(self, command_type="Manual"):
         try:
             commands = Commands(
-              name=name,
+              name=self.name,
               type=command_type,
             ).save()
             result = {"result":"success", "message":"Succesfully added command reference to DB"}

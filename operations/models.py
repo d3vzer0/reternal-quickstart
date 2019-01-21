@@ -20,9 +20,9 @@ ROLEOPTIONS = ('User', 'Admin')
 class Users(db.Document):
     username = db.StringField(max_length=50, required=True, unique=True)
     password = db.StringField(max_length=128, required=True)
-    salt = db.StringField(default=Random.create(20), max_length=20, required=True)
+    salt = db.StringField(default=Random(20).create(), max_length=20, required=True)
     role = db.StringField(max_length=20, required=True, default="User", choices=ROLEOPTIONS)
-    email = db.EmailField(required=True)
+    email = db.EmailField(required=False)
 
     meta = {
         'ordering': ['-username'],

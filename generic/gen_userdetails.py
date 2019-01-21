@@ -11,19 +11,10 @@ class UserDetails:
         while userdetails['password'] is None:
             userdetails['password'] = getpass.getpass()
 
-        while userdetails['email'] is None:
-            emailUnparsed = input("Email: ")
-            regexMail = re.search(
-                "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
-                emailUnparsed)
-            if regexMail:
-                userdetails['email'] = emailUnparsed
-            else:
-                print("Invalid email format")
-                quit()
-        
         while userdetails['role'] is None:
-            userdetails['role'] = input("Role (user/admin): ")
+            user_role =  input("Role (User/Admin): ")
+            if user_role == "Admin" or user_role == "User":
+                userdetails['role'] = user_role
 
 
         return userdetails

@@ -1,10 +1,10 @@
 from operations import Command
 
 class ImportCommand:
-    def create():
-        create_command = Command.create("exec_shell")
-        create_command = Command.create("make_screenshot")
-        create_command = Command.create("get_ifaces")
-        create_command = Command.create("download_remote")
-        create_command = Command.create("read_file")
-        return create_command
+     def create(self):
+        default_commands = ['exec_shell', 'make_screenshot', 'get_ifaces',
+            'download_remote', 'read_file']
+        for command in default_commands:
+             Command(command).create()
+   
+        return {'result':'success', 'message':'Finished importing base commands'}

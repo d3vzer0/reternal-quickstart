@@ -2,8 +2,8 @@ from operations import User, Command
 from generic import UserDetails
 
 class ImportUser:
-    def create():
+    def create(self):
         userdetails = UserDetails.prompt()
-        create_user = User.create(userdetails['username'], userdetails['password'],
-            userdetails['email'], userdetails['role'])
+        create_user = User(userdetails['username']).create(userdetails['password'],
+            userdetails['role'])
         return create_user

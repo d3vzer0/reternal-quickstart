@@ -5,12 +5,14 @@ import mongoengine
 import json
 
 class User:
-    def get(user_id):
+    def __init__(self, username):
+        self.username = username
+
+    def get(self):
         try:
-            user_object = Users.objects.get(id=user_id)
+            user_object = Users.objects.get(username=self.username)
             result = {'username': user_object['username'], 'groups': [],
-                      'email': user_object['email'],
-                      'role': user_object['role'],
+                      'email': user_object['email'], 'role': user_object['role'],
                       'id': str(user_object['id'])}
 
         except mongoengine.errors.DoesNotExist:
@@ -21,24 +23,18 @@ class User:
 
         return result
 
-    def create(username, password, email, role):
+    def create(self, password, role):
         try:
-            salt = Random.create(20)
+            salt = Random(20).create()
             password_hash = hashlib.sha512()
             password_string = salt + password
             password_hash.update(password_string.encode('utf-8'))
             password_hash = str(password_hash.hexdigest())
 
             user = Users(
-                username=username,
-                salt=salt,
-                password=password_hash,
-                email=email,
-                role = role
-            ).save()
+                username=self.username, salt=salt, password=password_hash, role = role ).save()
 
-            result = {"result": "created",
-                      "message": "Succesfully created user"}
+            result = {"result": "created", "message": "Succesfully created user"}
 
         except mongoengine.errors.NotUniqueError:
             result = {"result": "failed", "message": "User already exists"}
@@ -48,9 +44,9 @@ class User:
 
         return result
 
-    def delete(user_id):
+    def delete(self):
         try:
-            user_object = Users.objects.get(id=user_id).delete()
+            user_object = Users.objects.get(username=self.username).delete()
             result = {"result": "deleted", "message": "Deleted user from DB"}
 
         except mongoengine.errors.DoesNotExist:

@@ -4,7 +4,7 @@ import requests
 import json
 
 class ImportMitre:
-    def update():
+    def update(self):
         request_object = requests.get(config['mitre']['url'])
         json_object = request_object.json()
         for technique_details in json_object['objects']:
@@ -27,7 +27,7 @@ class ImportMitre:
                 for phase in kill_chain_phases:
                     killchain.append(phase['phase_name'])
                     
-                import_technique = Mitre.create(name, technique_id, description,
+                import_technique = Mitre().create(name, technique_id, description,
                     platforms, permissions_required, data_sources, references,
                     killchain)
                     

@@ -2,7 +2,7 @@ from operations.models import Mitre as MitreDB
 import mongoengine
 
 class Mitre:
-    def get(reference_id):
+    def get(self, reference_id):
         try:
             mitre_object = MitreDB.objects.get(references__external_id=reference_id)
             result = {"result":"success", "data":mitre_object}
@@ -15,18 +15,13 @@ class Mitre:
 
         return result
 
-    def create(name, technique_id, description, platforms, permissions_required, data_sources, references, killchain):
+    def create(self, name, technique_id, description, platforms, permissions_required, data_sources, references, killchain):
         try:
             mitre_object = MitreDB(
-                        name = name,
-                        technique_id = technique_id,
-                        description = description,
-                        platforms = platforms,
-                        permissions_required = permissions_required,
-                        data_sources = data_sources,
-                        references = references,
-                        kill_chain_phases = killchain
-                    ).save()
+                        name = name, technique_id = technique_id,
+                        description = description, platforms = platforms,
+                        permissions_required = permissions_required, data_sources = data_sources,
+                        references = references, kill_chain_phases = killchain).save()
                     
             result = {"result":"success", "message":"Succesfully added Mitre technique to DB"}
 
