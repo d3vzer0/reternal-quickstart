@@ -1,5 +1,6 @@
-from operations.models import Mitre as MitreDB
+from cli.operations.models import Mitre as MitreDB
 import mongoengine
+
 
 class Mitre:
     def get(self, reference_id):

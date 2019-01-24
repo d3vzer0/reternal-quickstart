@@ -1,4 +1,5 @@
-from operations import Command
+from cli.operations import Command
+
 
 class ImportCommand:
      def create(self):

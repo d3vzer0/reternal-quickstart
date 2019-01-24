@@ -1,5 +1,6 @@
-from operations.models import Commands
+from cli.operations.models import Commands
 import mongoengine
+
 
 class Command:
     def __init__(self, name):

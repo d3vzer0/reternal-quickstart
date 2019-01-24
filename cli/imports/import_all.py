@@ -1,7 +1,8 @@
-from imports import Mapping
-from imports import ImportMitre
-from imports import ImportUser
-from imports import ImportCommand
+from cli.imports import Mapping
+from cli.imports import ImportMitre
+from cli.imports import ImportUser
+from cli.imports import ImportCommand
+
 
 class Install:
     def all(self):

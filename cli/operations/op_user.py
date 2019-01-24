@@ -1,8 +1,9 @@
-from operations.models import Users
-from generic import Random
+from cli.operations.models import Users
+from cli.generic import Random
 import hashlib
 import mongoengine
 import json
+
 
 class User:
     def __init__(self, username):
