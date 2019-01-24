@@ -1,6 +1,6 @@
-from operations import MapCommand, Mitre
-from generic import FindFiles
-from config import config
+from cli.operations import MapCommand, Mitre
+from cli.generic import FindFiles
+from cli.config import config
 import glob
 import os
 import yaml

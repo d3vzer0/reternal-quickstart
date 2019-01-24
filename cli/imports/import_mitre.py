@@ -1,7 +1,8 @@
-from operations import Mitre
-from config import config
+from cli.operations import Mitre
+from cli.config import config
 import requests
 import json
+
 
 class ImportMitre:
     def update(self):

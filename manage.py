@@ -1,9 +1,9 @@
-from imports import Mapping
-from imports import ImportMitre
-from imports import ImportUser
-from imports import ImportCommand
-from imports import Install
-from operations import Compose
+from cli.imports import Mapping
+from cli.imports import ImportMitre
+from cli.imports import ImportUser
+from cli.imports import ImportCommand
+from cli.imports import Install
+from cli.operations import Compose
 import argparse, getpass, yaml
 
 

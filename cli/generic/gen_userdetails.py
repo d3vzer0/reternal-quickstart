@@ -3,7 +3,7 @@ import re
 
 
 class UserDetails:
-    def prompt():
+    def prompt(self):
         userdetails = dict.fromkeys(['username', 'password', 'email', 'role'])
         while userdetails['username'] is None:
             userdetails['username'] = input("Username: ")

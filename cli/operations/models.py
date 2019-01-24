@@ -1,5 +1,5 @@
-from config import config
-from generic import Random
+from cli.config import config
+from cli.generic import Random
 import datetime
 import mongoengine
 import mongoengine as db

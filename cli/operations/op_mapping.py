@@ -1,5 +1,6 @@
-from operations.models import CommandMapping
+from cli.operations.models import CommandMapping
 import mongoengine
+ 
  
 class MapCommand:
     def __init__(self, name):
