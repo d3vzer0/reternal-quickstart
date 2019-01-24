@@ -1,9 +1,6 @@
 [submodule "backend"]
 	path = backend
 	url = https://github.com/d3vzer0/reternal-backend
-[submodule "compiler"]
-	path = compiler
-	url = git@github.com:d3vzer0/reternal-agent
 [submodule "mitre"]
 	path = mitre
 	url = git@github.com:d3vzer0/reternal-mitre
