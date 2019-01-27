@@ -3,7 +3,7 @@ import oyaml as yaml
 
 
 class Compose:
-    def __init__(self, path="../docker-compose.yml"):
+    def __init__(self, path="./docker-compose.yml"):
         self.path = path
 
     def update(self):
