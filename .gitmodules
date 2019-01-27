@@ -3,13 +3,13 @@
 	url = https://github.com/d3vzer0/reternal-backend
 [submodule "mitre"]
 	path = mitre
-	url = git@github.com:d3vzer0/reternal-mitre
+	url = https://github.com/d3vzer0/reternal-mitre
 [submodule "c2"]
 	path = c2
-	url = git@github.com:d3vzer0/reternal-c2
+	url =  https://github.com/d3vzer0/reternal-c2
 [submodule "ui"]
 	path = ui
-	url = git@github.com:d3vzer0/reternal-ui
+	url =  https://github.com/d3vzer0/reternal-ui
 [submodule "agent"]
 	path = agent
-	url = git@github.com:d3vzer0/reternal-agent
+	url =  https://github.com/d3vzer0/reternal-agent
