@@ -29,7 +29,7 @@ services:
 
 
   api:
-    build: https://github.com/d3vzer0/reternal-backend.git#development
+    build: ./backend
     depends_on:
       - mongodb
       - redis-service
@@ -46,7 +46,7 @@ services:
 
 
   api-socket:
-    build: https://github.com/d3vzer0/reternal-backend.git#development
+    build: ./backend
     depends_on:
       - redis-service
     networks:
@@ -60,7 +60,7 @@ services:
 
 
   compiler:
-    build: https://github.com/d3vzer0/reternal-agent.git#development
+    build: ./reternal-agent
     depends_on:
       - redis-service
       - api
@@ -69,7 +69,7 @@ services:
 
 
   ui:
-      build: https://github.com/d3vzer0/reternal-ui.git#development
+      build: ./ui
       depends_on:
         - api
       networks:
@@ -78,7 +78,7 @@ services:
       - "127.0.0.1:80:80"
 
   c2:
-    build: https://github.com/d3vzer0/reternal-c2.git#development
+    build: ./c2
     depends_on:
       - redis-service
       - mongodb
