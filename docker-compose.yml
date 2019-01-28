@@ -60,7 +60,7 @@ services:
 
 
   compiler:
-    build: ./reternal-agent
+    build: ./agent
     depends_on:
       - redis-service
       - api
