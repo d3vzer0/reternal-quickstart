@@ -19,7 +19,7 @@ and import Mitre and Metta databases.
 #### Reternal components
 | Component        | Description | Code           | Build  |
 | ------------- |:-------------- |:--------------| :------| 
-| [API](https://github.com/d3vzer0/reternal-api)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development) |
+| [API](https://github.com/d3vzer0/reternal-backend)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development) |
 | [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)|
 | [C2](https://github.com/d3vzer0/reternal-c2) | Seperate API endpoint that agents use to communicate with | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-c2.svg?branch=development) |
 | [Agent Compiler](https://github.com/d3vzer0/reternal-agent) | Service that compiles the agent (Golang) payloads| ![Python](https://img.shields.io/badge/Python-3.6-green.svg) ![Go](https://img.shields.io/badge/Go-1.11.4-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-agent.svg?branch=development) |
