@@ -96,6 +96,9 @@ This project has been re-developed so many times, it will probably never really 
 #### Recipe builder
 ![alt text](/screenshots/recipe_build.png)
 
+##### Included MITRE DB for details
+![alt text](/screenshots/scheduler.png)
+
 #### Interactive terminal
 ![alt text](https://i.postimg.cc/V679QJBS/reternal-terminal.png)
 
