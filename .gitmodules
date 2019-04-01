@@ -7,9 +7,6 @@
 [submodule "c2"]
 	path = c2
 	url =  https://github.com/d3vzer0/reternal-c2.git
-[submodule "ui"]
-	path = ui
-	url =  https://github.com/d3vzer0/reternal-ui.git
 [submodule "agent"]
 	path = agent
 	url =  https://github.com/d3vzer0/reternal-agent.git
