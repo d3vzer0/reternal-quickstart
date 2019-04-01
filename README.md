@@ -91,20 +91,20 @@ This project has been re-developed so many times, it will probably never really 
 
 ### Screenshots
 #### Technique mapping
-![alt text](https://i.postimg.cc/PqCFxBVZ/mapping.png)
+![alt text](/screenshots/mitre_mapping.png)
 
 #### Recipe builder
-![alt text](https://i.postimg.cc/Xvt1yQtP/recipes.png)
+![alt text](/screenshots/recipe_build.png)
 
 #### Interactive terminal
 ![alt text](https://i.postimg.cc/V679QJBS/reternal-terminal.png)
 
+#### Agents overview
+![alt text](/screenshots/agents.png)
+
 #### Screenshot galery from agents
 ![alt text](https://i.postimg.cc/JnJ63jLz/output.png)
 
-#### Agents overview
-![alt text](https://i.postimg.cc/zGtcqJ78/agents.png)
-
 ##### Included MITRE DB for details
-![alt text](https://i.postimg.cc/QC36fV8k/mitredetails.png)
+![alt text](/screenshots/mitre_search.png)
 
