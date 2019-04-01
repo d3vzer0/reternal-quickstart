@@ -10,9 +10,6 @@
 [submodule "agent"]
 	path = agent
 	url =  https://github.com/d3vzer0/reternal-agent.git
-[submodule "reternal-ui"]
-	path = reternal-ui
-	url = https://github.com/d3vzer0/reternal-ui.git
 [submodule "ui"]
 	path = ui
 	url = https://github.com/d3vzer0/reternal-ui.git
