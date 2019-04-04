@@ -70,6 +70,9 @@ services:
 
   ui:
       build: ./ui
+      args:
+        VUE_APP_BASEAPI: "http://127.0.0.1:5000/api/v1"
+        VUE_APP_SOCKETHOST: "http://127.0.0.1:5000"
       depends_on:
         - api
       networks:
