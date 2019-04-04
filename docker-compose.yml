@@ -69,16 +69,17 @@ services:
 
 
   ui:
-      build: ./ui
+    build: 
+      context: ./ui
       args:
         VUE_APP_BASEAPI: "http://127.0.0.1:5000/api/v1"
         VUE_APP_SOCKETHOST: "http://127.0.0.1:5000"
-      depends_on:
-        - api
-      networks:
-        - rtn-frontend
-      ports:
-      - "127.0.0.1:80:80"
+    depends_on:
+      - api
+    networks:
+      - rtn-frontend
+    ports:
+    - "127.0.0.1:80:80"
 
   c2:
     build: ./c2
