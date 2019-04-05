@@ -10,6 +10,6 @@ config = {
         "url":"https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
     },
     "mapping": {
-        "path": "../mitre"
+        "path": "./mitre"
     }
 }
