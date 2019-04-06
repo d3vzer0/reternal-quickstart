@@ -51,10 +51,10 @@ Reternal components are primarily aimed to be run as docker containers since the
   - pip (3)
 
 #### Getting started
-- **Clone the quickstart repo to your system:** `git clone https://github.com/d3vzer0/reternal-quickstart`
+- **Clone the quickstart repo to your system:** `git clone https://github.com/d3vzer0/reternal-quickstart --recurse`
 - **Navigate to the reternal-quickstart directory:** `cd reternal-quickstart`
-- **Install pip dependencies:** `pip3 install requirements.txt`
-- **Create unique keys for JWT and Session tokens:** `python manage.py -a update -t compose`
+- **Install pip dependencies:** `pip3 install -r requirements.txt`
+- **Create unique keys for JWT and Session tokens:** `python3 manage.py -a update -t compose`
 
 When done, execute '`docker-compose up -d --build`' inside the root reternal-quickstart directory to run all the services. The latest version from the Development branch will be pulled and build.
 
