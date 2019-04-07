@@ -22,7 +22,6 @@ services:
     volumes:
       - mongodb-data:/data/db
 
-
   redis-service:
     image: redis
     restart: unless-stopped
@@ -30,7 +29,6 @@ services:
       - rtn-backend
     ports:
       - "127.0.0.1:6379:6379"
-
 
   api:
     build: ./backend
@@ -83,8 +81,10 @@ services:
       - api
     networks:
       - rtn-frontend
+    volumes:
+      - "./navigator-reternal.json:/usr/share/nginx/html/mitre-navigator/assets/config.json"
     ports:
-    - "127.0.0.1:80:80"
+      - "127.0.0.1:80:80"
 
   c2:
     build: ./c2
