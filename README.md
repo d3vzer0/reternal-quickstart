@@ -89,25 +89,9 @@ This project has been re-developed so many times, it will probably never really 
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
 
 
+
 ### Screenshots
-#### Technique mapping
-![alt text](/screenshots/mitre_mapping.png)
+#### Video showing intro to Recipe building
+[VIMEO Link](https://vimeo.com/328926622)
 
-#### Recipe builder
-![alt text](/screenshots/recipe_build.png)
-
-##### Included MITRE DB for details
-![alt text](/screenshots/scheduler.png)
-
-#### Interactive terminal
-![alt text](https://i.postimg.cc/V679QJBS/reternal-terminal.png)
-
-#### Agents overview
-![alt text](/screenshots/agents.png)
-
-#### Screenshot galery from agents
-![alt text](https://i.postimg.cc/JnJ63jLz/output.png)
-
-##### Included MITRE DB for details
-![alt text](/screenshots/mitre_search.png)
 
