@@ -10,6 +10,9 @@ install:
   - python manage.py -a update -t compose
   - docker-compose up --build -d
 
+before_script:
+  - sleep 10
+
 script:
   - docker ps | grep -q api
   - docker ps |grep -q redis-service
