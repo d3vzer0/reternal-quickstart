@@ -19,10 +19,10 @@ and import Mitre and Metta databases.
 #### Reternal components
 | Component        | Description | Code           | Build  |
 | ------------- |:-------------- |:--------------| :------| 
-| [API](https://github.com/d3vzer0/reternal-backend)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development) |
-| [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)|
-| [C2](https://github.com/d3vzer0/reternal-c2) | Seperate API endpoint that agents use to communicate with | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-c2.svg?branch=development) |
-| [Agent Compiler](https://github.com/d3vzer0/reternal-agent) | Service that compiles the agent (Golang) payloads| ![Python](https://img.shields.io/badge/Python-3.6-green.svg) ![Go](https://img.shields.io/badge/Go-1.11.4-green.svg) | ![Build Status](https://travis-ci.com/d3vzer0/reternal-agent.svg?branch=development) |
+| [API](https://github.com/d3vzer0/reternal-backend)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-backend) |
+| [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-ui)|
+| [C2](https://github.com/d3vzer0/reternal-c2) | Seperate API endpoint that agents use to communicate with | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-c2.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-c2) |
+| [Agent Compiler](https://github.com/d3vzer0/reternal-agent) | Service that compiles the agent (Golang) payloads| ![Python](https://img.shields.io/badge/Python-3.6-green.svg) ![Go](https://img.shields.io/badge/Go-1.11.4-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-agent.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-agent) |
 
 
 #### Compose Status
@@ -40,36 +40,9 @@ and import Mitre and Metta databases.
 
 <img src="https://i.postimg.cc/15nGCgws/Untitled-Diagram-3.png" alt="Drawing" style="width: 600px;"/>
 
-
-#### Component installation
-Reternal components are primarily aimed to be run as docker containers since the component configuration depends on environment variables set by docker-compose or the dockerfile. A docker-compose with all the default options can be found in this repository.
-
-#### Pre-Requirements
-  - docker
-  - docker-compose
-  - python3
-  - pip (3)
-
-#### Getting started
-- **Clone the quickstart repo to your system:** `git clone https://github.com/d3vzer0/reternal-quickstart --recurse`
-- **Navigate to the reternal-quickstart directory:** `cd reternal-quickstart`
-- **Install pip dependencies:** `pip3 install -r requirements.txt`
-- **Create unique keys for JWT and Session tokens:** `python3 manage.py -a update -t compose`
-
-When done, execute '`docker-compose up -d --build`' inside the root reternal-quickstart directory to run all the services. The latest version from the Development branch will be pulled and build.
-
-#### Post-setup
-The quickstart repo contains a management script called 'manage.py'. You can use this script to create your first user and import already existing techniques. 
-
-- **Configure all variables and create first user:** `python3 manage.py -a install -t all`
-
-You can now open a browser of choice and navigate to http://localhost. Use the credentials you just created via the manage.py script.
-
-##### Individual options
-- **Create user:** `python3 manage.py -a create -t user`
-- **Import Mitre DB:** `python3 manage.py -a import -t mitre`
-- **Import Techniques:** `python3 manage.py -a import -t mapping`
-- **Create Default commands:** `python3 manage.py -a create -t command`
+#### Installation and configuration
+The installation guide and configuration guide can be found on the repo's Wiki @ 
+https://github.com/d3vzer0/reternal-quickstart/wiki/Install--Guide
 
 
 #### Feature Requests & Bugs
@@ -89,8 +62,6 @@ This project has been re-developed so many times, it will probably never really 
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
 
 
-
-### Screenshots
 #### Video showing intro to Recipe building
 [VIMEO Link](https://vimeo.com/328926622)
 
