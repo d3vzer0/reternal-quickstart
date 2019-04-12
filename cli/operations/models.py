@@ -45,19 +45,6 @@ class Commands(db.Document):
     platform = db.ListField(db.StringField(max_length=50, default="all"))
 
 
-class CommandMapping(db.Document):
-    author = db.StringField(max_length=100, required=False)
-    name = db.StringField(max_length=100, required=True, unique_with=['technique_id', 'platform', 'kill_chain_phase'])
-    description = db.StringField(max_length=200, required=False)
-    reference = db.StringField(max_length=100, required=False, default=None)
-
-    technique_id = db.StringField(max_length=200, required=True)
-    technique_name = db.StringField(max_length=100, required=True)
-    external_id = db.StringField(max_length=100, required=True)
-    kill_chain_phase = db.StringField(max_length=100, required=True)
-    platform = db.StringField(max_length=30, choices=PLATFORMS, required=True)
-    commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
-
 
 class TechniqueActors(db.EmbeddedDocument):
     actor_id = db.StringField(max_length=100, required=False, unique=False)
@@ -102,3 +89,19 @@ class Actors(db.Document):
     references = db.EmbeddedDocumentListField('ActorReferences')
     aliases = db.ListField(db.StringField(max_length=100, required=False))
     techniques = db.EmbeddedDocumentListField('ActorTechniques')
+
+
+class CommandMapping(db.Document):
+    author = db.StringField(max_length=100, required=False)
+    name = db.StringField(max_length=100, required=True, unique_with=['technique_id', 'platform', 'kill_chain_phase'])
+    description = db.StringField(max_length=200, required=False)
+    reference = db.StringField(max_length=100, required=False, default=None)
+
+    technique_id = db.StringField(max_length=200, required=True)
+    technique_name = db.StringField(max_length=100, required=True)
+    external_id = db.StringField(max_length=100, required=True)
+    kill_chain_phase = db.StringField(max_length=100, required=True)
+    platform = db.StringField(max_length=30, choices=PLATFORMS, required=True)
+    commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
+    actors = db.EmbeddedDocumentListField('TechniqueActors')
+
