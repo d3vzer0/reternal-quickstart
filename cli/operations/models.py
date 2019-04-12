@@ -59,15 +59,20 @@ class CommandMapping(db.Document):
     commands = db.EmbeddedDocumentListField('TaskCommands', required=True)
 
 
-class MitreReferences(db.EmbeddedDocument):
+class TechniqueActors(db.EmbeddedDocument):
+    actor_id = db.StringField(max_length=100, required=False, unique=False)
+    name = db.StringField(max_length=100, required=True)
+
+
+class TechniqueReferences(db.EmbeddedDocument):
     external_id = db.StringField(max_length=100)
     url = db.StringField(max_length=1000)
     source_name = db.StringField(max_length=100)
     description = db.StringField(max_length=1000)
 
 
-class Mitre(db.Document):
-    references = db.EmbeddedDocumentListField('MitreReferences')
+class Techniques(db.Document):
+    references = db.EmbeddedDocumentListField('TechniqueReferences')
     platforms = db.ListField(db.StringField(max_length=50, default="all"))
     kill_chain_phases = db.ListField(db.StringField(max_length=100))
     permissions_required = db.ListField(db.StringField(max_length=100))
@@ -76,3 +81,24 @@ class Mitre(db.Document):
     description = db.StringField(max_length=9000)
     data_sources = db.ListField(db.StringField(max_length=100))
     detection = db.StringField(max_length=1000)
+    actors = db.EmbeddedDocumentListField('TechniqueActors')
+
+class ActorReferences(db.EmbeddedDocument):
+    url = db.StringField(max_length=300, required=False)
+    description = db.StringField(max_length=1000, required=False)
+    source_name = db.StringField(max_length=100, reuired=False)
+    external_id = db.StringField(max_length=100, required=False)
+
+
+class ActorTechniques(db.EmbeddedDocument):
+    technique_id = db.StringField(max_length=100, required=False, unique=False)
+    name = db.StringField(max_length=100, required=False)
+
+
+class Actors(db.Document):
+    actor_id = db.StringField(max_length=100, required=True, unique=True)
+    name = db.StringField(max_length=100, required=True)
+    description = db.StringField(max_length=2000, required=False)
+    references = db.EmbeddedDocumentListField('ActorReferences')
+    aliases = db.ListField(db.StringField(max_length=100, required=False))
+    techniques = db.EmbeddedDocumentListField('ActorTechniques')
