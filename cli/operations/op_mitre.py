@@ -1,11 +1,17 @@
-from cli.operations.models import Mitre as MitreDB
+from cli.operations.models import Techniques, Actors
 import mongoengine
 
-
 class Mitre:
-    def get(self, reference_id):
+    def __init__(self, query_field):
+        self.query_field = query_field
+
+    def technique(self, reference_id):
         try:
-            mitre_object = MitreDB.objects.get(references__external_id=reference_id)
+            if self.query_field == 'id':
+                mitre_object = Techniques.objects.get(technique_id=reference_id)
+            elif self.query_field == 'external_id':
+                mitre_object = Techniques.objects.get(references__external_id=reference_id)
+
             result = {"result":"success", "data":mitre_object}
 
         except mongoengine.errors.DoesNotExist:
@@ -16,21 +22,19 @@ class Mitre:
 
         return result
 
-    def create(self, name, technique_id, description, platforms, permissions_required, data_sources, references, killchain):
+    def actor(self, reference_id):
         try:
-            mitre_object = MitreDB(
-                        name = name, technique_id = technique_id,
-                        description = description, platforms = platforms,
-                        permissions_required = permissions_required, data_sources = data_sources,
-                        references = references, kill_chain_phases = killchain).save()
-                    
-            result = {"result":"success", "message":"Succesfully added Mitre technique to DB"}
+            if self.query_field == 'id':
+                actor_object = Actors.objects.get(actor_id=reference_id)
+            elif self.query_field == 'external_id':
+                actor_object = Actors.objects.get(references__external_id=reference_id)
 
-        except mongoengine.errors.NotUniqueError:
-            result = {"result":"failed", "message":"Mitre technique already exists"}
+            result = {"result":"success", "data":actor_object}
 
+        except mongoengine.errors.DoesNotExist:
+                result = {"result":"failed", "data":"Actor does not exist"}
 
         except Exception as err:
-            result = {"result":"failed", "message":"Error importing Mitre technique"}
+            result = {"result":"failed", "data":"Actor lookup error"}
 
         return result
