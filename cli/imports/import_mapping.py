@@ -17,8 +17,8 @@ class Mapping:
             with open(config_file) as yamlfile:
                 yaml_object = yaml.load(yamlfile)
                 try:
-                    name = yaml_object['name']
                     mapping_data = {
+                        'name': yaml_object['name'],
                         'platform': yaml_object['mitre_technique']['platform'],
                         'reference': yaml_object.get('reference', None),
                         'description': yaml_object.get('description', None),
@@ -32,7 +32,7 @@ class Mapping:
                         "sleep":command["sleep"]} for command in mapping_data['commands']]
 
                     for phase in technique_object['kill_chain_phases']:
-                        map_result = MapCommand(name).create(technique_object, mapping_data, all_commands, phase)
+                        map_result = MapCommand(mapping_data['name']).create(technique_object, mapping_data, all_commands, phase)
 
                 except Exception as err:
                     pass
