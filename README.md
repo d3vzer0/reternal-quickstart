@@ -9,7 +9,7 @@
 
 ---------------------
 
-#### Note: Still under development, only use for testing and do not expose interfaces #####
+#### Note: Still under development, only use for testing and do not expose interfaces! #####
 
 RE:TERNAL is a centralised purple team simulation platform. Reternal uses agents installed on a simulation network to execute various known
 red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
@@ -61,6 +61,20 @@ This project has been re-developed so many times, it will probably never really 
   - MITRE ATT&CK - Framework used for mapping simulations: https://attack.mitre.org/wiki/Main_Page
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
 
+#### Examples and screenshots
+
+##### Actor mapping
+Reternal automatically maps available commands and techniques to actors. You can directly add all the techniques commonly used by actors to your set of tasks.
+<img width="1226" alt="actor_mapping" src="https://user-images.githubusercontent.com/34250156/56099791-c5418900-5f11-11e9-8bf9-889765a4d8a9.png">
+
+##### Technique mapping
+Commands are mapped to MITRE ATTCK techniques. You can browse the available commands and directly add them to your task list.
+<img width="1222" alt="technique_mapping" src="https://user-images.githubusercontent.com/34250156/56100207-0cca1400-5f16-11e9-99b5-be72141c50f0.png">
+
+##### Recipe builder
+Scheduling tasks to be run on an agent is called a recipe. You can add manual commands to a recipe or select one of the existing mapped techniques or actor TTPs. You can drag/drop to change the order of the tasks in your recipe.
+
+<img width="1431" alt="recipe" src="https://user-images.githubusercontent.com/34250156/56100184-df7d6600-5f15-11e9-8acb-2658fb2795ec.png">
 
 #### Video showing intro to Recipe building
 [VIMEO Link](https://vimeo.com/328926622)
