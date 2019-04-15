@@ -11,4 +11,20 @@
     - role: docker
       tags: ['docker', 'core']
 
+
+- hosts: backend
+  become: yes
+  roles:
+    - role: backend
+      tags: ['backend', 'reternal']
+
+
+- hosts: ui
+  become: yes
+  roles:
+    - role: ui
+      tags: ['ui', 'reternal']
+      
+
+
     
