@@ -1,0 +1,14 @@
+hostname: rtn-dev-01
+ansible_host: &mgt_addr 192.168.90.243 # Example of IP of TestVM, replace this with target host IP
+
+firewall:
+  defaults:
+    - direction: incoming
+      policy: allow
+  rules:
+    - rule: allow
+      to_port: 22
+      protocol: tcp
+    - rule: allow
+      to_port: 80
+      protocol: tcp

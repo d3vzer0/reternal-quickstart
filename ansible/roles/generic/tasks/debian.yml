@@ -1,0 +1,8 @@
+- name: Ensure hostname is set properly
+  hostname: 
+    name: "{{ hostname }}"
+
+- name: Installing Minimal required packages
+  apt:
+    name: ["git", "vim", "python3-pip", "ufw"]
+    state: present

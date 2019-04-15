@@ -1,0 +1,18 @@
+- name: Configuring individual rules UFW
+  ufw:
+    rule: "{{ item.rule }}"
+    to_port: "{{  item.to_port }}"
+    proto: "{{ item.protocol | default(omit) }}"
+    from_ip: "{{ item.from_ip | default(omit) }}"
+    direction: "{{ item.direction | default(omit) }}"
+  with_items: "{{ firewall.rules }}"
+
+- name: Set default policies UFW
+  ufw:
+    policy: "{{ item.policy }}"
+    direction: "{{ item.direction }}"
+  with_items: "{{ firewall.defaults }}"
+
+- name: Enable UFW
+  ufw:
+    state: enabled
