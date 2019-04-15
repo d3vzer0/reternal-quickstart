@@ -1,0 +1,3 @@
+reternal:
+  api_ip: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
+  api_port: 5000

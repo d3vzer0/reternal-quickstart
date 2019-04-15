@@ -1,0 +1,2 @@
+backend_target_dir: "/opt/reternal/backend"
+backend_src_dir: "../../../backend/"

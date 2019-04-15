@@ -1,0 +1,43 @@
+
+- name: Create backend network
+  docker_network:
+    name: backend_network
+
+- name: Create persistent DB volume
+  docker_volume:
+    name: mongodb-data
+
+- name: Run mongo container
+  docker_container:
+    name: mongodb
+    image: mongo
+    state: started
+    networks:
+      - name: backend_network
+        aliases:
+          - mongodb
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "127.0.0.1:27017:27017"
+
+- name: Run redis container
+  docker_container:
+    name: redis
+    image: redis
+    state: started
+    networks:
+      - name: backend_network
+        aliases:
+          - redis-service
+
+- name: Copy source files to target server
+  copy:
+    src: "{{ backend_src_dir }}"
+    dest: "{{ backend_target_dir }}"
+
+- name: Build backend/api container
+  docker_image:
+    name: reternal/backend
+    path: "{{ backend_target_dir }}"
+    force: yes

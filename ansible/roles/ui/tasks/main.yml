@@ -1,0 +1,43 @@
+
+- name: Create frontend network
+  docker_network:
+    name: frontend_network
+
+- name: Copy source files to target server
+  copy:
+    src: "{{ ui_src_dir }}"
+    dest: "{{ ui_target_dir }}"
+  when: install | default(False)
+
+- name: Creating config directory
+  file:
+    path: /etc/reternal
+    state: directory
+
+- name: Copy navigator template to target server
+  template:
+    src: navigator.json.j2
+    dest: /etc/reternal/navigator.json
+
+- name: Build ui container
+  docker_image:
+    name: reternal/ui
+    path: "{{ ui_target_dir }}"
+    buildargs:
+      VUE_APP_BASEAPI: "http://{{ reternal.api_ip }}:5000/api/v1"
+      VUE_APP_SOCKETHOST: "http://{{ reternal.api_ip }}:5000"
+    force: "{{ 'yes' if install is defined else 'no' }}"
+
+- name: Run UI container
+  docker_container:
+    name: reternal-ui
+    image: reternal/ui
+    state: started
+    networks:
+      - name: frontend_network
+        aliases:
+          - reternal-ui
+    ports:
+      - "127.0.0.1:80:80"
+    volumes:
+      - /etc/reternal/navigator.json:/usr/share/nginx/html/mitre-navigator/assets/config.json
