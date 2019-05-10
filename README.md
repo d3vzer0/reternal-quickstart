@@ -44,9 +44,16 @@ and import Mitre and Metta databases.
 The installation guide and configuration guide can be found on the repo's Wiki @ 
 https://github.com/d3vzer0/reternal-quickstart/wiki/Install--Guide
 
+#### Roadmap May
+  - Certificate Pinning: Only accept commands from server with fixed TLS fingerprint
+  - Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content
+  - Loading Saved Campaign: Finalise ability to load saved campaigns
+  - Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components
+  - Bug fixes etc
 
 #### Feature Requests & Bugs
 We use the Github to manage Feature requests and Bug reports.
+
 
 #### Developers and Contact
 
