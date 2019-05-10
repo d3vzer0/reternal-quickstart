@@ -1,3 +1,10 @@
 reternal:
   api_ip: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
   api_port: 5000
+  api_proto: "http"
+
+  c2_ip: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
+  c2_port: 9000
+  c2_proto: "http"
+
+  cors_host: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
