@@ -41,3 +41,24 @@
     name: reternal/backend
     path: "{{ backend_target_dir }}"
     force: yes
+
+- name: Generating random for JWT
+  pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+
+- name: Run backend container
+  docker_container:
+    name: reternal-backend
+    image: reternal/backend
+    state: started
+    env:
+      JWT_SECRET: 
+      FLASK_SECRET:
+      CORS_DOMAIN: "{{ reternal.cors_host }}"
+      C2_DEST: "http://{{ reternal.c2_ip }}:{{ reternal.c2_port }}/api/v1/ping"
+    networks:
+      - name: backend_network
+        aliases:
+          - reternal-backend
+    ports:
+      - "127.0.0.1:5000:5000"
+   
