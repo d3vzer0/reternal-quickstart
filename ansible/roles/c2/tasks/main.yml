@@ -17,13 +17,11 @@
     name: reternal-c2
     image: reternal/c2
     state: started
+    recreate: yes
     env:
       C2_SECRET: "{{ passwords.c2_secret }}"
-      C2_PORT: "{{ reternal.c2_port }}"
     networks:
       - name: backend_network
         aliases:
           - reternal-c2
-    ports:
-      - "127.0.0.1:{{ reternal.c2_port }}:9000"
-
+  

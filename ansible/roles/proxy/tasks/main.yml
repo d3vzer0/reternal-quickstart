@@ -1,0 +1,34 @@
+- name: Create proxy config directory
+  file:
+    path: "{{ proxy_target_dir }}"
+    state: directory
+
+- name: Copy NGINX config template
+  template:
+    src: proxy.conf.j2
+    dest: "{{ proxy_target_dir }}/proxy.conf"
+
+- name: Run NGINX container
+  docker_container:
+    name: reternal-proxy
+    image: nginx
+    state: started
+    recreate: yes
+    networks:
+      - name: frontend_network
+        aliases:
+          - reternal-proxy
+        links:
+          - reternal-ui
+      - name: backend_network
+        aliases:
+          - reternal-proxy
+        links:
+          - reternal-backend
+          - reternal-c2
+    volumes:
+      - "{{ proxy_target_dir }}/proxy.conf:/etc/nginx/conf.d/proxy.conf"
+    ports:
+      - "80:80"
+      - "443:443"
+      - ""

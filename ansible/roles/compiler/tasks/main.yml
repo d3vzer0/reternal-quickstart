@@ -14,6 +14,7 @@
     name: reternal-compiler
     image: reternal/compiler
     state: started
+    recreate: yes
     networks:
       - name: backend_network
         aliases:

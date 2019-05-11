@@ -1,0 +1,28 @@
+- name: Install PyOpenSSL to generate self signed cert
+  pip:
+    name: pyOpenSSL
+
+- name: Generate private key
+  openssl_privatekey:
+    path: "{{ proxy_target_dir }}/reternal.key"
+
+- name: Generate CSR 
+  openssl_csr:
+    path: "{{ proxy_target_dir }}/{{ item }}.csr"
+    privatekey_path: "{{ proxy_target_dir }}/reternal.key"
+    common_name: "{{ item }}"
+  with_list:
+    - "{{ proxy.ui.domain }}"
+    - "{{ proxy.c2.domain }}"
+    - "{{ proxy.api.domain }}"
+
+- name: Generate self signed certificate
+  openssl_certificate:
+    path: "{{ proxy_target_dir }}/{{ item }}.crt"
+    privatekey_path: "{{ proxy_target_dir }}/reternal.key"
+    csr_path: "{{ proxy_target_dir }}/{{ item }}.csr"
+    provider: selfsigned
+  with_list:
+    - "{{ proxy.ui.domain }}"
+    - "{{ proxy.c2.domain }}"
+    - "{{ proxy.api.domain }}"

@@ -24,8 +24,8 @@
     name: reternal/ui
     path: "{{ ui_target_dir }}"
     buildargs:
-      VUE_APP_BASEAPI: "{{ reternal.api_proto }}://{{ reternal.api_ip }}:{{ reternal.api_port }}/api/v1"
-      VUE_APP_SOCKETHOST: "{{ reternal.api_proto }}://{{ reternal.api_ip }}:{{ reternal.api_port }}"
+      VUE_APP_BASEAPI: "{{ reternal.api_dest }}/api/v1"
+      VUE_APP_SOCKETHOST: "{{ reternal.api_dest }}"
     force: "{{ 'yes' if install is defined else 'no' }}"
 
 - name: Run UI container
@@ -33,11 +33,10 @@
     name: reternal-ui
     image: reternal/ui
     state: started
+    recreate: yes
     networks:
       - name: frontend_network
         aliases:
           - reternal-ui
-    ports:
-      - "127.0.0.1:{{reternal.ui_port}}:80"
     volumes:
       - /etc/reternal/navigator.json:/usr/share/nginx/html/mitre-navigator/assets/config.json
