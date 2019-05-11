@@ -33,5 +33,11 @@
       tags: ['c2', 'reternal']
       
 
+- hosts: compiler
+  become: yes
+  roles:
+    - role: compiler
+      tags: ['compiler', 'reternal']
+
 
     
