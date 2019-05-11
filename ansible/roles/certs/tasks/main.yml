@@ -2,14 +2,28 @@
   pip:
     name: pyOpenSSL
 
+- name: Create proxy config directory
+  file:
+    path: "{{ proxy_target_dir }}"
+    state: directory
+
+- name: Create proxy config directory
+  file:
+    path: "{{ proxy_target_dir }}/tls"
+    state: directory
+
 - name: Generate private key
   openssl_privatekey:
-    path: "{{ proxy_target_dir }}/reternal.key"
+    path: "{{ proxy_target_dir }}/tls/{{ item }}.key"
+  with_list:
+    - "{{ proxy.ui.domain }}"
+    - "{{ proxy.c2.domain }}"
+    - "{{ proxy.api.domain }}"
 
 - name: Generate CSR 
   openssl_csr:
-    path: "{{ proxy_target_dir }}/{{ item }}.csr"
-    privatekey_path: "{{ proxy_target_dir }}/reternal.key"
+    path: "{{ proxy_target_dir }}/tls/{{ item }}.csr"
+    privatekey_path: "{{ proxy_target_dir }}/tls/{{ item }}.key"
     common_name: "{{ item }}"
   with_list:
     - "{{ proxy.ui.domain }}"
@@ -18,9 +32,9 @@
 
 - name: Generate self signed certificate
   openssl_certificate:
-    path: "{{ proxy_target_dir }}/{{ item }}.crt"
-    privatekey_path: "{{ proxy_target_dir }}/reternal.key"
-    csr_path: "{{ proxy_target_dir }}/{{ item }}.csr"
+    path: "{{ proxy_target_dir }}/tls/{{ item }}.crt"
+    privatekey_path: "{{ proxy_target_dir }}/tls/{{ item }}.key"
+    csr_path: "{{ proxy_target_dir }}/tls/{{ item }}.csr"
     provider: selfsigned
   with_list:
     - "{{ proxy.ui.domain }}"
