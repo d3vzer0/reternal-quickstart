@@ -11,13 +11,11 @@
     - role: docker
       tags: ['docker', 'core']
 
-
 - hosts: backend
   become: yes
   roles:
     - role: backend
       tags: ['backend', 'reternal']
-
 
 - hosts: ui
   become: yes
@@ -25,19 +23,22 @@
     - role: ui
       tags: ['ui', 'reternal']
 
-
 - hosts: c2
   become: yes
   roles:
     - role: c2
       tags: ['c2', 'reternal']
       
-
 - hosts: compiler
   become: yes
   roles:
     - role: compiler
       tags: ['compiler', 'reternal']
 
-
-    
+- hosts: proxy
+  become: yes
+  roles:
+    - role: certs
+      tags: ['certs', 'reternal']
+    - role: proxy
+      tags: ['proxy', 'reternal']

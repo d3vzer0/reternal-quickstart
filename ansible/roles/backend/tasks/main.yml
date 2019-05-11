@@ -49,23 +49,23 @@
     name: reternal-backend
     image: reternal/backend
     state: started
+    recreate: yes
     env:
       JWT_SECRET: "{{ passwords.mongo_root_user }}"
       FLASK_SECRET: "{{ passwords.mongo_root_user }}"
-      CORS_DOMAIN: "{{ reternal.cors_host }}"
-      C2_DEST: "http://{{ reternal.c2_ip }}:{{ reternal.c2_port }}/api/v1/ping"
+      CORS_DOMAIN: "{{ reternal.cors }}"
+      C2_DEST: "{{ reternal.c2_dest }}"
     networks:
       - name: backend_network
         aliases:
           - reternal-backend
-    ports:
-      - "127.0.0.1:{{reternal.api_port}}:5000"
-
+ 
 - name: Run backend SocketIO container
   docker_container:
     name: reternal-backend
     image: reternal/backend
     state: started
+    recreate: yes
     env:
       JWT_SECRET: "{{ passwords.mongo_root_user }}"
       FLASK_SECRET: "{{ passwords.mongo_root_user }}"
