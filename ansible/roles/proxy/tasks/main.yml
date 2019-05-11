@@ -28,7 +28,9 @@
           - reternal-c2
     volumes:
       - "{{ proxy_target_dir }}/proxy.conf:/etc/nginx/conf.d/proxy.conf"
+      - "{{ proxy_target_dir }}/tls:/etc/nginx/tls"
+
     ports:
-      - "80:80"
-      - "443:443"
-      - ""
+      - "{{ proxy.c2.port }}:{{ proxy.c2.port }}"
+      - "{{ proxy.ui.port }}:{{ proxy.ui.port }}"
+      - "{{ proxy.api.port }}:{{ proxy.api.port }}"

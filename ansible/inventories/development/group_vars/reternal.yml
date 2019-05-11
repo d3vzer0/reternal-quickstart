@@ -1,20 +1,21 @@
 reternal:
-  api_dest: "http://localhost:9090"
+  api_dest: "http://localhost:9443"
   c2_dest: "http://localhost/api/v1/ping"
   cors: "http://{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
 
 proxy:
   c2: 
+    container: "reternal-c2"
     domain: "c2.reternal.localdomain"
-    port: 80
-  
+    port: 443
+
   api:
+    container: "reternal-api"
     domain: "api.reternal.localdomain"
-    port: 9090
+    port: 9443
 
   ui:
+    container: "reternal-ui"
     domain: "reternal.localdomain"
-    port: 8080
-    
-
-  # cors_host: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
+    port: 8443
+  

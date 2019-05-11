@@ -62,7 +62,7 @@
  
 - name: Run backend SocketIO container
   docker_container:
-    name: reternal-backend
+    name: reternal-socketio
     image: reternal/backend
     state: started
     recreate: yes
