@@ -24,6 +24,13 @@
   roles:
     - role: ui
       tags: ['ui', 'reternal']
+
+
+- hosts: c2
+  become: yes
+  roles:
+    - role: c2
+      tags: ['c2', 'reternal']
       
 
 

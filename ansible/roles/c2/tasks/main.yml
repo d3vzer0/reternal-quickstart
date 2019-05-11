@@ -1,0 +1,29 @@
+
+- include_vars: vault.yml
+
+- name: Copy source files to target server
+  copy:
+    src: "{{ c2_src_dir }}"
+    dest: "{{ c2_target_dir }}"
+
+- name: Build C2 container
+  docker_image:
+    name: reternal/c2
+    path: "{{ c2_target_dir }}"
+    force: yes
+
+- name: Run C2 container
+  docker_container:
+    name: reternal-c2
+    image: reternal/c2
+    state: started
+    env:
+      C2_SECRET: "{{ passwords.c2_secret }}"
+      C2_PORT: "{{ reternal.c2_port }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - reternal-c2
+    ports:
+      - "127.0.0.1:{{ reternal.c2_port }}:9000"
+
