@@ -1,0 +1,20 @@
+- name: Copy source files to target server
+  copy:
+    src: "{{ compiler_src_dir }}"
+    dest: "{{ compiler_target_dir }}"
+
+- name: Build compiler container
+  docker_image:
+    name: reternal/compiler
+    path: "{{ compiler_target_dir }}"
+    force: yes
+
+- name: Run compiler container
+  docker_container:
+    name: reternal-compiler
+    image: reternal/compiler
+    state: started
+    networks:
+      - name: backend_network
+        aliases:
+          - reternal-c2

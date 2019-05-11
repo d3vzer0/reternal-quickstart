@@ -1,0 +1,2 @@
+compiler_target_dir: "/opt/reternal/compiler"
+compiler_src_dir: "../../../agent/"
