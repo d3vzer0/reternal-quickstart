@@ -31,7 +31,7 @@ and import Mitre and Metta databases.
 | Total Stack | Build verifying entire stack via docker-compose in this repository | [![Build Status](https://travis-ci.com/d3vzer0/reternal-quickstart.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-quickstart) |
 
 
-<img src="https://i.postimg.cc/15nGCgws/Untitled-Diagram-3.png" alt="Drawing" style="width: 600px;"/>
+<img src="https://user-images.githubusercontent.com/34250156/57585460-d49ffc00-74e8-11e9-9ace-e7da68336e0c.png" alt="Drawing" style="width: 600px;"/>
 
 ## Install and Configuration
 This repository contains an Ansible deployment playbook to automate the installation and configuration for Reternal. The guide can be found on the repo's Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki/1.A-Ansible-Install-Guide. A manual docker-compose file is also available for local testing.
