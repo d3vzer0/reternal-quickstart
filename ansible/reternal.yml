@@ -42,3 +42,18 @@
       tags: ['certs', 'reternal']
     - role: proxy
       tags: ['proxy', 'reternal']
+
+
+- hosts: backend
+  become: yes
+  vars_prompt:
+  - name: "login_username"
+    prompt: "Username for Reternal auth"
+    private: no
+  - name: "login_password"
+    prompt: "Password for Reternal auth"
+    private: yes
+
+  roles:
+    - role: management
+      tags: ['backend', 'management']
