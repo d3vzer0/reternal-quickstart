@@ -1,10 +1,17 @@
 
 - include_vars: vault.yml
 
-- name: Copy source files to target server
-  copy:
-    src: "{{ c2_src_dir }}"
-    dest: "{{ c2_target_dir }}"
+- name: Archiving C2 components
+  archive:
+    path: "../c2"
+    dest: "../c2.tgz"
+  delegate_to: localhost
+  become: no
+
+- name: Extract C2 components to target
+  unarchive:
+    src: "../c2.tgz"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Build C2 container
   docker_image:

@@ -9,11 +9,19 @@
   docker_volume:
     name: mongodb-data
 
+- name: Installing pymongo for DB management
+  pip:
+    name: pymongo
+    state: present
+
 - name: Run mongo container
   docker_container:
     name: mongodb
     image: mongo
     state: started
+    env:
+      MONGO_INITDB_ROOT_USERNAME: "{{ passwords.mongo_root_user }}"
+      MONGO_INITDB_ROOT_PASSWORD: "{{ passwords.mongo_root_pass }}"
     networks:
       - name: backend_network
         aliases:
@@ -22,6 +30,16 @@
       - mongodb-data:/data/db
     ports:
       - "127.0.0.1:27017:27017"
+
+- name: Create mongodb user and pass for reternal
+  mongodb_user:
+    login_user: "{{ passwords.mongo_root_user }}"
+    login_password: "{{ passwords.mongo_root_pass }}"
+    database: "{{ database.db }}"
+    user: "{{ database.user }}"
+    password: "{{ passwords.mongo_reternal_pass }}"
+    state: present
+    roles: readWrite
 
 - name: Run redis container
   docker_container:
@@ -33,10 +51,17 @@
         aliases:
           - redis-service
 
-- name: Copy source files to target server
-  copy:
-    src: "{{ backend_src_dir }}"
-    dest: "{{ backend_target_dir }}"
+- name: Archiving backend components
+  archive:
+    path: "../backend"
+    dest: "../backend.tgz"
+  delegate_to: localhost
+  become: no
+
+- name: Extract backend components to target
+  unarchive:
+    src: "../backend.tgz"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Build backend/api container
   docker_image:

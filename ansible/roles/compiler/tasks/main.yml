@@ -1,7 +1,14 @@
-- name: Copy source files to target server
-  copy:
-    src: "{{ compiler_src_dir }}"
-    dest: "{{ compiler_target_dir }}"
+- name: Archiving Compiler components
+  archive:
+    path: "../agent"
+    dest: "../agent.tgz"
+  delegate_to: localhost
+  become: no
+
+- name: Extract Compiler components to target
+  unarchive:
+    src: "../agent.tgz"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Build compiler container
   docker_image:
