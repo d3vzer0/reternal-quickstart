@@ -80,6 +80,7 @@
       FLASK_SECRET: "{{ passwords.mongo_root_user }}"
       CORS_DOMAIN: "{{ reternal.cors }}"
       C2_DEST: "{{ reternal.c2_dest }}"
+      MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"
     networks:
       - name: backend_network
         aliases:

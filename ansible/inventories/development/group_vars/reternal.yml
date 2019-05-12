@@ -1,27 +1,36 @@
-reternal:
-  install_dir: "/opt/reternal"
-  api_dest: "http://localhost:9443"
-  c2_dest: "http://localhost/api/v1/ping"
-  cors: "http://{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
+# This is the default settings file for the reternal playbook.
+# None of the variables will have to be changed for testing. In it's current state the following will be deployed:
 
+# API on https://<your_ip>:8443
+# UI on https://<your_ip>:9443
+# C2 Endpoint on https://<your_ip>:443
+
+# A default firewall won't be enabled, so be carefull what you expose!
+
+# PS. The certs role will create self-signed certificates. You can replace these with your own certs later on
+
+
+reternal:
+  install_dir: "/opt/reternal" # Install location for source code
+  api_dest: "https://{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}:8443" # IP/Domain used inside the UI to perform API calls
+  c2_dest: "https://{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}/api/v1/ping" # Default endpoint used for our agent to get tasks
+  cors: "*" # Change value to enforce CORS policy (ie. only allow API requests from IP/domain 'X')
 
 database:
-  user: "reternal"
-  db: "reternal"
+  user: "reternal" # Username used for Mongo DB
+  db: "reternal" # Default database for reternal
 
 proxy:
   c2: 
-    container: "reternal-c2"
-    domain: "c2.reternal.localdomain"
-    port: 443
-
-  api:
-    container: "reternal-api"
-    domain: "api.reternal.localdomain"
-    port: 9443
+    container: "reternal-c2" # No need to change - container name for our C2 container, 
+    domain: "c2.reternal.localdomain" #  CN for our self signed cert
+    port: 443 # Port exposed by nginx that will forward requests to our C2 container
 
   ui:
-    container: "reternal-ui"
-    domain: "reternal.localdomain"
-    port: 8443
+    container: "reternal-ui" # No need to change - container name for our UI container, 
+    domain: "reternal.localdomain" # CN for our self signed cert
+    port: 8443 # Port exposed by nginx that will forward requests to our UI container
   
+  api:
+    container: "reternal-api" # No need to change - container name for our API container, 
+    domain: "api.reternal.localdomain" # CN for our self signed cert
