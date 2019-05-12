@@ -35,7 +35,7 @@
 
 - name: Running configuration script for first time use
   expect: 
-    command: "python3 {{ reternal.install_dir }}/manage.py -install create -t all"
+    command: "python3 {{ reternal.install_dir }}/manage.py -a install -t all"
     responses:
       (.*)Mongo Password(.*): "{{ passwords.mongo_reternal_pass }}"
       (.*)Username(.*): '{{ login_username }}'
