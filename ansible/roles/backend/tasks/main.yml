@@ -76,8 +76,8 @@
     state: started
     recreate: yes
     env:
-      JWT_SECRET: "{{ passwords.mongo_root_user }}"
-      FLASK_SECRET: "{{ passwords.mongo_root_user }}"
+      JWT_SECRET: "{{ passwords.jwt_secret }}"
+      FLASK_SECRET: "{{ passwords.api_secret }}"
       CORS_DOMAIN: "{{ reternal.cors }}"
       C2_DEST: "{{ reternal.c2_dest }}"
       MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"

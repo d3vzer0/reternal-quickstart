@@ -18,7 +18,6 @@
   with_list:
     - "{{ proxy.ui.domain }}"
     - "{{ proxy.c2.domain }}"
-    - "{{ proxy.api.domain }}"
 
 - name: Generate CSR 
   openssl_csr:
@@ -28,7 +27,6 @@
   with_list:
     - "{{ proxy.ui.domain }}"
     - "{{ proxy.c2.domain }}"
-    - "{{ proxy.api.domain }}"
 
 - name: Generate self signed certificate
   openssl_certificate:
@@ -39,4 +37,3 @@
   with_list:
     - "{{ proxy.ui.domain }}"
     - "{{ proxy.c2.domain }}"
-    - "{{ proxy.api.domain }}"

@@ -33,4 +33,3 @@
     ports:
       - "{{ proxy.c2.port }}:{{ proxy.c2.port }}"
       - "{{ proxy.ui.port }}:{{ proxy.ui.port }}"
-      - "{{ proxy.api.port }}:{{ proxy.api.port }}"
