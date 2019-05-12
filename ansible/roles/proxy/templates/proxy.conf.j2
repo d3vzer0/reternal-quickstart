@@ -32,17 +32,17 @@ server {
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;        
     }
-}
 
-server {
-    listen {{ proxy.api.port }} ssl;
-    server_name {{ ansible_default_ipv4.address }};
-    ssl_certificate     /etc/nginx/tls/{{ proxy.api.domain}}.crt;
-    ssl_certificate_key /etc/nginx/tls/{{ proxy.api.domain}}.key;
-    ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
-    ssl_protocols       TLSv1.1 TLSv1.2;
-    
-    location / {
+    location /api/v1/ {
+            proxy_pass http://reternal-backend:5000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;        
+        }
+
+    location /socket.io {
         proxy_pass http://reternal-backend:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -51,3 +51,5 @@ server {
         proxy_cache_bypass $http_upgrade;        
     }
 }
+
+
