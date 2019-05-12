@@ -32,7 +32,8 @@
     buildargs:
       VUE_APP_BASEAPI: "{{ reternal.api_dest }}/api/v1"
       VUE_APP_SOCKETHOST: "{{ reternal.api_dest }}"
-    force: "{{ 'yes' if install is defined else 'no' }}"
+    force: yes
+    # force: "{{ 'yes' if install is defined else 'no' }}"
 
 - name: Run UI container
   docker_container:
