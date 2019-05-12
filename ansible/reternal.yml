@@ -1,59 +1,69 @@
 - hosts: all
+  tags: ['all', 'core']
   become: yes
   strategy: free
   roles:
     - role: generic
-      tags: ['generic', 'core']
+      tags: ['generic']
 
     - role: firewall
-      tags: ['firewall', 'core']
+      tags: ['firewall']
 
     - role: docker
-      tags: ['docker', 'core']
+      tags: ['docker']
+
 
 - hosts: backend
+  tags: ['backend', 'reternal']
   become: yes
   roles:
     - role: backend
-      tags: ['backend', 'reternal']
+      tags: ['backend']
 
-- hosts: ui
+
+- hosts: frontend
+  tags: ['frontend', 'reternal']
   become: yes
   roles:
     - role: ui
-      tags: ['ui', 'reternal']
+      tags: ['ui']
+
 
 - hosts: c2
+  tags: ['c2', 'reternal']
   become: yes
   roles:
     - role: c2
-      tags: ['c2', 'reternal']
-      
-- hosts: compiler
+      tags: ['c2']
+
+
+- hosts: compilers
+  tags: ['compilers', 'reternal']
   become: yes
   roles:
     - role: compiler
-      tags: ['compiler', 'reternal']
+      tags: ['compiler']
 
-- hosts: proxy
+- hosts: proxies
+  tags: ['proxies']
   become: yes
   roles:
     - role: certs
-      tags: ['certs', 'reternal']
+      tags: ['certs']
     - role: proxy
-      tags: ['proxy', 'reternal']
+      tags: ['proxy'] 
 
 
 - hosts: backend
+  tags: ['backend', 'utils']
   become: yes
   vars_prompt:
-  - name: "login_username"
-    prompt: "Username for Reternal auth"
-    private: no
-  - name: "login_password"
-    prompt: "Password for Reternal auth"
-    private: yes
-
+    - name: "login_username"
+      prompt: "Username for Reternal auth"
+      private: no
+    - name: "login_password"
+      prompt: "Password for Reternal auth"
+      private: yes
   roles:
     - role: management
-      tags: ['backend', 'management']
+      tags: ['management']
