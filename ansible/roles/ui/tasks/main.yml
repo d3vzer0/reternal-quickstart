@@ -8,6 +8,11 @@
     path: "{{ ui_target_dir }}"
     state: directory
 
+- name: Making sure default install directory is created
+  file:
+    path: "{{ reternal.install_dir }}"
+    state: directory
+
 - name: Archiving UI components
   archive:
     path: "../ui"
@@ -23,7 +28,7 @@
 - name: Copy navigator template to target server
   template:
     src: navigator.json.j2
-    dest: /etc/reternal/navigator.json
+    dest: /opt/reternal/navigator.json
 
 - name: Build ui container
   docker_image:
@@ -33,7 +38,6 @@
       VUE_APP_BASEAPI: "{{ reternal.api_dest }}/api/v1"
       VUE_APP_SOCKETHOST: "{{ reternal.api_dest }}"
     force: yes
-    # force: "{{ 'yes' if install is defined else 'no' }}"
 
 - name: Run UI container
   docker_container:
@@ -44,6 +48,6 @@
     networks:
       - name: frontend_network
         aliases:
-          - reternal-ui
+          - reternal-uis
     volumes:
-      - /etc/reternal/navigator.json:/usr/share/nginx/html/mitre-navigator/assets/config.json
+      - /opt/reternal/navigator.json:/usr/share/nginx/html/mitre-navigator/assets/config.json

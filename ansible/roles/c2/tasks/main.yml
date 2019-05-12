@@ -1,6 +1,11 @@
 
 - include_vars: vault.yml
 
+- name: Making sure default install directory is created
+  file:
+    path: "{{ reternal.install_dir }}"
+    state: directory
+  
 - name: Archiving C2 components
   archive:
     path: "../c2"

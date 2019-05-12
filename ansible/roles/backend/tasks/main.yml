@@ -51,6 +51,11 @@
         aliases:
           - redis-service
 
+- name: Making sure default install directory is created
+  file:
+    path: "{{ reternal.install_dir }}"
+    state: directory
+
 - name: Archiving backend components
   archive:
     path: "../backend"
