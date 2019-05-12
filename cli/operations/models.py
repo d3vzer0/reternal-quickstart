@@ -1,13 +1,17 @@
 from cli.config import config
 from cli.generic import Random
 import datetime
+import getpass
 import mongoengine
 import mongoengine as db
 
 db.connect(
     db=config['mongodb']['database'],
     host=config['mongodb']['address'],
-    port=int(config['mongodb']['port'])
+    port=int(config['mongodb']['port']),
+    username='reternal',
+    password=getpass.getpass(prompt='Mongo Password: '),
+    authSource='admin'
 )
 
 
@@ -27,7 +31,6 @@ class Users(db.Document):
     meta = {
         'ordering': ['-username'],
     }
-
 
 
 class TaskCommands(db.EmbeddedDocument):
