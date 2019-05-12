@@ -1,7 +1,13 @@
 reternal:
+  install_dir: "/opt/reternal"
   api_dest: "http://localhost:9443"
   c2_dest: "http://localhost/api/v1/ping"
   cors: "http://{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}"
+
+
+database:
+  user: "reternal"
+  db: "reternal"
 
 proxy:
   c2: 

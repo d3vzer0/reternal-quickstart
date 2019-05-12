@@ -3,16 +3,22 @@
   docker_network:
     name: frontend_network
 
-- name: Copy source files to target server
-  copy:
-    src: "{{ ui_src_dir }}"
-    dest: "{{ ui_target_dir }}"
-  when: install | default(False)
-
 - name: Creating config directory
   file:
-    path: /etc/reternal
+    path: "{{ ui_target_dir }}"
     state: directory
+
+- name: Archiving UI components
+  archive:
+    path: "../ui"
+    dest: "../ui.tgz"
+  delegate_to: localhost
+  become: no
+
+- name: Extract UI components to target
+  unarchive:
+    src: "../ui.tgz"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Copy navigator template to target server
   template:

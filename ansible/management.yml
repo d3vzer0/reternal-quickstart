@@ -1,0 +1,5 @@
+- hosts: backend
+  become: yes
+  roles:
+    - role: management
+      tags: ['backend', 'management']

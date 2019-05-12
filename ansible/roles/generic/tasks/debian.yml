@@ -6,3 +6,4 @@
   apt:
     name: ["git", "vim", "python3-pip", "ufw"]
     state: present
+    update_cache: yes
