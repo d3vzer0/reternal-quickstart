@@ -5,7 +5,7 @@
 
 - name: Creating config directory
   file:
-    path: "{{ ui_target_dir }}"
+    path: "{{ reternal.install_dir }}/ui"
     state: directory
 
 - name: Making sure default install directory is created
@@ -33,7 +33,7 @@
 - name: Build ui container
   docker_image:
     name: reternal/ui
-    path: "{{ ui_target_dir }}"
+    path: "{{ reternal.install_dir }}/ui"
     buildargs:
       VUE_APP_BASEAPI: "{{ reternal.api_dest }}/api/v1"
       VUE_APP_SOCKETHOST: "{{ reternal.api_dest }}"
