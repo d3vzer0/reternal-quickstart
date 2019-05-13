@@ -22,12 +22,12 @@
 - name: Extract source CLI to target
   unarchive:
     src: "../cli.tgz"
-    dest: "{{ extract_target_dir }}"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Extract source mapping to target
   unarchive:
     src: "../mitre.tgz"
-    dest: "{{ extract_target_dir }}"
+    dest: "{{ reternal.install_dir }}"
 
 - name: Copy management script to target
   copy:
@@ -37,16 +37,3 @@
 - name: Installing required packages
   pip:
     name: ['mongoengine', 'oyaml', 'requests', 'pexpect']
-
-- name: Running configuration script for first time use
-  expect: 
-    command: "python3 {{ reternal.install_dir }}/manage.py -a install -t all"
-    responses:
-      (.*)Mongo Password(.*): "{{ passwords.mongo_reternal_pass }}"
-      (.*)Username(.*): '{{ login_username }}'
-      (.*)Password(.*): '{{ login_password }}'
-      (.*)Role(.*): 'Admin'
-  register: manage_script
-
-- debug: msg="{{ manage_script.stdout }}"
-

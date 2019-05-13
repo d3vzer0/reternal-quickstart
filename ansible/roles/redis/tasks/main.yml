@@ -1,0 +1,13 @@
+- name: Making sure backend docker network exists
+  docker_network:
+    name: backend_network
+
+- name: Run redis container
+  docker_container:
+    name: redis
+    image: redis
+    state: started
+    networks:
+      - name: backend_network
+        aliases:
+          - redis-service

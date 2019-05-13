@@ -17,8 +17,12 @@
   tags: ['backend', 'reternal']
   become: yes
   roles:
-    - role: backend
-      tags: ['backend']
+    - role: mongodb
+      tags: ['mongodb']
+    - role: redis
+      tags: ['redis']
+    - role: api
+      tags: ['api']
 
 
 - hosts: frontend
@@ -44,6 +48,7 @@
     - role: compiler
       tags: ['compiler']
 
+
 - hosts: proxies
   tags: ['proxies']
   become: yes
@@ -67,3 +72,11 @@
   roles:
     - role: management
       tags: ['management']
+    - role: usercreate
+      tags: ['usercreate']
+    - role: attck
+      tags: ['attck']
+    - role: mapping
+      tags: ['mapping']
+    - role: commands
+      tags: ['commands']

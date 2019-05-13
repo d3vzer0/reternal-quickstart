@@ -1,0 +1,14 @@
+
+- include_vars: vault.yml
+
+- name: Creating Reternal user
+  expect: 
+    command: "python3 {{ reternal.install_dir }}/manage.py -a create -t user"
+    responses:
+      (.*)Mongo Password(.*): "{{ passwords.mongo_reternal_pass }}"
+      (.*)Username(.*): '{{ login_username }}'
+      (.*)Password(.*): '{{ login_password }}'
+      (.*)Role(.*): 'Admin'
+  register: manage_script
+
+- debug: msg="{{ manage_script.stdout }}"

@@ -1,0 +1,11 @@
+
+- include_vars: vault.yml
+
+- name: Importing MITRE ATT&CK techniques
+  expect: 
+    command: "python3 {{ reternal.install_dir }}/manage.py -a import -t mitre"
+    responses:
+      (.*)Mongo Password(.*): "{{ passwords.mongo_reternal_pass }}"
+  register: manage_script
+
+- debug: msg="{{ manage_script.stdout }}"

@@ -1,0 +1,42 @@
+
+- include_vars: vault.yml
+
+- name: Making sure backend docker network exists
+  docker_network:
+    name: backend_network
+
+- name: Create persistent DB volume
+  docker_volume:
+    name: mongodb-data
+
+- name: Installing pymongo for DB management
+  pip:
+    name: pymongo
+    state: present
+
+- name: Run mongo container
+  docker_container:
+    name: mongodb
+    image: mongo
+    state: started
+    env:
+      MONGO_INITDB_ROOT_USERNAME: "{{ passwords.mongo_root_user }}"
+      MONGO_INITDB_ROOT_PASSWORD: "{{ passwords.mongo_root_pass }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - mongodb
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "127.0.0.1:27017:27017"
+
+- name: Create mongodb user and pass for reternal
+  mongodb_user:
+    login_user: "{{ passwords.mongo_root_user }}"
+    login_password: "{{ passwords.mongo_root_pass }}"
+    database: "{{ database.db }}"
+    user: "{{ database.user }}"
+    password: "{{ passwords.mongo_reternal_pass }}"
+    state: present
+    roles: readWrite
