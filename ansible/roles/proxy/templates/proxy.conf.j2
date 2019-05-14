@@ -1,6 +1,5 @@
 server {
     listen {{ proxy.c2.port }} ssl;
-    server_name {{ ansible_default_ipv4.address }};
     ssl_certificate     /etc/nginx/tls/{{ proxy.c2.domain}}.crt;
     ssl_certificate_key /etc/nginx/tls/{{ proxy.c2.domain}}.key;
     ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
@@ -18,7 +17,6 @@ server {
 
 server {
     listen {{ proxy.ui.port }} ssl;
-    server_name {{ ansible_default_ipv4.address }};
     ssl_certificate     /etc/nginx/tls/{{ proxy.ui.domain}}.crt;
     ssl_certificate_key /etc/nginx/tls/{{ proxy.ui.domain}}.key;
     ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;

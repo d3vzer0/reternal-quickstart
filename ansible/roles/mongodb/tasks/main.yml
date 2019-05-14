@@ -39,4 +39,4 @@
     user: "{{ database.user }}"
     password: "{{ passwords.mongo_reternal_pass }}"
     state: present
-    roles: readWrite
+    roles: readWrite,dbAdmin

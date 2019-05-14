@@ -51,11 +51,12 @@
     state: started
     recreate: yes
     env:
-      JWT_SECRET: "{{ passwords.mongo_root_user }}"
-      FLASK_SECRET: "{{ passwords.mongo_root_user }}"
+      JWT_SECRET: "{{ passwords.jwt_secret }}"
+      FLASK_SECRET: "{{ passwords.api_secret }}"
+      MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"
     networks:
       - name: backend_network
         aliases:
-          - reternal-backend
+          - reternal-backendsocket
     command: ['celery', '-A', 'app.tasks.listener.celery', 'worker', '-Q', 'api']
     
