@@ -23,14 +23,14 @@ database:
 proxy:
   c2: 
     container: "reternal-c2" # No need to change - container name for our C2 container, 
-    domain: "c2.reternal.localdomain" #  CN for our self signed cert
+    domain: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}" #  CN for our self signed cert
     port: 443 # Port exposed by nginx that will forward requests to our C2 container
 
   ui:
     container: "reternal-ui" # No need to change - container name for our UI container, 
-    domain: "reternal.localdomain" # CN for our self signed cert
+    domain: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}" # CN for our self signed cert
     port: 8443 # Port exposed by nginx that will forward requests to our UI container
   
   api:
     container: "reternal-api" # No need to change - container name for our API container, 
-    domain: "api.reternal.localdomain" # CN for our self signed cert
+    domain: "{{ hostvars['rtn-dev-01']['ansible_default_ipv4']['address'] }}" # CN for our self signed cert

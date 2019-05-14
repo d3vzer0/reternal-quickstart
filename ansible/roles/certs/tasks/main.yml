@@ -34,6 +34,7 @@
     privatekey_path: "{{ proxy_target_dir }}/tls/{{ item }}.key"
     csr_path: "{{ proxy_target_dir }}/tls/{{ item }}.csr"
     provider: selfsigned
+    subject_alt_name: "{{ item }}"
   with_list:
     - "{{ proxy.ui.domain }}"
     - "{{ proxy.c2.domain }}"
