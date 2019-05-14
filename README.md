@@ -58,6 +58,9 @@ This project has been re-developed so many times, it will probably never really 
 
 ## Examples and screenshots
 
+### Agent Overview
+<img width="1412" alt="agents" src="https://user-images.githubusercontent.com/34250156/57738616-79206a80-76b0-11e9-989b-62014f991ef0.png">
+
 ### Actor mapping
 Reternal automatically maps available commands and techniques to actors. You can directly add all the techniques commonly used by actors to your set of tasks.
 <img width="1226" alt="actor_mapping" src="https://user-images.githubusercontent.com/34250156/56099791-c5418900-5f11-11e9-8bf9-889765a4d8a9.png">
