@@ -39,9 +39,9 @@ This repository contains an Ansible deployment playbook to automate the installa
 ## Roadmap before offical release (end of 05-2019)
   - Certificate Pinning: Only accept commands from server with fixed TLS fingerprint
   - Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content
-  - Loading Saved Campaign: Finalise ability to load saved campaigns
-  - Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components
-  - Bug fixes etc
+  - ~~Loading Saved Campaign: Finalise ability to load saved campaigns~~ Done
+  - ~~Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components~~ Done
+  - Bug fixes
   
 ## Developers and Contact
 
@@ -57,6 +57,10 @@ This project has been re-developed so many times, it will probably never really 
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
 
 ## Examples and screenshots
+All of the features will be documented on the Welcome page of the Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki. Below are a few examples of the main components.
+
+### Agent Overview
+<img width="1412" alt="agents" src="https://user-images.githubusercontent.com/34250156/57738616-79206a80-76b0-11e9-989b-62014f991ef0.png">
 
 ### Actor mapping
 Reternal automatically maps available commands and techniques to actors. You can directly add all the techniques commonly used by actors to your set of tasks.
@@ -69,7 +73,7 @@ Commands are mapped to MITRE ATTCK techniques. You can browse the available comm
 ### Recipe builder
 Scheduling tasks to be run on an agent is called a recipe. You can add manual commands to a recipe or select one of the existing mapped techniques or actor TTPs. You can drag/drop to change the order of the tasks in your recipe.
 
-<img width="1431" alt="recipe" src="https://user-images.githubusercontent.com/34250156/56100184-df7d6600-5f15-11e9-8acb-2658fb2795ec.png">
+<img width="1180" alt="campaign" src="https://user-images.githubusercontent.com/34250156/57738867-8e49c900-76b1-11e9-96b6-aedaeb522198.png">
 
 #### Video showing intro to Recipe building
 [VIMEO Link](https://vimeo.com/328926622)
