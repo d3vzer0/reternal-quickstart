@@ -39,9 +39,9 @@ This repository contains an Ansible deployment playbook to automate the installa
 ## Roadmap before offical release (end of 05-2019)
   - Certificate Pinning: Only accept commands from server with fixed TLS fingerprint
   - Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content
-  - Loading Saved Campaign: Finalise ability to load saved campaigns
-  - Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components
-  - Bug fixes etc
+  - ~~Loading Saved Campaign: Finalise ability to load saved campaigns~~ Done
+  - ~~Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components~~ Done
+  - Bug fixes
   
 ## Developers and Contact
 
