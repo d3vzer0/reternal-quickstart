@@ -1,0 +1,23 @@
+
+- name: Installing Cryptodome to generate RSA certs
+  pip:
+    name: pycryptodome
+
+- name: Creating RSA directory
+  file:
+    path: "{{ reternal.install_dir }}/rsa"
+    state: directory
+
+- name: Copy RSA script to target
+  copy:
+    src: ../certs.py
+    dest: "{{ reternal.install_dir }}/"
+
+- name: Checking if RSA key exists
+  stat:
+    path: "{{ reternal.install_dir }}/rsa/priv.key"
+  register: key_result
+  
+- name: Creating RSA cert/key on target server
+  command: "python3 {{ reternal.install_dir }}/certs.py"
+  when: key_result.stat.exists == False 
