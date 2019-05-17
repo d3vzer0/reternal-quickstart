@@ -32,22 +32,23 @@
     - role: ui
       tags: ['ui']
 
-
 - hosts: c2
   tags: ['c2', 'reternal']
   become: yes
   roles:
+    - role: rsa
+      tags: ['rsa']
     - role: c2
       tags: ['c2']
-
 
 - hosts: compilers
   tags: ['compilers', 'reternal']
   become: yes
   roles:
+    - role: rsa
+      tags: ['rsa']
     - role: compiler
       tags: ['compiler']
-
 
 - hosts: proxies
   tags: ['proxies']
