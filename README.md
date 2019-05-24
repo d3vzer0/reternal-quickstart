@@ -36,9 +36,15 @@ and import Mitre and Metta databases.
 ## Install and Configuration
 This repository contains an Ansible deployment playbook to automate the installation and configuration for Reternal. The guide can be found on the repo's Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki/1.A-Ansible-Install-Guide. A manual docker-compose file is also available for local testing.
 
-## Roadmap before offical release (end of 05-2019)
+## Roadmap for first beta (06-2019)
+  - Validation techniques: Implement commands that validate and confirm succesfull run techniques/tasks
+  - Agent conditionals: Design tasks that rely on the execution of tasks on different agents. Ie. if agent A finished task B, let agent X execute task Y
+  - Develop timeline for executed tasks
+  - More bug fixingg
+
+## Roadmap before offical Alpha release (end of 05-2019)
   - Certificate Pinning: Only accept commands from server with fixed TLS fingerprint
-  - Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content
+  - ~~Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content~~ Done
   - ~~Loading Saved Campaign: Finalise ability to load saved campaigns~~ Done
   - ~~Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components~~ Done
   - Bug fixes
