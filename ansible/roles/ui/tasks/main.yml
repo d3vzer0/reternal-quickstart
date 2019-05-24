@@ -37,6 +37,7 @@
     buildargs:
       VUE_APP_BASEAPI: "{{ reternal.api_dest }}/api/v1"
       VUE_APP_SOCKETHOST: "{{ reternal.api_dest }}"
+      VUE_APP_C2DEST: "{{ reternal.c2_dest }}"
     force: yes
 
 - name: Run UI container

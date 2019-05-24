@@ -31,3 +31,5 @@
       - name: backend_network
         aliases:
           - reternal-c2
+    volumes:
+        - "/opt/reternal/rsa/pub.pem:/opt/reternal/rsa/pub.pem"
