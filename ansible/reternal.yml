@@ -6,8 +6,9 @@
     - role: generic
       tags: ['generic']
 
-    - role: firewall
-      tags: ['firewall']
+    # Firewall rule not deployed automatically
+    # - role: firewall
+    #   tags: ['firewall']
 
     - role: docker
       tags: ['docker']
