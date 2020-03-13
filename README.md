@@ -11,10 +11,11 @@
 
 #### Note: Still under development, only use for testing and do not expose interfaces! #####
 
-RE:TERNAL is a centralised purple team simulation platform. Reternal uses agents installed on a simulation network to execute various known
+RE:TERNAL is a centralised purple team orchestration service to manage third-party C2 frameworks. Agents are installed on endpoints to  to execute various known
 red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
-the compose file in order to set up the reternal platform via docker. An additional import script is available to create your first user
-and import Mitre and Metta databases.
+the compose file in order to set up the reternal platform via docker. 
+
+
 
 ## Reternal components
 | Component        | Description | Code           | Build  |
@@ -36,18 +37,7 @@ and import Mitre and Metta databases.
 ## Install and Configuration
 This repository contains an Ansible deployment playbook to automate the installation and configuration for Reternal. The guide can be found on the repo's Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki/1.A-Ansible-Install-Guide. A manual docker-compose file is also available for local testing.
 
-## Roadmap for first beta (06-2019)
-  - Validation techniques: Implement commands that validate and confirm succesfull run techniques/tasks
-  - Agent conditionals: Design tasks that rely on the execution of tasks on different agents. Ie. if agent A finished task B, let agent X execute task Y
-  - Develop timeline for executed tasks
-  - More bug fixingg
 
-## Roadmap before offical Alpha release (end of 05-2019)
-  - Certificate Pinning: Only accept commands from server with fixed TLS fingerprint
-  - ~~Key Exchange: Implement method to exchange encryption keys beween agent and server to encrypt agent content~~ Done
-  - ~~Loading Saved Campaign: Finalise ability to load saved campaigns~~ Done
-  - ~~Finalise Ansible playbooks: Finish the Ansible playbook that configures and deploys all reternal components~~ Done
-  - Bug fixes
   
 ## Developers and Contact
 
@@ -65,23 +55,19 @@ This project has been re-developed so many times, it will probably never really 
 ## Examples and screenshots
 All of the features will be documented on the Welcome page of the Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki. Below are a few examples of the main components.
 
-### Agent Overview
-<img width="1412" alt="agents" src="https://user-images.githubusercontent.com/34250156/57738616-79206a80-76b0-11e9-989b-62014f991ef0.png">
-
-### Actor mapping
+### Actor / Technique mapping
 Reternal automatically maps available commands and techniques to actors. You can directly add all the techniques commonly used by actors to your set of tasks.
-<img width="1226" alt="actor_mapping" src="https://user-images.githubusercontent.com/34250156/56099791-c5418900-5f11-11e9-8bf9-889765a4d8a9.png">
+<img width="1226" alt="actor_mapping" src="screenshots/actor_mapping.png">
 
-### Technique mapping
-Commands are mapped to MITRE ATTCK techniques. You can browse the available commands and directly add them to your task list.
-<img width="1222" alt="technique_mapping" src="https://user-images.githubusercontent.com/34250156/56100207-0cca1400-5f16-11e9-99b5-be72141c50f0.png">
 
-### Recipe builder
-Scheduling tasks to be run on an agent is called a recipe. You can add manual commands to a recipe or select one of the existing mapped techniques or actor TTPs. You can drag/drop to change the order of the tasks in your recipe.
+### Recipe / Graph builder
+Scheduling tasks to be run on an agent is called a graph. You can add manual commands to a graph or select one of the existing mapped techniques or actor TTPs. You can drag/drop to change the order of the tasks in your graph.
 
-<img width="1180" alt="campaign" src="https://user-images.githubusercontent.com/34250156/57738867-8e49c900-76b1-11e9-96b6-aedaeb522198.png">
+<img width="1180" alt="campaign" src="screenshots/graph_builder.png">
 
-#### Video showing intro to Recipe building
-[VIMEO Link](https://vimeo.com/328926622)
+### C2 interaction
+Reternal acts as a piece of middleware and interacts with external C2 frameworks. An example is shown below how Reternal manages external listeners and generates stagers.
+<img width="1226" alt="actor_mapping" src="screenshots/listener_mgt.png">
 
+<img width="1226" alt="actor_mapping" src="screenshots/stager_builder.png">
 
