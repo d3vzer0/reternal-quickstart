@@ -67,7 +67,6 @@ All of the features will be documented on the Welcome page of the Wiki @ https:/
 Reternal automatically maps available commands and techniques to actors. You can directly add all the techniques commonly used by actors to your set of tasks.
 <img width="1226" alt="actor_mapping" src="screenshots/actor_mapping.png">
 
-
 ### Recipe / Graph builder
 Scheduling tasks to be run on an agent is called a graph. You can add manual commands to a graph or select one of the existing mapped techniques or actor TTPs. You can drag/drop to change the order of the tasks in your graph.
 
@@ -83,3 +82,6 @@ Reternal acts as a piece of middleware and interacts with external C2 frameworks
 Specify what datasources are available in your environment. Reternal will suggest specific campaigns to execute based on your coverage rating.
 
 <img width="1226" alt="actor_mapping" src="screenshots/dettect_coverage.png">
+
+With an overview of your coverage compared to all the ATT&CK techniques:
+<img width="1226" alt="attck_archive" src="screenshots/attck_archive.png">
