@@ -9,7 +9,7 @@
 
 ---------------------
 
-#### Note: Still under development, only use for testing and do not expose interfaces! #####
+#### Note: Still under development, only use for testing and do not expose interfaces! Current compose doesn't work yet, only try when you know what you're doing #####
 
 RE:TERNAL is a centralised purple team orchestration service to manage third-party C2 frameworks. Agents are installed on endpoints to  to execute various known
 red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
