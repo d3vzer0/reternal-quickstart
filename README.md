@@ -85,3 +85,10 @@ Specify what datasources are available in your environment. Reternal will sugges
 
 With an overview of your coverage compared to all the ATT&CK techniques:
 <img width="1226" alt="attck_archive" src="screenshots/attck_archive.png">
+
+### Campaign state and dashboard
+The main dashboard displays the state of your running campaigns and displays the expected coverage of your datasources vs techniques
+
+
+<img width="1226" alt="attck_archive" src="screenshots/campaign_state.png">
+
