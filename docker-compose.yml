@@ -69,9 +69,6 @@ services:
     build: ../reternal-c2
     depends_on:
       - redis-service
-    volumes:
-      - "/Users/jdreijer/Documents/Code/Github/reternal/reternal-c2:/reternal-c2"
-
     networks:
       - rtn-backend
 
