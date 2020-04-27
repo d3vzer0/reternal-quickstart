@@ -14,10 +14,12 @@ services:
     ports:
       - "127.0.0.1:27017:27017"
     volumes:
-      - empire-data:/data/db
+      - mongodb-data:/data/db
 
   redis:
-    image: redis
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_PASSWORD=this_should_be_something_secret
     networks:
       - rtn-backend
     ports:
@@ -31,29 +33,40 @@ services:
       - "127.0.0.1:5000:5000"
 
   c2:
-    image: reternal/c2
+    build: reternal-c2
     environment:
+      - RT_CELERY_BACKEND=redis://:this_should_be_something_secret@redis:6379/0
       # Replace below with something unique, also change for the empire service
-      - RT_EMPIRE_PASSWORD=l0ld4tuken0bi
-      - RT_EMPIRE_USERNAME=h3ll0there
+      - RT_EMPIRE_PATH=https://empire3:1337/api/
+      - RT_EMPIRE_PASSWORD=and_empi1re_pass_th3re
+      - RT_EMPIRE_USERNAME=3mpire_username_here
     networks:
-      - rtn-backend    
+      - rtn-backend
 
-  # Soon (tm)
-  # filebeat:
-  #   image: docker.elastic.co/beats/filebeat:7.6.1
-  #   networks:
-  #     - rtn-backend
-  #   volumes:
-  #     - "empire-data:/opt/Empire:ro"
-  #     - "./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-
-  empire:
-    image: empireproject/empire:latest
-    # Change command to match the empire password
-    command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username h3ll0there --password l0ld4tuken0bi --headless --debug"
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.6.2
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+    networks:
+      - rtn-backend
     volumes:
-      - "empire-data:/opt/Empire:rw"
+      - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
+  # Soon (tm)
+
+  empire3beat:
+    image: docker.elastic.co/beats/filebeat:7.6.2
+    networks:
+      - rtn-backend
+    volumes:
+      - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
+      - "empire-data:/empire:ro"
+  
+  empire3:
+    image: bcsecurity/empire:latest
+    # Change command to match the empire password
+    command: /bin/bash -c "cd setup && ./cert.sh && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug && while sleep 1000; do :; done"
+    volumes:
+      - "empire-data:/empire:rw"
     expose:
       - 1337
     ports:
@@ -62,11 +75,11 @@ services:
       - rtn-backend
 
   # Test machine to deploy payload :)
-  # victim:
-  #   image: python:2.7.17-slim
-  #   command: /bin/sh -c "while sleep 1000; do :; done"
-  #   networks:
-  #     - rtn-backend
+  victim:
+    image: python:3.6-slim
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    networks:
+      - rtn-backend
 
 volumes:
   empire-data:

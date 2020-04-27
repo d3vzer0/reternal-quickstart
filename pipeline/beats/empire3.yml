@@ -1,0 +1,11 @@
+# Filebat empire3 log shipper
+
+name: "empire3-shipper"
+
+filebeat.inputs:
+  - type: log 
+    paths:
+      - /empire/empire.debug
+
+output.logstash:
+  hosts: ["logstash:5044"]
