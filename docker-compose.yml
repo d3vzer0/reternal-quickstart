@@ -8,6 +8,7 @@
 version: '2'
 services:
   mongodb:
+    container_name: mongodb
     image: mongo
     networks:
       - rtn-backend
@@ -17,6 +18,7 @@ services:
       - mongodb-data:/data/db
 
   redis:
+    container_name: redis
     image: bitnami/redis:latest
     environment:
       - REDIS_PASSWORD=this_should_be_something_secret
@@ -25,15 +27,17 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
-  api:
-    image: reternal/api
-    networks:
-      - rtn-backend
-    ports:
-      - "127.0.0.1:5000:5000"
+  # api:
+  #   container_name: rtapi
+  #   image: reternal/api
+  #   networks:
+  #     - rtn-backend
+  #   ports:
+  #     - "127.0.0.1:5000:5000"
 
   c2:
-    build: reternal-c2
+    container_name: rtc2
+    build: c2
     environment:
       - RT_CELERY_BACKEND=redis://:this_should_be_something_secret@redis:6379/0
       # Replace below with something unique, also change for the empire service
@@ -43,30 +47,35 @@ services:
     networks:
       - rtn-backend
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.6.2
-    environment:
-      - XPACK_MONITORING_ENABLED=false
-    networks:
-      - rtn-backend
-    volumes:
-      - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
-  # Soon (tm)
 
-  empire3beat:
-    image: docker.elastic.co/beats/filebeat:7.6.2
-    networks:
-      - rtn-backend
-    volumes:
-      - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
-      - "empire-data:/empire:ro"
+  # For Elastic integration
+  # logstash:
+  #   container_name: logstash
+  #   image: docker.elastic.co/logstash/logstash:7.6.2
+  #   environment:
+  #     - LS_JAVA_OPTS=-Xms256m -Xmx256m
+  #     - XPACK_MONITORING_ENABLED=false
+  #   networks:
+  #     - rtn-backend
+  #   volumes:
+  #     - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
+
+  # empire3beat:
+  #   container_name: empire3beat
+  #   image: docker.elastic.co/beats/filebeat:7.6.2
+  #   networks:
+  #     - rtn-backend
+  #   volumes:
+  #     - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
+  #     - "empire-data:/empire:ro"
   
-  empire3:
-    image: bcsecurity/empire:latest
+  # Empire3 code is broken for Python implants (using 2 instead)
+  empire2:
+    image: empireproject/empire:latest
     # Change command to match the empire password
-    command: /bin/bash -c "cd setup && ./cert.sh && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug && while sleep 1000; do :; done"
+    command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug  && while sleep 1000; do :; done"
     volumes:
-      - "empire-data:/empire:rw"
+      - "empire2-data:/opt/Empire:rw"
     expose:
       - 1337
     ports:
@@ -74,15 +83,61 @@ services:
     networks:
       - rtn-backend
 
+  empire2bit:
+    container_name: empire2bit
+    image: fluent/fluent-bit:latest
+    volumes:
+      - "empire2-data:/empire:ro"
+      - "./pipeline/fluentbit/empire2/input.conf:/fluent-bit/etc/fluent-bit.conf:ro"
+      - "./pipeline/fluentbit/empire2/parser.conf:/fluent-bit/etc/parser.conf:ro"
+    networks:
+      - rtn-backend
+      
+  # placeholder for when empire 3 issues are fixed
+  # empire3bit:
+  #   container_name: empire3bit
+  #   image: fluent/fluent-bit:latest
+  #   volumes:
+  #     - "empire3-data:/empire:ro"
+  #     - "./pipeline/fluentbit/empire3/input.conf:/fluent-bit/etc/fluent-bit.conf:ro"
+  #     - "./pipeline/fluentbit/empire3/parser.conf:/fluent-bit/etc/parser.conf:ro"
+  #   networks:
+  #     - rtn-backend
+
+  # empire3:
+  #   container_name: empire3
+  #   image: bcsecurity/empire:latest
+  #   # Change command to match the empire password
+  #   command: /bin/bash -c "cd /empire/setup && ./cert.sh && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug && while sleep 1000; do :; done"
+  #   volumes:
+  #     - "empire3-data:/empire:rw"
+  #   expose:
+  #     - 1337
+  #   ports:
+  #     - '127.0.0.1:1337:1337'
+  #   networks:
+  #     - rtn-backend
+
+
   # Test machine to deploy payload :)
   victim:
-    image: python:3.6-slim
+    container_name: victim
+    image: python:2.7-slim
     command: /bin/sh -c "while sleep 1000; do :; done"
     networks:
       - rtn-backend
 
+  # Same machine but for Py3
+  # victim:
+  #   container_name: victim
+  #   image: python:3.7-slim
+  #   command: /bin/sh -c "while sleep 1000; do :; done"
+  #   networks:
+  #     - rtn-backend
+      
 volumes:
-  empire-data:
+  empire2-data:
+  empire3-data:
   mongodb-data:
       
 networks:
