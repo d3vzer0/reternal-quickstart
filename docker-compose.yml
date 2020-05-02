@@ -1,8 +1,9 @@
 # Example compose file starting all reternal components
 # Binds all interface on localhost with their default ports in a custom rtrnal network
+# (binding ports to localhost for services other than web and mongo will be removed later)
 #
 # WARNING: This is compose uses the Development branch. Some components
-# do not have authentication enabled yet (mongodb, redis).
+# do not have authentication enabled yet (mongodb, redis, api).
 # Don't be silly and run this when you didn't review this file >:(
 
 version: '2'
@@ -47,29 +48,14 @@ services:
     networks:
       - rtn-backend
 
-
-  # For Elastic integration
-  # logstash:
-  #   container_name: logstash
-  #   image: docker.elastic.co/logstash/logstash:7.6.2
-  #   environment:
-  #     - LS_JAVA_OPTS=-Xms256m -Xmx256m
-  #     - XPACK_MONITORING_ENABLED=false
-  #   networks:
-  #     - rtn-backend
-  #   volumes:
-  #     - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
-
-  # empire3beat:
-  #   container_name: empire3beat
-  #   image: docker.elastic.co/beats/filebeat:7.6.2
-  #   networks:
-  #     - rtn-backend
-  #   volumes:
-  #     - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
-  #     - "empire-data:/empire:ro"
-  
-  # Empire3 code is broken for Python implants (using 2 instead)
+  scheduler:
+    container_name: rtscheduler
+    build: c2
+    environment: 
+      - RT_CELERY_BACKEND=redis://:this_should_be_something_secret@redis:6379/0
+      - RT_PIPELINE_TOKEN=placeholder_for_future_use
+    
+  # Empire3 support for Python 3 is broken atm,  using Empire2 temporarily
   empire2:
     image: empireproject/empire:latest
     # Change command to match the empire password
@@ -86,13 +72,28 @@ services:
   empire2bit:
     container_name: empire2bit
     image: fluent/fluent-bit:latest
+    environment:
+      - RT_API_TOKEN=placeholder_for_future_use
+      - RT_API_HOST=192.168.1.141
+      - RT_API_PORT=5000
+      - RT_API_PATH=/api/v1/results/module
     volumes:
       - "empire2-data:/empire:ro"
       - "./pipeline/fluentbit/empire2/input.conf:/fluent-bit/etc/fluent-bit.conf:ro"
       - "./pipeline/fluentbit/empire2/parser.conf:/fluent-bit/etc/parser.conf:ro"
     networks:
       - rtn-backend
-      
+
+  # Test machine to deploy payload :)
+  victim:
+    container_name: victim
+    image: python:2.7-slim
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    networks:
+      - rtn-backend
+
+  # Some optional services if you would like to use Empire 3 or integrate with Elasticsearch
+  #
   # placeholder for when empire 3 issues are fixed
   # empire3bit:
   #   container_name: empire3bit
@@ -118,14 +119,27 @@ services:
   #   networks:
   #     - rtn-backend
 
+  
+  # For Elastic integration
+  # logstash:
+  #   container_name: logstash
+  #   image: docker.elastic.co/logstash/logstash:7.6.2
+  #   environment:
+  #     - LS_JAVA_OPTS=-Xms256m -Xmx256m
+  #     - XPACK_MONITORING_ENABLED=false
+  #   networks:
+  #     - rtn-backend
+  #   volumes:
+  #     - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
 
-  # Test machine to deploy payload :)
-  victim:
-    container_name: victim
-    image: python:2.7-slim
-    command: /bin/sh -c "while sleep 1000; do :; done"
-    networks:
-      - rtn-backend
+  # empire3beat:
+  #   container_name: empire3beat
+  #   image: docker.elastic.co/beats/filebeat:7.6.2
+  #   networks:
+  #     - rtn-backend
+  #   volumes:
+  #     - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
+  #     - "empire-data:/empire:ro"
 
   # Same machine but for Py3
   # victim:
@@ -137,7 +151,7 @@ services:
       
 volumes:
   empire2-data:
-  empire3-data:
+  # empire3-data:
   mongodb-data:
       
 networks:
