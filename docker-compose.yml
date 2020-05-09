@@ -4,7 +4,16 @@
 #
 # WARNING: This is compose uses the Development branch. Some components
 # do not have authentication enabled yet (mongodb, redis, api).
-# Don't be silly and run this when you didn't review this file >:(
+# Don't be silly and run this when you didn't review this file >:( 
+# Replace the example passwords/tokens with something secret, obviously.
+
+# If you're planning on running a development environment. you can use
+# this compose to run redis, mongodb,  empireX and empireXbit but start the  other 
+# serivces manually for debugging and live reload. Be sure to set/change the following environment variables:
+# export RT_EMPIRE_PATH=https://localhost:1337/api/
+# export RT_CELERY_BACKEND=redis://:this_should_be_something_secret@localhost:6379/0
+# export RT_EMPIRE_USERNAME=3mpire_username_here
+# export RT_EMPIRE_PASSWORD=and_empi1re_pass_th3re
 
 version: '2'
 services:
@@ -28,6 +37,17 @@ services:
     ports:
       - "127.0.0.1:6379:6379"
 
+
+  flower:
+    container_name: flower
+    image: mher/flower
+    networks:
+      - rtn-backend
+    environment:
+      - CELERY_BROKER_URL=redis://:this_should_be_something_secret@redis:6379/0
+      - FLOWER_PORT=8888
+    ports:
+      - "127.0.0.1:8888:8888"
   # api:
   #   container_name: rtapi
   #   image: reternal/api
@@ -62,8 +82,6 @@ services:
     command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug  && while sleep 1000; do :; done"
     volumes:
       - "empire2-data:/opt/Empire:rw"
-    expose:
-      - 1337
     ports:
       - '127.0.0.1:1337:1337'
     networks:
