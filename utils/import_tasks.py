@@ -30,7 +30,7 @@ class Tasks:
                     'integration': yaml_object['integration'],
                     'external_id': yaml_object['mitre_technique']['id'],
                     'commands': [{"category":"Mitre", "module": command["module"], "input":command["input"],
-                        "sleep":command["sleep"]} for command in yaml_object['commands']],
+                        "sleep":command["sleep"], 'integration': yaml_object['integration'] } for command in yaml_object['commands']],
                     'external_id': yaml_object['mitre_technique']['id'],
                 }
                 yield mapping_data

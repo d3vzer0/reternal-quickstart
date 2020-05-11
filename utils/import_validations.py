@@ -20,7 +20,7 @@ class Validations:
 
     def load_config(self):
         ''' Find all technique config files '''
-        config_files = glob.iglob(f'{self.file_path}/**/*.yml', recursive=True)
+        config_files = glob.iglob(f'{self.file_path}/**/**/*.yml', recursive=True)
         for config in config_files:
             with open(config) as yamlfile:
                 yaml_object = yaml.load(yamlfile, Loader=yaml.FullLoader)
@@ -30,8 +30,10 @@ class Validations:
                     'reference': yaml_object.get('reference', None),
                     'description': yaml_object.get('description', None),
                     'author': yaml_object.get('author', None),
+                    'coverage': yaml_object.get('coverage', None),
                     'external_id': yaml_object['mitre_technique']['id'],
-                    'queries': [query for query in yaml_object['queries']]
+                    'data_sources': yaml_object['mitre_technique'].get('datasources', None),
+                    'search': yaml_object['search']
                 }
                 yield mapping_data
           

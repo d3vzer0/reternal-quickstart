@@ -1,15 +1,24 @@
 from environment import config
+import json
 import aiohttp
 import json
 import asyncio
 
+def load_magma(magma_path=config['MAGMA_PATH']):
+    magma_mapping = { }
+    with open(magma_path, 'r') as magma_file:
+        json_object = json.loads(magma_file.read())
+        for mapping in json_object:
+            magma_mapping[mapping['external_id']] = mapping
+    return magma_mapping
 
 class MitreAttck:
-    def __init__(self, mitre_url=config['ATTCK_URL'],api_url=config['API_URL']):
+    def __init__(self, mitre_url=config['ATTCK_URL'],api_url=config['API_URL'], magma_mapping=None):
         ''' Import the MITRE ATTCK techniques and actors from Github '''
         self.session = aiohttp.ClientSession()
         self.mitre_url = mitre_url
         self.api_url = api_url
+        self.magma_mapping = magma_mapping
         self.actors = { }
         self.techniques = { }
 
@@ -21,6 +30,7 @@ class MitreAttck:
 
     def format_technique(self, technique_details):
         ''' Format technique to match expected API schema '''
+        external_id = technique_details['external_references'][0]['external_id']
         killchain = [phase['phase_name'] for phase in technique_details['kill_chain_phases']]
         technique_data = { 'technique_id': technique_details['id'], 'name':technique_details['name'],
             'description': technique_details['description'], 'platforms': technique_details['x_mitre_platforms'], 
@@ -29,6 +39,11 @@ class MitreAttck:
             'references': technique_details['external_references'], 'kill_chain_phases': killchain,
             'data_sources_available': [], 'actors': []
         }
+        if external_id in self.magma_mapping:
+            mapped_usecase = self.magma_mapping[external_id]
+            mapped_usecase.pop('external_id')
+            technique_data['magma'] = mapped_usecase
+
         return technique_data
 
     async def import_actor(self, actor):
@@ -79,7 +94,8 @@ class MitreAttck:
 
 async def main():
     ''' Retrieve MITRE ATTCK database and format data '''
-    async with MitreAttck() as mitre:
+    magma_mapping = load_magma()
+    async with MitreAttck(magma_mapping=magma_mapping) as mitre:
         for technique in mitre.techniques.values():
             await mitre.import_technique(technique)
         for actor in mitre.actors.values():
