@@ -5,5 +5,6 @@ config = {
     'API_URL': os.getenv('RT_API_URL', 'http://localhost:5000/api/v1'),
     'TECHNIQUES_PATH': os.getenv('RT_TECHNIQUES_PATH', '../mitre/techniques'),
     'VALIDATIONS_PATH': os.getenv('RT_VALIDATIONS_PATH', '../mitre/validations'),
+    'PRODUCTS_PATH': os.getenv('RT_PRODUCTS_PATH', '../mitre/datasource_mapping.json'),
     'MAGMA_PATH': os.getenv('RT_MAGMA_PATH', '../mitre/magma_mapping.json')
 }
