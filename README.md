@@ -81,7 +81,7 @@ Reternal acts as a piece of middleware and interacts with external C2 frameworks
 <img width="1226" alt="actor_mapping" src="screenshots/stager_builder.png">
 
 ### Coverage rating (based on Rabo DeTTECT)
-Specify what datasources are available in your environment. Reternal will suggest specific campaigns to execute based on your coverage rating.
+Automatically synchronise the available datasources with your Splunk environment or add logsources manually. Reternal will suggest specific campaigns to execute based on your coverage rating.
 
 <img width="1226" alt="actor_mapping" src="screenshots/dettect2.png">
 
