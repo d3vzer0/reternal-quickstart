@@ -59,6 +59,8 @@ This project has been re-developed so many times, it will probably never really 
   - Rabobank DeTTECT - Framework for mapping your log coverage against MITRE ATT&CK. Used the fundementals for the internal coverage rating and scenario suggestions: https://github.com/rabobank-cdc/DeTTECT
   - MITRE ATT&CK - Framework used for mapping simulations: https://attack.mitre.org/wiki/Main_Page
   - Uber Metta -  Using Metta's templates for MITRE techniques with small (optional) adjustments to the purple_action format: https://github.com/uber-common/metta
+  - https://github.com/olafhartong/sysmon-modular - Splunk app with out-of-the-box queries to hunt for malicious events based on Sysmon
+  - https://www.splunksecurityessentials.com/ - Must have Splunk app to extend your current detection capabilities. The app analyses the available sourcetypes and provices suitable tips/tricks to improve the overal use of Splunk for Hunting and Detection.
 
 ## Examples and screenshots
 All of the features will be documented on the Welcome page of the Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki. Below are a few examples of the main components.
@@ -85,6 +87,13 @@ Specify what datasources are available in your environment. Reternal will sugges
 
 With an overview of your coverage compared to all the ATT&CK techniques:
 <img width="1226" alt="attck_archive" src="screenshots/attck_archive.png">
+
+
+### Integrated Hunts
+Additionally a list of Splunk queries are included to automatically validate simulations. Soon (tm) the scheduled campaign will automatically run relevant queries and present a detailed report containing the findings (ie. time when attack was performed vs. time of detection etc)
+
+<img width="1226" alt="attck_archive" src="screenshots/hunts.png">
+
 
 ### Campaign state and dashboard
 The main dashboard displays the state of your running campaigns and displays the expected coverage of your datasources vs techniques
