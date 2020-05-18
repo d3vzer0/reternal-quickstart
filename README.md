@@ -83,7 +83,7 @@ Reternal acts as a piece of middleware and interacts with external C2 frameworks
 ### Coverage rating (based on Rabo DeTTECT)
 Specify what datasources are available in your environment. Reternal will suggest specific campaigns to execute based on your coverage rating.
 
-<img width="1226" alt="actor_mapping" src="screenshots/dettect_coverage.png">
+<img width="1226" alt="actor_mapping" src="screenshots/dettect2.png">
 
 With an overview of your coverage compared to all the ATT&CK techniques:
 <img width="1226" alt="attck_archive" src="screenshots/attck_archive.png">
@@ -92,7 +92,7 @@ With an overview of your coverage compared to all the ATT&CK techniques:
 ### Integrated Hunts
 Additionally a list of Splunk queries are included to automatically validate simulations. Soon (tm) the scheduled campaign will automatically run relevant queries and present a detailed report containing the findings (ie. time when attack was performed vs. time of detection etc)
 
-<img width="1226" alt="attck_archive" src="screenshots/hunts.png">
+<img width="1226" alt="attck_archive" src="screenshots/huntsquery.png">
 
 
 ### Campaign state and dashboard
