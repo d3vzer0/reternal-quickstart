@@ -20,16 +20,16 @@ the compose file in order to set up the reternal platform via docker.
 ## Reternal components
 | Component        | Description | Code           | Build  |
 | ------------- |:-------------- |:--------------| :------| 
-| [API](https://github.com/d3vzer0/reternal-backend)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-backend.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-backend) |
-| [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-ui)|
-| [C2](https://github.com/d3vzer0/reternal-c2) | Distributed tasks to interact with external C2 frameworks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://travis-ci.com/d3vzer0/reternal-c2.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-c2) |
-| [Search](https://github.com/d3vzer0/reternal-search)     | Distributed tasks to execute search queries (ie. Splunk/Elasticsearch) for ATT&CK coverage rating |
+| [API](https://github.com/d3vzer0/reternal-backend)      | Administrative API to schedule tasks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://dev.azure.com/joeydreijer/Reternal/_apis/build/status/d3vzer0.reternal-ui?branchName=development)](https://dev.azure.com/joeydreijer/Reternal/_build/latest?definitionId=1&branchName=development) |
+| [UI](https://github.com/d3vzer0/reternal-ui)     | VueJS-based UI buildscript and NGinx webserver |![VueJS](https://img.shields.io/badge/VueJS-2-green.svg) | [![Build Status](https://dev.azure.com/joeydreijer/Reternal/_apis/build/status/d3vzer0.reternal-ui?branchName=development)](https://dev.azure.com/joeydreijer/Reternal/_build/latest?definitionId=1&branchName=development) |
+| [C2](https://github.com/d3vzer0/reternal-c2) | Distributed tasks to interact with external C2 frameworks | ![Python](https://img.shields.io/badge/Python-3.6-green.svg) | [![Build Status](https://dev.azure.com/joeydreijer/Reternal/_apis/build/status/d3vzer0.reternal-c2?branchName=development)](https://dev.azure.com/joeydreijer/Reternal/_build/latest?definitionId=3&branchName=development) |
+| [Search](https://github.com/d3vzer0/reternal-search)     | Distributed tasks to execute search queries (ie. Splunk/Elasticsearch) for ATT&CK coverage rating | [![Build Status](https://dev.azure.com/joeydreijer/Reternal/_apis/build/status/d3vzer0.reternal-search?branchName=development)](https://dev.azure.com/joeydreijer/Reternal/_build/latest?definitionId=4&branchName=development) |
 | [Mitre](https://github.com/d3vzer0/reternal-mitre)     | Repository containing already existing mapped techniques for reternal |
 
 
 | Component        | Description | Build  |
 | ------------- |:-------------- | :------| 
-| Total Stack | Build verifying entire stack via docker-compose in this repository | [![Build Status](https://travis-ci.com/d3vzer0/reternal-quickstart.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-quickstart) |
+| Total Stack | Build verifying entire stack via docker-compose in this repository | TODO |
 
 
 ## Install and Configuration
