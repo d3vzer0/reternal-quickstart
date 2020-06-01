@@ -13,3 +13,6 @@
 [submodule "ui"]
 	path = ui
 	url = https://github.com/d3vzer0/reternal-ui.git
+[submodule "search"]
+	path = search
+	url = https://github.com/d3vzer0/reternal-search.git
