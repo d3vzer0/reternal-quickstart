@@ -18,7 +18,6 @@
 version: '2'
 services:
   mongodb:
-    container_name: mongodb
     image: mongo
     networks:
       - rtn-backend
@@ -28,26 +27,24 @@ services:
       - mongodb-data:/data/db
 
   redis:
-    container_name: redis
     image: bitnami/redis:latest
     environment:
-      - REDIS_PASSWORD=this_should_be_something_secret
+      - REDIS_PASSWORD=${RT_REDIS_PASSWORD}
     networks:
       - rtn-backend
     ports:
       - "127.0.0.1:6379:6379"
 
-
   flower:
-    container_name: flower
     image: mher/flower
     networks:
       - rtn-backend
     environment:
-      - CELERY_BROKER_URL=redis://:this_should_be_something_secret@redis:6379/0
-      - FLOWER_PORT=8888
+      - CELERY_BROKER_URL=${RT_CELERY_BACKEND}
+      - FLOWER_PORT=${RT_FLOWER_PORT}
     ports:
       - "127.0.0.1:8888:8888"
+
   # api:
   #   container_name: rtapi
   #   image: reternal/api
@@ -57,29 +54,37 @@ services:
   #     - "127.0.0.1:5000:5000"
 
   c2:
-    container_name: rtc2
-    build: c2
+    build: reternal-c2
     environment:
-      - RT_CELERY_BACKEND=redis://:this_should_be_something_secret@redis:6379/0
-      # Replace below with something unique, also change for the empire service
-      - RT_EMPIRE_PATH=https://empire3:1337/api/
-      - RT_EMPIRE_PASSWORD=and_empi1re_pass_th3re
-      - RT_EMPIRE_USERNAME=3mpire_username_here
+      - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+      - RT_EMPIRE_PATH=${RT_EMPIRE_PATH}
+      - RT_EMPIRE_PASSWORD=${RT_EMPIRE_PASSWORD}
+      - RT_EMPIRE_USERNAME=${RT_EMPIRE_USERNAME}
     networks:
       - rtn-backend
 
+  search:
+    build: reternal-search
+    environment:
+      - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+      - RT_SPLUNK_TOKEN=${RT_SPLUNK_TOKEN}
+      - RT_SPLUNK_PATH=${RT_SPLUNK_PATH}
+    networks:
+      - rtn-backend
+  
   scheduler:
-    container_name: rtscheduler
-    build: c2
+    build: reternal-backend
     environment: 
-      - RT_CELERY_BACKEND=redis://:this_should_be_something_secret@redis:6379/0
-      - RT_PIPELINE_TOKEN=placeholder_for_future_use
-    
+      - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+    networks:
+      - rtn-backend
+    entrypoint: ["celery", "-A", "workers", "worker", "-Q", "api"]
+  
   # Empire3 support for Python 3 is broken atm,  using Empire2 temporarily
   empire2:
     image: empireproject/empire:latest
     # Change command to match the empire password
-    command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username 3mpire_username_here --password and_empi1re_pass_th3re --headless --debug  && while sleep 1000; do :; done"
+    command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username ${RT_EMPIRE_USERNAME} --password ${RT_EMPIRE_PASSWORD} --headless --debug  && while sleep 1000; do :; done"
     volumes:
       - "empire2-data:/opt/Empire:rw"
     ports:
@@ -88,13 +93,12 @@ services:
       - rtn-backend
 
   empire2bit:
-    container_name: empire2bit
     image: fluent/fluent-bit:latest
     environment:
-      - RT_API_TOKEN=placeholder_for_future_use
-      - RT_API_HOST=192.168.1.141
-      - RT_API_PORT=5000
-      - RT_API_PATH=/api/v1/results/module
+      - RT_API_TOKEN=${RT_API_TOKEN}
+      - RT_API_HOST=${RT_API_HOST}
+      - RT_API_PORT=${RT_API_PORT}
+      - RT_API_PATH=${RT_API_PATH}
     volumes:
       - "empire2-data:/empire:ro"
       - "./pipeline/fluentbit/empire2/input.conf:/fluent-bit/etc/fluent-bit.conf:ro"
@@ -104,7 +108,6 @@ services:
 
   # Test machine to deploy payload :)
   victim:
-    container_name: victim
     image: python:2.7-slim
     command: /bin/sh -c "while sleep 1000; do :; done"
     networks:
@@ -136,29 +139,7 @@ services:
   #     - '127.0.0.1:1337:1337'
   #   networks:
   #     - rtn-backend
-
   
-  # For Elastic integration
-  # logstash:
-  #   container_name: logstash
-  #   image: docker.elastic.co/logstash/logstash:7.6.2
-  #   environment:
-  #     - LS_JAVA_OPTS=-Xms256m -Xmx256m
-  #     - XPACK_MONITORING_ENABLED=false
-  #   networks:
-  #     - rtn-backend
-  #   volumes:
-  #     - "./pipeline/logstash/:/usr/share/logstash/pipeline/:ro"
-
-  # empire3beat:
-  #   container_name: empire3beat
-  #   image: docker.elastic.co/beats/filebeat:7.6.2
-  #   networks:
-  #     - rtn-backend
-  #   volumes:
-  #     - ./pipeline/beats/empire3.yml:/usr/share/filebeat/filebeat.yml:ro
-  #     - "empire-data:/empire:ro"
-
   # Same machine but for Py3
   # victim:
   #   container_name: victim
