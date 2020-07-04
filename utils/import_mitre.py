@@ -15,7 +15,7 @@ def load_magma(magma_path=config['MAGMA_PATH']):
 class MitreAttck:
     def __init__(self, mitre_url=config['ATTCK_URL'],api_url=config['API_URL'], magma_mapping=None):
         ''' Import the MITRE ATTCK techniques and actors from Github '''
-        self.session = aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
         self.mitre_url = mitre_url
         self.api_url = api_url
         self.magma_mapping = magma_mapping
@@ -30,6 +30,7 @@ class MitreAttck:
 
     def format_technique(self, technique_details):
         ''' Format technique to match expected API schema '''
+        print(technique_details)
         external_id = technique_details['external_references'][0]['external_id']
         killchain = [phase['phase_name'] for phase in technique_details['kill_chain_phases']]
         technique_data = { 'technique_id': technique_details['id'], 'name':technique_details['name'],
@@ -37,7 +38,7 @@ class MitreAttck:
             'permissions_required': technique_details.get('x_mitre_permissions_required', []),
             'data_sources': technique_details.get('x_mitre_data_sources', []),
             'references': technique_details['external_references'], 'kill_chain_phases': killchain,
-            'data_sources_available': [], 'actors': []
+            'data_sources_available': [], 'actors': [], 'is_subtechnique': technique_details.get('x_mitre_is_subtechnique', False)
         }
         if external_id in self.magma_mapping:
             mapped_usecase = self.magma_mapping[external_id]
@@ -64,10 +65,11 @@ class MitreAttck:
         ''' Denormalize relationship between actors and techniques '''
         for relation in relations:
             if 'intrusion-set' in relation['source_ref'] and 'attack-pattern' in relation['target_ref']:
-                technique_object = self.techniques[relation['target_ref']]
+                technique_object = self.techniques.get(relation['target_ref'], None)
                 actor_object = self.actors[relation['source_ref']]
-                technique_object['actors'].append({'actor_id': actor_object['actor_id'], 'name': actor_object['name']})
-                actor_object['techniques'].append({'technique_id': technique_object['technique_id'], 'name': technique_object['name']})
+                if technique_object:
+                    technique_object['actors'].append({'actor_id': actor_object['actor_id'], 'name': actor_object['name']})
+                    actor_object['techniques'].append({'technique_id': technique_object['technique_id'], 'name': technique_object['name']})
     
     async def __aenter__(self):
         ''' Initialize session and populate techniques and actors '''
@@ -78,12 +80,14 @@ class MitreAttck:
     
         relations = []
         for technique_details in json.loads(all_techniques)['objects']:
-            if technique_details['type'] == 'attack-pattern': 
-                self.techniques[technique_details['id']] = self.format_technique(technique_details)
-            elif technique_details['type'] == 'intrusion-set':
-                self.actors[technique_details['id']] =  self.format_actor(technique_details)
-            elif technique_details['type'] == 'relationship':
-                relations.append(technique_details)
+            print(technique_details)
+            if technique_details.get('revoked', False) == False:
+                if technique_details['type'] == 'attack-pattern': 
+                    self.techniques[technique_details['id']] = self.format_technique(technique_details)
+                elif technique_details['type'] == 'intrusion-set':
+                    self.actors[technique_details['id']] =  self.format_actor(technique_details)
+                elif technique_details['type'] == 'relationship':
+                    relations.append(technique_details)
         self.denormalize(relations)
         return self
 
