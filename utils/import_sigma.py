@@ -5,6 +5,21 @@ import yaml
 import asyncio
 import aiohttp
 import hashlib
+import copy
+
+# Thanks fo Srisaila for this nested merge sample (https://stackoverflow.com/a/47564936)
+# this example doesn't override nested dictionaries, which is the default behaviour of the
+# regular dict update operation or {**dict1, **dict2}
+
+def merge_dicts(default, override):    
+    for key in override:
+        if key in default:
+            if isinstance(default[key], dict) and isinstance(override[key], dict):
+                merge_dicts(default[key], override[key])
+        else:
+            default[key] = override[key]
+    return default
+
 
 class Validations:
     def __init__(self, file_path=config['VALIDATIONS_PATH'], api_url=config['API_URL']):
@@ -29,7 +44,8 @@ class Validations:
                     sigma_group = yaml_objects[0]
                     yaml_objects.pop(0)
                     for document in yaml_objects:
-                        yield {**sigma_group, **document}
+                        defaults = copy.deepcopy(sigma_group)
+                        yield merge_dicts(defaults, document)
 
                 elif len(yaml_objects) == 1:
                     yield yaml_objects[0]
