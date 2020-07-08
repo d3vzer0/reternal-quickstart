@@ -45,26 +45,16 @@ services:
     ports:
       - "127.0.0.1:8888:8888"
 
-
-  ui:
-    image: reternal/ui:dev
-    networks:
-        - rtn-backend
-    ports:
-        - "127.0.0.1:80:80"
-
-  api:
-    image: reternal/backend:dev
-    environment:
-      - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
-      - RT_CELERY_BROKER=${RT_CELERY_BACKEND}
-    networks:
-      - rtn-backend
-    ports:
-      - "127.0.0.1:5000:5000"
+  # api:
+  #   container_name: rtapi
+  #   image: reternal/api
+  #   networks:
+  #     - rtn-backend
+  #   ports:
+  #     - "127.0.0.1:5000:5000"
 
   c2:
-    image: reternal/c2:dev
+    build: reternal-c2
     environment:
       - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
       - RT_EMPIRE_PATH=${RT_EMPIRE_PATH}
@@ -74,7 +64,7 @@ services:
       - rtn-backend
 
   search:
-    image: reternal/search:dev
+    build: reternal-search
     environment:
       - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
       - RT_SPLUNK_TOKEN=${RT_SPLUNK_TOKEN}
@@ -90,6 +80,7 @@ services:
       - rtn-backend
     entrypoint: ["celery", "-A", "workers", "worker", "-Q", "api"]
   
+  
   # Empire3 support for Python 3 is broken atm,  using Empire2 temporarily
   empire2:
     image: empireproject/empire:latest
@@ -101,7 +92,7 @@ services:
       - '127.0.0.1:1337:1337'
     networks:
       - rtn-backend
-
+  
   empire2bit:
     image: fluent/fluent-bit:latest
     environment:
