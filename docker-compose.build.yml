@@ -26,6 +26,17 @@ services:
     volumes:
       - mongodb-data:/data/db
 
+  rabbitmq:
+    image: bitnami/rabbitmq:latest
+    environment:
+      - RABBITMQ_USERNAME=${RT_RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RT_RABBITMQ_PASSWORD}
+      - RABBITMQ_VHOST=${RT_RABBITMQ_VHOST}
+    networks:
+      - rtn-backend
+    ports:
+      - "127.0.0.1:5672:5672"
+
   redis:
     image: bitnami/redis:latest
     environment:
@@ -34,7 +45,7 @@ services:
       - rtn-backend
     ports:
       - "127.0.0.1:6379:6379"
-
+    
   flower:
     image: mher/flower
     networks:
@@ -54,32 +65,40 @@ services:
   #     - "127.0.0.1:5000:5000"
 
   c2:
-    build: reternal-c2
+    build: c2
     environment:
       - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+      - RT_CELERY_BROKER=${RT_CELERY_BROKER}
       - RT_EMPIRE_PATH=${RT_EMPIRE_PATH}
       - RT_EMPIRE_PASSWORD=${RT_EMPIRE_PASSWORD}
       - RT_EMPIRE_USERNAME=${RT_EMPIRE_USERNAME}
+    volumes:
+      - "./reternal-c2/workers:/home/reternal/workers"
     networks:
       - rtn-backend
 
   search:
-    build: reternal-search
+    build: search
     environment:
       - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+      - RT_CELERY_BROKER=${RT_CELERY_BROKER}
       - RT_SPLUNK_TOKEN=${RT_SPLUNK_TOKEN}
       - RT_SPLUNK_PATH=${RT_SPLUNK_PATH}
+    volumes:
+      - "./reternal-search/workers:/home/reternal/workers"
     networks:
       - rtn-backend
   
   scheduler:
-    image: reternal/backend:dev
+    build: backend
     environment: 
+      - RT_CELERY_BROKER=${RT_CELERY_BROKER}
       - RT_CELERY_BACKEND=${RT_CELERY_BACKEND}
+    volumes:
+      - "./reternal-backend/workers:/home/reternal/workers"
     networks:
       - rtn-backend
     entrypoint: ["celery", "-A", "workers", "worker", "-Q", "api"]
-  
   
   # Empire3 support for Python 3 is broken atm,  using Empire2 temporarily
   empire2:
@@ -92,7 +111,7 @@ services:
       - '127.0.0.1:1337:1337'
     networks:
       - rtn-backend
-  
+
   empire2bit:
     image: fluent/fluent-bit:latest
     environment:
