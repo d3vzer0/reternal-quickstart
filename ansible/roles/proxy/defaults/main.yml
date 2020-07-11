@@ -1,1 +1,3 @@
-proxy_target_dir: '/opt/reternal/proxy'
+proxy:
+  tag: latest
+  port: 8443

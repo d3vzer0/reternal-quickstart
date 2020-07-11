@@ -1,2 +1,17 @@
 - name: include distribution specific install
   include_tasks: "{{ ansible_distribution|lower }}.yml"
+   
+- name: Installing Docker compose
+  pip:
+    name: "docker-compose"
+    state: present
+
+- name: Installing docker-py
+  pip:
+    name: "docker"
+    state: present
+
+- name: Making sure backend docker network exists
+  docker_network:
+    name: backend_network
+  

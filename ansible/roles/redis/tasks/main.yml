@@ -1,13 +1,42 @@
-- name: Making sure backend docker network exists
-  docker_network:
-    name: backend_network
+
+- name: Creating redis TLS directory
+  file:
+    path: "{{ redis.tls.path }}"
+    state: directory
+
+- name: Create new redis private key
+  openssl_privatekey:
+    path: "{{ redis.tls.path }}/privkey.pem"
+
+- name: Generate redis CSR
+  openssl_csr:
+    path: "{{ redis.tls.path }}/redis.csr"
+    privatekey_path: "{{ redis.tls.path }}/privkey.pem"
+    state_or_province_name: "{{ redis.tls.state_or_province_name }}"
+    country_name: "{{ redis.tls.country_name }}"
+    locality_name: "{{ redis.tls.locality_name }}"
+    common_name: "{{ redis.tls.common_name }}"
+
+- name: Generate a redis self signed certificate
+  openssl_certificate:
+    path: "{{ redis.tls.path }}/chain.crt"
+    privatekey_path: "{{ redis.tls.path }}/privkey.pem"
+    csr_path: "{{ redis.tls.path }}/redis.csr"
+    provider: ownca
+    ownca_path: "{{ ca.path }}/chain.crt"
+    ownca_privatekey_path: "{{ ca.path }}/privkey.pem"
+    ownca_privatekey_passphrase: "{{ vault.ca.passphrase }}"
 
 - name: Run redis container
   docker_container:
     name: redis
-    image: redis
+    image: bitnami/redis:{{ redis.tag }}
     state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    env:
+      REDIS_PASSWORD: "{{ vault.redis.password }}"
     networks:
       - name: backend_network
         aliases:
-          - redis-service
+          - redis

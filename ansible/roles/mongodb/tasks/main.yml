@@ -1,9 +1,33 @@
 
 - include_vars: vault.yml
 
-- name: Making sure backend docker network exists
-  docker_network:
-    name: backend_network
+- name: Creating mongodb TLS directory
+  file:
+    path: "{{ mongodb.tls.path }}"
+    state: directory
+
+- name: Create new mongodb private key
+  openssl_privatekey:
+    path: "{{ mongodb.tls.path }}/privkey.pem"
+
+- name: Generate mongodb CSR
+  openssl_csr:
+    path: "{{ mongodb.tls.path }}/mongodb.csr"
+    privatekey_path: "{{ mongodb.tls.path }}/privkey.pem"
+    state_or_province_name: "{{ mongodb.tls.state_or_province_name }}"
+    country_name: "{{ mongodb.tls.country_name }}"
+    locality_name: "{{ mongodb.tls.locality_name }}"
+    common_name: "{{ mongodb.tls.common_name }}"
+
+- name: Generate a mongodb self signed certificate
+  openssl_certificate:
+    path: "{{ mongodb.tls.path }}/chain.crt"
+    privatekey_path: "{{ mongodb.tls.path }}/privkey.pem"
+    csr_path: "{{ mongodb.tls.path }}/mongodb.csr"
+    provider: ownca
+    ownca_path: "{{ ca.path }}/chain.crt"
+    ownca_privatekey_path: "{{ ca.path }}/privkey.pem"
+    ownca_privatekey_passphrase: "{{ vault.ca.passphrase }}"
 
 - name: Create persistent DB volume
   docker_volume:
@@ -17,11 +41,13 @@
 - name: Run mongo container
   docker_container:
     name: mongodb
-    image: mongo
+    image: "mongo:{{ mongodb.tag }}"
+    purge_networks: no
+    networks_cli_compatible: yes
     state: started
     env:
-      MONGO_INITDB_ROOT_USERNAME: "{{ passwords.mongo_root_user }}"
-      MONGO_INITDB_ROOT_PASSWORD: "{{ passwords.mongo_root_pass }}"
+      MONGO_INITDB_ROOT_USERNAME: "{{ mongodb.root_username }}"
+      MONGO_INITDB_ROOT_PASSWORD: "{{ vault.mongodb.root_password }}"
     networks:
       - name: backend_network
         aliases:
@@ -32,11 +58,12 @@
       - "127.0.0.1:27017:27017"
 
 - name: Create mongodb user and pass for reternal
+  no_log: true
   mongodb_user:
-    login_user: "{{ passwords.mongo_root_user }}"
-    login_password: "{{ passwords.mongo_root_pass }}"
-    database: "{{ database.db }}"
-    user: "{{ database.user }}"
-    password: "{{ passwords.mongo_reternal_pass }}"
+    login_user: "{{ mongodb.root_username }}"
+    login_password: "{{ vault.mongodb.root_password }}"
+    database: "{{ mongodb.db }}"
+    user: "{{ mongodb.username }}"
+    password: "{{ vault.mongodb.password }}"
     state: present
     roles: readWrite,dbAdmin

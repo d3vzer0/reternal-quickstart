@@ -1,0 +1,45 @@
+- include_vars: vault.yml
+
+- name: Creating rabbitmq TLS directory
+  file:
+    path: "{{ rabbitmq.tls.path }}"
+    state: directory
+
+- name: Create new rabbitmq private key
+  openssl_privatekey:
+    path: "{{ rabbitmq.tls.path }}/privkey.pem"
+
+- name: Generate rabbitmq CSR
+  openssl_csr:
+    path: "{{ rabbitmq.tls.path }}/rabbitmq.crt"
+    privatekey_path: "{{ rabbitmq.tls.path }}/privkey.pem"
+    state_or_province_name: "{{ rabbitmq.tls.state_or_province_name }}"
+    country_name: "{{ rabbitmq.tls.country_name }}"
+    locality_name: "{{ rabbitmq.tls.locality_name }}"
+    common_name: "{{ rabbitmq.tls.common_name }}"
+
+- name: Generate a rabbitmq self signed certificate
+  openssl_certificate:
+    path: "{{ rabbitmq.tls.path }}/chain.csr"
+    privatekey_path: "{{ rabbitmq.tls.path }}/privkey.pem"
+    csr_path: "{{ rabbitmq.tls.path }}/rabbitmq.csr"
+    provider: ownca
+    ownca_path: "{{ ca.path }}/chain.crt"
+    ownca_privatekey_path: "{{ ca.path }}/privkey.pem"
+    ownca_privatekey_passphrase: "{{ vault.ca.passphrase }}"
+
+- name: Run rabbitmq container
+  docker_container:
+    name: rabbitmq
+    image: bitnami/rabbitmq:{{ rabbitmq.tag }}
+    state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    env:
+      RABBITMQ_USERNAME: "{{ rabbitmq.username }}"
+      RABBITMQ_PASSWORD:  "{{ vault.rabbitmq.password }}"
+      RABBITMQ_VHOST: "{{ rabbitmq.vhost }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - rabbitmq

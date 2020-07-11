@@ -1,0 +1,35 @@
+
+- include_vars: vault.yml
+
+- name: Installing Cryptography to generate certs
+  pip:
+    name: cryptography
+
+- name: Creating CA directory
+  file:
+    path: "{{ ca.path }}"
+    state: directory
+
+- name: Create new private key
+  openssl_privatekey:
+    path: "{{ ca.path }}/privkey.pem"
+    passphrase: "{{ vault.ca.passphrase }}"
+    cipher: auto
+
+- name: Generate CSR
+  openssl_csr:
+    path: "{{ ca.path }}/ca.csr"
+    privatekey_path: "{{ ca.path }}/privkey.pem"
+    state_or_province_name: "{{ ca.state_or_province_name }}"
+    country_name: "{{ ca.country_name }}"
+    locality_name: "{{ ca.locality_name }}"
+    common_name: "{{ ca.common_name }}"
+    privatekey_passphrase: "{{ vault.ca.passphrase }}"
+
+- name: Generate a self signed certificate
+  openssl_certificate:
+    path: "{{ ca.path }}/chain.crt"
+    privatekey_path: "{{ ca.path }}/privkey.pem"
+    privatekey_passphrase: "{{ vault.ca.passphrase }}"
+    csr_path: "{{ ca.path }}/ca.csr"
+    provider: selfsigned

@@ -1,25 +1,25 @@
+
 - include_vars: vault.yml
 
 - name: Making sure default install directory is created
   file:
     path: "{{ reternal.install_dir }}"
     state: directory
-  
-- name: Run C2 container
+
+- name: Run Search container
   docker_container:
-    name: c2
-    image: "reternal/c2:{{ c2.tag}}"
+    name: search
+    image: "reternal/search:{{ search.tag }}"
     state: started
-    purge_networks: yes
-    networks_cli_compatible: yes
     recreate: yes
+    networks_cli_compatible: yes
+    purge_networks: yes
     env:
       RT_CELERY_BACKEND: "{{ celery.backend }}"
       RT_CELERY_BROKER: "{{ celery.broker }}"
-      RT_EMPIRE_PATH: "{{ c2.empire_path }}"
-      RT_EMPIRE_PASSWORD: "{{ vault.empire2.password }}"
-      RT_EMPIRE_USERNAME: "{{ empire2.username }}"
+      RT_SPLUNK_TOKEN: "{{ vault.splunk.token }}"
+      RT_SPLUNK_PATH=: "{{ search.splunk_path }}"
     networks:
       - name: backend_network
         aliases:
-          - c2
+          - search
