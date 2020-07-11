@@ -1,35 +1,67 @@
-- name: Create proxy config directory
+- include_vars: vault.yml
+
+- name: Creating proxy TLS directory
   file:
-    path: "{{ proxy_target_dir }}"
+    path: "{{ proxy.tls.path }}"
     state: directory
 
-- name: Copy NGINX config template
+- name: Create new proxy private key
+  openssl_privatekey:
+    path: "{{ proxy.tls.path }}/privkey.pem"
+
+- name: Generate proxy CSR
+  openssl_csr:
+    path: "{{ proxy.tls.path }}/proxy.csr"
+    privatekey_path: "{{ proxy.tls.path }}/privkey.pem"
+    state_or_province_name: "{{ proxy.tls.state_or_province_name }}"
+    country_name: "{{ proxy.tls.country_name }}"
+    locality_name: "{{ proxy.tls.locality_name }}"
+    common_name: "{{ proxy.tls.common_name }}"
+
+- name: Generate a proxy self signed certificate
+  openssl_certificate:
+    path: "{{ proxy.tls.path }}/chain.crt"
+    privatekey_path: "{{ proxy.tls.path }}/privkey.pem"
+    csr_path: "{{ proxy.tls.path }}/proxy.csr"
+    provider: ownca
+    ownca_path: "{{ ca.path }}/chain.crt"
+    ownca_privatekey_path: "{{ ca.path }}/privkey.pem"
+    ownca_privatekey_passphrase: "{{ vault.ca.passphrase }}"
+
+
+- name: Create proxy config directory
+  file:
+    path: "{{ reternal.install_dir }}/proxy"
+    state: directory
+
+- name: Copy Nginx config template
   template:
     src: proxy.conf.j2
-    dest: "{{ proxy_target_dir }}/proxy.conf"
+    dest: "{{ reternal.install_dir }}/proxy/gateway.conf"
 
-- name: Run NGINX container
+- name: Run Nginx container
   docker_container:
-    name: reternal-proxy
-    image: nginx
+    name: proxy
+    image: "nginx:{{ proxy.tag }}"
     state: started
+    purge_networks: no
+    networks_cli_compatible: yes
     recreate: yes
     networks:
       - name: frontend_network
         aliases:
-          - reternal-proxy
+          - proxy
         links:
-          - reternal-ui
+          - frontend
       - name: backend_network
         aliases:
-          - reternal-proxy
+          - proxy
         links:
-          - reternal-backend
-          - reternal-c2
+          - api
+          - c2
     volumes:
-      - "{{ proxy_target_dir }}/proxy.conf:/etc/nginx/conf.d/proxy.conf"
-      - "{{ proxy_target_dir }}/tls:/etc/nginx/tls"
+      - "{{ reternal.install_dir }}/proxy/gateway.conf:/etc/nginx/conf.d/proxy.conf"
+      - "{{ proxy.tls.path }}:/etc/nginx/tls"
 
     ports:
-      - "{{ proxy.c2.port }}:{{ proxy.c2.port }}"
-      - "{{ proxy.ui.port }}:{{ proxy.ui.port }}"
+      - "{{ proxy.port }}:{{ proxy.port }}"

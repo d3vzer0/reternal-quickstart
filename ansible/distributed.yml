@@ -1,0 +1,109 @@
+- hosts: all
+  tags: ['all', 'core']
+  # become: yes
+  strategy: free
+  roles:
+    # - role: generic
+    #   tags: ['generic']
+
+    # Firewall rule not deployed automatically
+    # - role: firewall
+    #   tags: ['firewall']
+
+    - role: docker
+      tags: ['docker']
+
+
+- hosts: standalone
+  tags: ['standalone', 'reternal']
+  roles:
+    - role: mongodb
+      tags: ['mongodb']
+    - role: redis
+      tags: ['redis']
+    - role: rabbitmq
+      tags: ['rabbitmq']
+    - role: empire2
+      tags: ['empire2']
+    - role: c2
+      tags: ['c2']
+    - role: search
+      tags: ['search']
+    - role: api
+      tags: ['api']
+
+# - hosts: frontend
+#   tags: ['frontend', 'reternal']
+#   become: yes
+#   roles:
+#     - role: ui
+#       tags: ['ui']
+
+- hosts: api
+  tags: ['api', 'reternal']
+  roles:
+    - role: api
+      tags: ['api']
+
+- hosts: c2
+  tags: ['c2', 'reternal']
+  roles:
+    - role: c2
+      tags: ['c2']
+
+- hosts: search
+  tags: ['search', 'reternal']
+  roles:
+    - role: search
+      tags: ['search']
+
+- hosts: rabbitmq
+  tags: ['rabbitmq', 'reternal']
+  roles:
+    - role: rabbitmq
+
+- hosts: empire2
+  tags: ['empire2', 'reternal']
+  roles:
+    - role: empire2
+
+# - hosts: compilers
+#   tags: ['compilers', 'reternal']
+#   become: yes
+#   roles:
+#     - role: rsa
+#       tags: ['rsa']
+#     - role: compiler
+#       tags: ['compiler']
+
+# - hosts: proxies
+#   tags: ['proxies']
+#   become: yes
+#   roles:
+#     - role: certs
+#       tags: ['certs']
+#     - role: proxy
+#       tags: ['proxy'] 
+
+
+# - hosts: backend
+#   tags: ['backend', 'utils']
+#   become: yes
+#   vars_prompt:
+#     - name: "login_username"
+#       prompt: "Username for Reternal auth"
+#       private: no
+#     - name: "login_password"
+#       prompt: "Password for Reternal auth"
+#       private: yes
+#   roles:
+#     - role: management
+#       tags: ['management']
+#     - role: usercreate
+#       tags: ['usercreate']
+#     - role: attck
+#       tags: ['attck']
+#     - role: mapping
+#       tags: ['mapping']
+#     - role: commands
+#       tags: ['commands']

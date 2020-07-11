@@ -1,0 +1,21 @@
+
+- include_vars: vault.yml
+
+- name: Create persistent Empire2 volume
+  docker_volume:
+    name: empire2-data
+
+- name: Run Empire2 container
+  docker_container:
+    name: empire2
+    image: "empireproject/empire:{{ empire2.tag }}"
+    state: started
+    command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username {{ empire2.username }} --password {{ vault.empire2.password }} --headless --debug  && while sleep 1000; do :; done"
+    purge_networks: yes
+    networks_cli_compatible: yes
+    volumes:
+      - "empire2-data:/opt/Empire:rw"
+    networks:
+      - name: backend_network
+        aliases:
+          - empire2

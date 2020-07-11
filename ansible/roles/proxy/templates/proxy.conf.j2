@@ -1,29 +1,12 @@
 server {
-    listen {{ proxy.c2.port }} ssl;
-    ssl_certificate     /etc/nginx/tls/{{ proxy.c2.domain}}.crt;
-    ssl_certificate_key /etc/nginx/tls/{{ proxy.c2.domain}}.key;
+    listen {{ proxy.port }} ssl;
+    ssl_certificate     /etc/nginx/tls/chain.crt;
+    ssl_certificate_key /etc/nginx/tls/privkey.pem;
     ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
     ssl_protocols       TLSv1.1 TLSv1.2;
 
     location / {
-        proxy_pass http://reternal-c2:8080;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;        
-    }
-}
-
-server {
-    listen {{ proxy.ui.port }} ssl;
-    ssl_certificate     /etc/nginx/tls/{{ proxy.ui.domain}}.crt;
-    ssl_certificate_key /etc/nginx/tls/{{ proxy.ui.domain}}.key;
-    ssl_ciphers         EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH;
-    ssl_protocols       TLSv1.1 TLSv1.2;
-
-    location / {
-        proxy_pass http://reternal-ui;
+        proxy_pass http://frontend;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -32,7 +15,7 @@ server {
     }
 
     location /api/v1/ {
-            proxy_pass http://reternal-backend:5000;
+            proxy_pass http://api:{{ api.port }};
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection 'upgrade';
@@ -41,7 +24,7 @@ server {
         }
 
     location /socket.io {
-        proxy_pass http://reternal-backend:5000;
+        proxy_pass http://api:{{ api.port }};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -49,5 +32,3 @@ server {
         proxy_cache_bypass $http_upgrade;        
     }
 }
-
-

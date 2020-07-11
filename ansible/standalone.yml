@@ -1,0 +1,32 @@
+- hosts: all
+  tags: ['all', 'core']
+  # become: yes
+  strategy: free
+  roles:
+    - role: docker
+      tags: ['docker']
+
+
+- hosts: standalone
+  tags: ['standalone', 'reternal']
+  roles:
+    - role: ca
+      tags: ['ca']
+    - role: mongodb
+      tags: ['mongodb']
+    - role: redis
+      tags: ['redis']
+    - role: rabbitmq
+      tags: ['rabbitmq']
+    - role: empire2
+      tags: ['empire2']
+    - role: c2
+      tags: ['c2']
+    - role: search
+      tags: ['search']
+    - role: api
+      tags: ['api']
+    - role: frontend
+      tags: ['frontend']
+    - role: proxy
+      tags: ['proxy']

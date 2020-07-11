@@ -1,62 +1,39 @@
 - include_vars: vault.yml
 
-- name: Making sure backend docker network exists
-  docker_network:
-    name: backend_network
-
 - name: Making sure default install directory is created
   file:
     path: "{{ reternal.install_dir }}"
     state: directory
 
-- name: Archiving backend components
-  archive:
-    path: "../backend"
-    dest: "../backend.tgz"
-  delegate_to: localhost
-  become: no
-
-- name: Extract backend components to target
-  unarchive:
-    src: "../backend.tgz"
-    dest: "{{ reternal.install_dir }}"
-
-- name: Build API container
-  docker_image:
-    name: reternal/backend
-    path: "{{ reternal.install_dir }}/backend"
-    force: yes
-
 - name: Run API container
   docker_container:
-    name: reternal-backend
-    image: reternal/backend
+    name: api
+    image: "reternal/backend:{{ api.tag }}"
     state: started
     recreate: yes
+    purge_networks: yes
+    networks_cli_compatible: yes
     env:
-      JWT_SECRET: "{{ passwords.jwt_secret }}"
-      FLASK_SECRET: "{{ passwords.api_secret }}"
-      CORS_DOMAIN: "{{ reternal.cors }}"
-      C2_DEST: "{{ reternal.c2_dest }}"
-      MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"
+      RT_CELERY_BACKEND: "{{ celery.backend }}"
+      RT_CELERY_BROKER: "{{ celery.broker }}"
     networks:
       - name: backend_network
         aliases:
-          - reternal-backend
+          - api
  
-- name: Run backend SocketIO container
-  docker_container:
-    name: reternal-socketio
-    image: reternal/backend
-    state: started
-    recreate: yes
-    env:
-      JWT_SECRET: "{{ passwords.jwt_secret }}"
-      FLASK_SECRET: "{{ passwords.api_secret }}"
-      MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"
-    networks:
-      - name: backend_network
-        aliases:
-          - reternal-backendsocket
-    command: ['celery', '-A', 'app.tasks.listener.celery', 'worker', '-Q', 'api']
+# - name: Run backend SocketIO container
+#   docker_container:
+#     name: reternal-socketio
+#     image: reternal/backend
+#     state: started
+#     recreate: yes
+#     env:
+#       JWT_SECRET: "{{ passwords.jwt_secret }}"
+#       FLASK_SECRET: "{{ passwords.api_secret }}"
+#       MONGO_PASSWORD: "{{ passwords.mongo_reternal_pass }}"
+#     networks:
+#       - name: backend_network
+#         aliases:
+#           - reternal-backendsocket
+#     command: ['celery', '-A', 'app.tasks.listener.celery', 'worker', '-Q', 'api']
     

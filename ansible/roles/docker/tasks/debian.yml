@@ -17,12 +17,3 @@
   apt:
     name: ["docker-ce", "docker-ce-cli", "containerd.io"]
     state: present
-  
-- name: Installing Docker compose
-  apt:
-    name: "docker-compose"
-    state: present
-
-- name: Installing docker-py
-  pip:
-    name: "docker"
