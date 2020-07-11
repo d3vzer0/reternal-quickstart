@@ -15,7 +15,8 @@
     state: started
     purge_networks: yes
     networks_cli_compatible: yes
-    recreate: yes
+    pull: "{{ frontend.pull | default('yes') }}"
+    recreate: "{{ frontend.recreate | default('yes') }}"
     env:
       RT_API_BASE_URL: "{{ frontend.api_base_url }}"
       RT_OAUTH_AUTHORITY_URL: "{{ frontend.oauth_authority_url }}"

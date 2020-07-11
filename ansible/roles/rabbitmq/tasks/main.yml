@@ -33,6 +33,8 @@
     name: rabbitmq
     image: bitnami/rabbitmq:{{ rabbitmq.tag }}
     state: started
+    pull: "{{ rabbitmq.pull | default('no') }}"
+    recreate: "{{ rabbitmq.recreate | default('no') }}"
     purge_networks: yes
     networks_cli_compatible: yes
     env:

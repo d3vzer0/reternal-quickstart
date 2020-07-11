@@ -45,6 +45,8 @@
     purge_networks: no
     networks_cli_compatible: yes
     state: started
+    pull: "{{ mongodb.pull | default('no') }}"
+    recreate: "{{ mongodb.recreate | default('no') }}"
     env:
       MONGO_INITDB_ROOT_USERNAME: "{{ mongodb.root_username }}"
       MONGO_INITDB_ROOT_PASSWORD: "{{ vault.mongodb.root_password }}"

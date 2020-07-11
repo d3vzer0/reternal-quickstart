@@ -10,6 +10,8 @@
     name: empire2
     image: "empireproject/empire:{{ empire2.tag }}"
     state: started
+    pull: "{{ empire2.pull | default('no') }}"
+    recreate: "{{ empire2.recreate | default('no') }}"
     command: /bin/sh -c "cd setup && ./cert.sh && pip install pefile requests && cd ../ && ./empire --username {{ empire2.username }} --password {{ vault.empire2.password }} --headless --debug  && while sleep 1000; do :; done"
     purge_networks: yes
     networks_cli_compatible: yes

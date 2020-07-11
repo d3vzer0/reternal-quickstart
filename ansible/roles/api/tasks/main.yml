@@ -10,9 +10,10 @@
     name: api
     image: "reternal/backend:{{ api.tag }}"
     state: started
-    recreate: yes
     purge_networks: yes
     networks_cli_compatible: yes
+    pull: "{{ api.pull | default('yes') }}"
+    recreate: "{{ api.recreate | default('yes') }}"
     env:
       RT_CELERY_BACKEND: "{{ celery.backend }}"
       RT_CELERY_BROKER: "{{ celery.broker }}"

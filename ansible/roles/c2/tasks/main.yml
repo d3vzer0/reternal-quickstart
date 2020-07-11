@@ -10,9 +10,10 @@
     name: c2
     image: "reternal/c2:{{ c2.tag}}"
     state: started
+    pull: "{{ c2.pull | default('yes') }}"
+    recreate: "{{ c2.recreate | default('yes') }}"
     purge_networks: yes
     networks_cli_compatible: yes
-    recreate: yes
     env:
       RT_CELERY_BACKEND: "{{ celery.backend }}"
       RT_CELERY_BROKER: "{{ celery.broker }}"

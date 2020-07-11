@@ -32,6 +32,8 @@
     name: redis
     image: bitnami/redis:{{ redis.tag }}
     state: started
+    pull: "{{ redis.pull | default('no') }}"
+    recreate: "{{ redis.recreate | default('no') }}"
     purge_networks: yes
     networks_cli_compatible: yes
     env:

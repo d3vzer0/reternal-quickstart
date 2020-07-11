@@ -45,7 +45,8 @@
     state: started
     purge_networks: no
     networks_cli_compatible: yes
-    recreate: yes
+    pull: "{{ proxy.pull | default('no') }}"
+    recreate: "{{ proxy.recreate | default('no') }}"
     networks:
       - name: frontend_network
         aliases:
@@ -59,7 +60,7 @@
           - api
           - c2
     volumes:
-      - "{{ reternal.install_dir }}/proxy/gateway.conf:/etc/nginx/conf.d/proxy.conf"
+      - "{{ reternal.install_dir }}/proxy/gateway.conf:/etc/nginx/conf.d/gateway.conf"
       - "{{ proxy.tls.path }}:/etc/nginx/tls"
 
     ports:
