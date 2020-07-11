@@ -12,6 +12,7 @@
 
 reternal:
   install_dir: "{{ lookup('env','HOME') }}/opt/reternal"
+  domain: "localhost"
 
 ca:
   path: "{{ reternal.install_dir }}/ca"
@@ -22,11 +23,11 @@ ca:
 
 frontend:
   tag: dev
-  api_base_url: "http://localhost:8443/api/v1"
-  oauth_authority_url: ""
-  oauth_authorize_url: ""
-  oauth_client_id: ""
-  oauth_redirect_url: "http://localhost:9090/login"
+  api_base_url: "http://{{ reternal.domain }}:{{ proxy.port }}/api/v1"
+  oauth_authority_url: "https://login.microsoftonline.com/<tenant_here>/v2.0/"
+  oauth_authorize_url: "https://login.microsoftonline.com/<tenant_here>/v2.0/authorize"
+  oauth_client_id: "<client_id_here>"
+  oauth_redirect_url: "http://{{ reternal.domain }}:{{ proxy.port }}/login"
 
 c2:
   tag: dev

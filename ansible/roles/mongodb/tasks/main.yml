@@ -48,6 +48,7 @@
     env:
       MONGO_INITDB_ROOT_USERNAME: "{{ mongodb.root_username }}"
       MONGO_INITDB_ROOT_PASSWORD: "{{ vault.mongodb.root_password }}"
+      MONGO_INITDB_DATABASE: "{{ mongodb.db }}"
     networks:
       - name: backend_network
         aliases:
@@ -58,7 +59,7 @@
       - "127.0.0.1:27017:27017"
 
 - name: Create mongodb user and pass for reternal
-  no_log: true
+  # no_log: true
   mongodb_user:
     login_user: "{{ mongodb.root_username }}"
     login_password: "{{ vault.mongodb.root_password }}"

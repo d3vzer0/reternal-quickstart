@@ -28,7 +28,6 @@
     ownca_privatekey_path: "{{ ca.path }}/privkey.pem"
     ownca_privatekey_passphrase: "{{ vault.ca.passphrase }}"
 
-
 - name: Create proxy config directory
   file:
     path: "{{ reternal.install_dir }}/proxy"
