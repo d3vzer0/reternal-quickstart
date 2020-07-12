@@ -1,0 +1,28 @@
+- name: Build C2 image
+  docker_image:
+    build: 
+      path: "{{ c2.build_path }}"
+    name: reternal-dev/c2
+    tag: latest
+    source: build
+
+- name: Run C2 container
+  docker_container:
+    name: c2
+    image: "reternal-dev/c2:latest"
+    state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    recreate: "{{ c2.recreate | default('yes') }}"
+    volumes:
+      - "{{ c2.build_path }}/workers:/home/reternal/workers"
+    env:
+      RT_CELERY_BACKEND: "{{ celery.backend }}"
+      RT_CELERY_BROKER: "{{ celery.broker }}"
+      RT_EMPIRE_PATH: "{{ c2.empire_path }}"
+      RT_EMPIRE_PASSWORD: "{{ vault.empire2.password }}"
+      RT_EMPIRE_USERNAME: "{{ empire2.username }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - c2

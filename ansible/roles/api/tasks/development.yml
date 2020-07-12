@@ -1,0 +1,29 @@
+- name: Build API image
+  docker_image:
+    build: 
+      path: "{{ api.build_path }}"
+    name: reternal-dev/api
+    tag: latest
+    source: build
+
+- name: Run API container
+  docker_container:
+    name: api
+    image: "reternal-dev/api:latest"
+    state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    recreate: "{{ api.recreate | default('yes') }}"
+    volumes:
+      - "{{ api.build_path }}/app:/home/reternal/app"
+      - "{{ api.build_path }}/database:/home/reternal/database"
+      - "{{ api.build_path }}/workers:/home/reternal/workers"
+      - "{{ api.build_path }}/environment.py:/home/reternal/environment.py"
+    env:
+      RT_CELERY_BACKEND: "{{ celery.backend }}"
+      RT_CELERY_BROKER: "{{ celery.broker }}"
+      FASTAPI_DEBUG: "True"
+    networks:
+      - name: backend_network
+        aliases:
+          - api

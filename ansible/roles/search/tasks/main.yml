@@ -6,21 +6,5 @@
     path: "{{ reternal.install_dir }}"
     state: directory
 
-- name: Run Search container
-  docker_container:
-    name: search
-    image: "reternal/search:{{ search.tag }}"
-    state: started
-    pull: "{{ search.pull | default('yes') }}"
-    recreate: "{{ search.recreate | default('yes') }}"
-    networks_cli_compatible: yes
-    purge_networks: yes
-    env:
-      RT_CELERY_BACKEND: "{{ celery.backend }}"
-      RT_CELERY_BROKER: "{{ celery.broker }}"
-      RT_SPLUNK_TOKEN: "{{ vault.splunk.token }}"
-      RT_SPLUNK_PATH=: "{{ search.splunk_path }}"
-    networks:
-      - name: backend_network
-        aliases:
-          - search
+- name: include phase specific install
+  include_tasks: "{{ reternal.phase }}.yml"

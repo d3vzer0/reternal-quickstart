@@ -46,7 +46,7 @@
     purge_networks: no
     networks_cli_compatible: yes
     pull: "{{ proxy.pull | default('no') }}"
-    recreate: "{{ proxy.recreate | default('no') }}"
+    recreate: "{{ proxy.recreate | default('yes') }}"
     networks:
       - name: frontend_network
         aliases:

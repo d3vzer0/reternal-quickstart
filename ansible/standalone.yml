@@ -1,32 +1,33 @@
 - hosts: all
+  gather_facts: yes
+
+- hosts: all
   tags: ['all', 'core']
-  # become: yes
-  strategy: free
   roles:
     - role: docker
       tags: ['docker']
 
-
 - hosts: standalone
+  gather_facts: yes
   tags: ['standalone', 'reternal']
   roles:
     - role: ca
-      tags: ['ca']
+      tags: ['ca', 'custom', 'utils']
     - role: mongodb
-      tags: ['mongodb']
+      tags: ['mongodb', 'default', 'container']
     - role: redis
-      tags: ['redis']
+      tags: ['redis', 'default', 'container']
     - role: rabbitmq
-      tags: ['rabbitmq']
+      tags: ['rabbitmq', 'default', 'container']
     - role: empire2
-      tags: ['empire2']
+      tags: ['empire2', 'default', 'container']
     - role: c2
-      tags: ['c2']
+      tags: ['c2', 'custom', 'container']
     - role: search
-      tags: ['search']
+      tags: ['search', 'custom', 'container']
     - role: api
-      tags: ['api']
+      tags: ['api', 'custom', 'container']
     - role: frontend
-      tags: ['frontend']
+      tags: ['frontend', 'custom', 'container']
     - role: proxy
-      tags: ['proxy']
+      tags: ['proxy', 'custom', 'container']

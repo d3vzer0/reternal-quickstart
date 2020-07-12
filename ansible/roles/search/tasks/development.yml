@@ -1,0 +1,27 @@
+- name: Build Search image
+  docker_image:
+    build: 
+      path: "{{ search.build_path }}"
+    name: reternal-dev/search
+    tag: latest
+    source: build
+
+- name: Run Search container
+  docker_container:
+    name: search
+    image: "reternal-dev/search:latest"
+    state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    recreate: "{{ search.recreate | default('yes') }}"
+    volumes:
+      - "{{ search.build_path }}/workers:/home/reternal/workers"
+    env:
+      RT_CELERY_BACKEND: "{{ celery.backend }}"
+      RT_CELERY_BROKER: "{{ celery.broker }}"
+      RT_SPLUNK_TOKEN: "{{ vault.splunk.token }}"
+      RT_SPLUNK_PATH=: "{{ search.splunk_path }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - search

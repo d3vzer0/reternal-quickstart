@@ -11,7 +11,7 @@
 
 
 reternal:
-  phase: development
+  phase: deployment
   install_dir: "{{ lookup('env','HOME') }}/opt/reternal"
   domain: "reternal.local"
 
@@ -20,27 +20,24 @@ ca:
   state_or_province_name: "Rohan"
   country_name: "ME"
   locality_name: "Edoras"
-  common_name: "Reternal Internal CA DEV"
+  common_name: "Reternal Internal CA TEST"
 
 frontend:
   tag: dev
-  port: 9090
+  port: 80
   api_base_url: "http://{{ reternal.domain }}:{{ proxy.port }}/api/v1"
   oauth_authority_url: "https://login.microsoftonline.com/<tenant_here>/v2.0/"
   oauth_authorize_url: "https://login.microsoftonline.com/<tenant_here>/v2.0/authorize"
   oauth_client_id: "<client_id_here>"
   oauth_redirect_url: "http://{{ reternal.domain }}:{{ proxy.port }}/login"
-  build_path: "../../reternal-ui"
 
 c2:
   tag: dev
   empire_path: "https://empire2:1337/api/"
-  build_path: "../../reternal-c2"
 
 search:
   tag: dev
   splunk_path: ""
-  build_path: "../../reternal-search"
 
 celery:
   broker: "amqp://{{ rabbitmq.username }}:{{ vault.rabbitmq.password }}@rabbitmq:5672/{{ rabbitmq.vhost }}"
@@ -55,7 +52,6 @@ api:
   cors: "*"
   port: 5000
   host: "0.0.0.0"
-  build_path: "../../reternal-backend"
 
 redis:
   tag: latest

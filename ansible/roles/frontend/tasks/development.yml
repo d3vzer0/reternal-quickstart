@@ -1,0 +1,30 @@
+- name: Build UI image
+  docker_image:
+    build: 
+      path: "{{ frontend.build_path }}"
+      dockerfile: "Dockerfile.dev"
+    name: reternal-dev/ui
+    tag: latest
+    source: build
+
+- name: Run frontend container
+  docker_container:
+    name: frontend
+    image: reternal-dev/ui:latest
+    state: started
+    purge_networks: yes
+    networks_cli_compatible: yes
+    recreate: "{{ frontend.recreate | default('yes') }}"
+    volumes:
+      - "{{ frontend.build_path }}/src:/app/src/"
+      - "{{ frontend.build_path }}/quasar.conf.js:/app/quasar.conf.js"
+    env:
+      RT_API_BASE_URL: "{{ frontend.api_base_url }}"
+      RT_OAUTH_AUTHORITY_URL: "{{ frontend.oauth_authority_url }}"
+      RT_OAUTH_AUTHORIZE_URL: "{{ frontend.oauth_authorize_url }}"
+      RT_OAUTH_CLIENT_ID: "{{ frontend.oauth_client_id }}"
+      RT_OAUTH_REDIRECT_URL: "{{ frontend.oauth_redirect_url }}"
+    networks:
+      - name: backend_network
+        aliases:
+          - frontend

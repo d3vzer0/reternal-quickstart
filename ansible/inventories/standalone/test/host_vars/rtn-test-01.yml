@@ -1,5 +1,5 @@
-hostname: localhost
-ansible_host: &mgt_addr 127.0.0.1 # Example of IP of TestVM, replace this with target host IP
+hostname: hostname_here
+ansible_host: &mgt_addr ip_here # Example of IP of TestVM, replace this with target host IP
 
 firewall:
   defaults:

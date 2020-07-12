@@ -8,7 +8,7 @@ server {
     server_tokens off;
 
     location / {
-        proxy_pass http://frontend;
+        proxy_pass http://frontend:{{ frontend.port }};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
