@@ -27,6 +27,8 @@
       tags: ['search', 'custom', 'container']
     - role: api
       tags: ['api', 'custom', 'container']
+    - role: empire2bit
+      tags: ['empire2bit', 'custom', 'container']
     - role: frontend
       tags: ['frontend', 'custom', 'container']
     - role: proxy
