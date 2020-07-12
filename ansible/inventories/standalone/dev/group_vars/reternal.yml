@@ -98,4 +98,9 @@ proxy:
     state_or_province_name: "Rohan"
     country_name: "ME"
     locality_name: "Edoras"
-  
+
+empire2bit:
+  tag: latest
+  results: /api/v1/results/module
+  pipeline_path: "../pipeline/fluentbit/empire2"
+

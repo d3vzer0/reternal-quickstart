@@ -1,0 +1,25 @@
+
+- include_vars: vault.yml
+
+- name: Run Fluentbit (empire2) container
+  docker_container:
+    name: empire2bit
+    image: "fluent/fluent-bit:{{ empire2bit.tag }}"
+    state: started
+    pull: "{{ empire2bit.pull | default('no') }}"
+    recreate: "{{ empire2bit.recreate | default('no') }}"
+    purge_networks: yes
+    networks_cli_compatible: yes
+    env:
+      RT_API_TOKEN: "{{ vault.api.results_key }}"
+      RT_API_HOST: "api"
+      RT_API_PORT: "{{ api.port }}"
+      RT_API_PATH: "{{ empire2bit.results }}"
+    volumes:
+      - "empire2-data:/empire:ro"
+      - "{{ empire2bit.pipeline_path }}/input.conf:/fluent-bit/etc/fluent-bit.conf:ro"
+      - "{{ empire2bit.pipeline_path }}/parser.conf:/fluent-bit/etc/parser.conf:ro"
+    networks:
+      - name: backend_network
+        aliases:
+          - empire2bit
