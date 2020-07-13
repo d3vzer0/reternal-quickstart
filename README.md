@@ -33,18 +33,7 @@ the compose file in order to set up the reternal platform via docker.
 
 
 ## Install and Configuration
-This repository contains an Ansible deployment playbook to automate the installation and configuration for Reternal. The guide can be found on the repo's Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki/1.A-Ansible-Install-Guide. A manual docker-compose file is also available for local testing.
-
-
-## Devmode
-Only use the following steps when developing, services will only be exposed to localhost and no credentials are used:
-
-1. Run the container dependencies: docker-compose up -d mongodb redis empire
-2. Run empire and obtain API key: docker exec -ti <empire_container_id> /bin/bash
-2b. ./empire --rest
-3. Export the token to your environment: export RT_TOKEN_EMPIRE="token_here"
-... TODO
-
+This repository contains Ansible deployment playbooks to automate the local or remote installation and configuration for Reternal. The guide can be found on the repo's Wiki @ https://github.com/d3vzer0/reternal-quickstart/wiki.  
 
 
 ## Developers and Contact
