@@ -7,7 +7,7 @@ import asyncio
 
 class Products:
     def __init__(self, products_path=config['PRODUCTS_PATH'],api_url=config['API_URL']):
-        self.session = aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
         self.products_path = products_path
         self.api_url = api_url
 

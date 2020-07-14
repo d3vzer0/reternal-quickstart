@@ -25,7 +25,7 @@ class Validations:
     def __init__(self, file_path=config['VALIDATIONS_PATH'], api_url=config['API_URL']):
         self.file_path = file_path
         self.api_url = api_url
-        self.session = aiohttp.ClientSession()
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
 
     async def import_config(self, mapping):
         ''' Create mapping via Reternal API '''

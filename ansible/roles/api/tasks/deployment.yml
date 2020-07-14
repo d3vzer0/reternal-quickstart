@@ -12,7 +12,7 @@
       RT_CELERY_BROKER: "{{ celery.broker }}"
       RT_MONGO_USERNAME: "{{ mongodb.username }}"
       RT_MONGO_PASSWORD: "{{ vault.mongodb.password }}"
-      CORS_ALLOW_ORIGIN: "{{ api.cors }}"
+      RT_CORS_ALLOW_ORIGIN: "{{ api.cors }}"
       RT_SERVICE_TOKEN: "{{ vault.api.service_token }}"
     networks:
       - name: backend_network

@@ -11,7 +11,7 @@
     purge_networks: yes
     networks_cli_compatible: yes
     env:
-      RT_API_TOKEN: "{{ vault.api.results_key }}"
+      RT_API_TOKEN: "{{ vault.api.service_token }}"
       RT_API_HOST: "api"
       RT_API_PORT: "{{ api.port }}"
       RT_API_PATH: "{{ empire2bit.results }}"

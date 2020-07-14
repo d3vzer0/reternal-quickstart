@@ -15,7 +15,7 @@ def load_magma(magma_path=config['MAGMA_PATH']):
 class MitreAttck:
     def __init__(self, mitre_url=config['ATTCK_URL'],api_url=config['API_URL'], magma_mapping=None):
         ''' Import the MITRE ATTCK techniques and actors from Github '''
-        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
         self.mitre_url = mitre_url
         self.api_url = api_url
         self.magma_mapping = magma_mapping
@@ -80,7 +80,6 @@ class MitreAttck:
     
         relations = []
         for technique_details in json.loads(all_techniques)['objects']:
-            print(technique_details)
             if technique_details.get('revoked', False) == False:
                 if technique_details['type'] == 'attack-pattern': 
                     self.techniques[technique_details['id']] = self.format_technique(technique_details)
