@@ -27,6 +27,9 @@
       RT_MONGO_PASSWORD: "{{ vault.mongodb.password }}"
       RT_CORS_ALLOW_ORIGIN: "{{ api.cors }}"
       RT_SERVICE_TOKEN: "{{ vault.api.service_token }}"
+      RT_OAUTH2_ISSUER: "{{ openid.issuer_url }}"
+      RT_OAUTH2_AUDIENCE: "{{ openid.audience }}"
+      RT_OAUTH2_OPENID_CONFIG: "{{ openid.config_url }}"
       FASTAPI_DEBUG: "True"
     networks:
       - name: backend_network
