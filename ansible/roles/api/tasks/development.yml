@@ -2,6 +2,7 @@
   docker_image:
     build: 
       path: "{{ api.build_path }}"
+    force: "{{ api.recreate | default('yes') }}"
     name: reternal-dev/api
     tag: latest
     source: build
@@ -22,7 +23,9 @@
     env:
       RT_CELERY_BACKEND: "{{ celery.backend }}"
       RT_MONGO_HOST: "mongodb"
+      RT_REDIS_PATH_SOCKETIO: "{{ redis.path.socketio }}"
       RT_CELERY_BROKER: "{{ celery.broker }}"
+      RT_REDIS_PATH_CACHE: "{{ redis.path.cache }}"
       RT_MONGO_USERNAME: "{{ mongodb.username }}"
       RT_MONGO_PASSWORD: "{{ vault.mongodb.password }}"
       RT_CORS_ALLOW_ORIGIN: "{{ api.cors }}"
