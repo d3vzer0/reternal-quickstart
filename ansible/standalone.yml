@@ -33,3 +33,5 @@
       tags: ['frontend', 'custom', 'container']
     - role: proxy
       tags: ['proxy', 'custom', 'container']
+    - role: apitasks
+      tags: ['apitasks', 'custom', 'container']

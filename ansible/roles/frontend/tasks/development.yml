@@ -4,6 +4,7 @@
       path: "{{ frontend.build_path }}"
       dockerfile: "Dockerfile.dev"
     name: reternal-dev/ui
+    force: "{{ frontend.recreate | default('yes') }}"
     tag: latest
     source: build
 

@@ -1,0 +1,9 @@
+- include_vars: vault.yml
+
+- name: Making sure default install directory is created
+  file:
+    path: "{{ reternal.install_dir }}"
+    state: directory
+
+- name: include phase specific install
+  include_tasks: "{{ reternal.phase }}.yml"
