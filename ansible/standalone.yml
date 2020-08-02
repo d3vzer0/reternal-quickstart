@@ -35,3 +35,10 @@
       tags: ['proxy', 'custom', 'container']
     - role: apitasks
       tags: ['apitasks', 'custom', 'container']
+
+- hosts: victims
+  gather_facts: yes
+  tags: ['victim', 'reternal']
+  roles:
+    - role: victim
+      tags: ['victim', 'custom', 'container']

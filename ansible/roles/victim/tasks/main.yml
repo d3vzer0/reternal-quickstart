@@ -1,0 +1,14 @@
+- name: Run victim container
+  docker_container:
+    name: victim
+    image: python:{{ victim.tag }}
+    state: started
+    recreate: "{{ victim.recreate | default('no') }}"
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    networks_cli_compatible: yes
+    networks:
+      - name: backend_network
+        aliases:
+          - victim
+
+
