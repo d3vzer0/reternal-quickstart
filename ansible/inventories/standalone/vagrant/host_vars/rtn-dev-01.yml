@@ -1,5 +1,5 @@
-hostname: localhost
-ansible_host: &mgt_addr 127.0.0.1 # Example of IP of TestVM, replace this with target host IP
+hostname: reternal.local
+ansible_host: &mgt_addr 192.168.77.20 # Example of IP of TestVM, replace this with target host IP
 
 firewall:
   defaults:

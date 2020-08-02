@@ -1,6 +1,6 @@
 - name: Installing Docker dependencies
   apt:
-    name: ["apt-transport-https", "ca-certificates", "curl", "gnupg-agent", "software-properties-common"]
+    name: ["apt-transport-https", "python3-pip", "ca-certificates", "curl", "gnupg-agent", "software-properties-common"]
     state: present
 
 - name: Add Docker gpg key
@@ -17,13 +17,8 @@
   apt:
     name: ["docker-ce", "docker-ce-cli", "containerd.io"]
     state: present
-  
-- name: Installing Docker compose
-  apt:
-    name: "docker-compose"
-    state: present
 
-- name: Installing docker-py
+- name: Installing docker for python
   pip:
-    name: "docker-py"
+    name: "docker"
     state: present

@@ -1,0 +1,115 @@
+# This is the default settings file for the reternal playbook.
+# None of the variables will have to be changed for testing. In it's current state the following will be deployed:
+
+# API on https://<your_ip>:8443
+# UI on https://<your_ip>:9443
+# C2 Endpoint on https://<your_ip>:443
+
+# A default firewall won't be enabled, so be carefull what you expose!
+
+# PS. The certs role will create self-signed certificates. You can replace these with your own certs later on
+
+
+reternal:
+  phase: development
+  install_dir: "/opt/reternal"
+  domain: "reternal.local"
+
+openid:
+  config_url: 'https://login.microsoftonline.com/<tenant_id_here>/.well-known/openid-configuration'
+  issuer_url: 'https://sts.windows.net/<tenant_id_here>/'
+  authority_url: 'https://login.microsoftonline.com/<tenant_id_here>/v2.0/'
+  authorize_url: 'https://login.microsoftonline.com/<tenant_id_here>/v2.0/authorize'
+  client_id: '<client_id_here>'
+  redirect_url: "http://{{ reternal.domain }}:{{ proxy.port }}/login"
+  audience: 'api://reternalApi'
+
+ca:
+  path: "{{ reternal.install_dir }}/ca"
+  state_or_province_name: "Rohan"
+  country_name: "ME"
+  locality_name: "Edoras"
+  common_name: "Reternal Internal CA DEV"
+
+frontend:
+  tag: dev
+  port: 9090
+  api_base_url: "http://{{ reternal.domain }}:{{ proxy.port }}/api/v1"
+  build_path: "../../reternal-ui"
+
+c2:
+  tag: dev
+  empire_path: "https://empire2:1337/api/"
+  build_path: "../../reternal-c2"
+
+search:
+  tag: dev
+  splunk_path: ""
+  build_path: "../../reternal-search"
+
+celery:
+  broker: "amqp://{{ rabbitmq.username }}:{{ vault.rabbitmq.password }}@rabbitmq:5672/{{ rabbitmq.vhost }}"
+  backend: "redis://:{{ vault.redis.password }}@redis:6379/0"
+
+empire2:
+  tag: latest
+  username: hello_there
+
+api:
+  tag: dev
+  cors: "*"
+  port: 5000
+  host: "0.0.0.0"
+  build_path: "../../reternal-backend"
+
+redis:
+  tag: latest
+  path:
+    celery: "redis://:{{ vault.redis.password }}@redis:6379/0"
+    cache: "redis://:{{ vault.redis.password }}@redis:6379/1"
+    socketio: "redis://:{{ vault.redis.password }}@redis:6379/2"
+  tls:
+    path: "{{ reternal.install_dir }}/redis"
+    common_name: "redis"
+    state_or_province_name: "Rohan"
+    country_name: "ME"
+    locality_name: "Edoras"
+
+rabbitmq:
+  tag: latest
+  vhost: reternal
+  username: reternal
+  tls:
+    path: "{{ reternal.install_dir }}/rabbitmq"
+    common_name: "rabbitmq"
+    state_or_province_name: "Rohan"
+    country_name: "ME"
+    locality_name: "Edoras"
+
+mongodb:
+  tag: latest
+  root_username: reternalroot 
+  username: reternal 
+  db: reternal 
+  tls:
+    path: "{{ reternal.install_dir }}/mongodb"
+    common_name: "mongodb"
+    state_or_province_name: "Rohan"
+    country_name: "ME"
+    locality_name: "Edoras"
+
+proxy:
+  tag: latest
+  port: 8443
+  tls:
+    path: "{{ reternal.install_dir }}/proxy"
+    common_name: "proxy"
+    state_or_province_name: "Rohan"
+    country_name: "ME"
+    locality_name: "Edoras"
+
+empire2bit:
+  tag: latest
+  results: /api/v1/results/module
+  pipeline_path: "../pipeline/fluentbit/empire2"
+

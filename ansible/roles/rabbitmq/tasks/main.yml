@@ -11,7 +11,7 @@
 
 - name: Generate rabbitmq CSR
   openssl_csr:
-    path: "{{ rabbitmq.tls.path }}/rabbitmq.crt"
+    path: "{{ rabbitmq.tls.path }}/rabbitmq.csr"
     privatekey_path: "{{ rabbitmq.tls.path }}/privkey.pem"
     state_or_province_name: "{{ rabbitmq.tls.state_or_province_name }}"
     country_name: "{{ rabbitmq.tls.country_name }}"
@@ -20,7 +20,7 @@
 
 - name: Generate a rabbitmq self signed certificate
   openssl_certificate:
-    path: "{{ rabbitmq.tls.path }}/chain.csr"
+    path: "{{ rabbitmq.tls.path }}/chain.crt"
     privatekey_path: "{{ rabbitmq.tls.path }}/privkey.pem"
     csr_path: "{{ rabbitmq.tls.path }}/rabbitmq.csr"
     provider: ownca
