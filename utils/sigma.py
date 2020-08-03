@@ -1,10 +1,9 @@
 
-from environment import config
+from .environment import config
 import glob
 import yaml
 import asyncio
 import aiohttp
-import hashlib
 import copy
 
 # Thanks fo Srisaila for this nested merge sample (https://stackoverflow.com/a/47564936)
@@ -22,8 +21,8 @@ def merge_dicts(default, override):
 
 
 class Validations:
-    def __init__(self, file_path=config['VALIDATIONS_PATH'], api_url=config['API_URL']):
-        self.file_path = file_path
+    def __init__(self, path=config['VALIDATIONS_PATH'], api_url=config['API_URL']):
+        self.path = path
         self.api_url = api_url
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
 
@@ -31,12 +30,12 @@ class Validations:
         ''' Create mapping via Reternal API '''
         async with self.session.post(f'{self.api_url}/sigma', json=mapping) as resp:
             if not resp.status == 200:
-                kek = await resp.text()
-                print(resp.status, kek, mapping)
+                error_message = await resp.json()
+                print(error_message)
 
     def load_config(self):
         ''' Find and parse all sigma config files '''
-        config_files = glob.iglob(f'{self.file_path}/sigma/**/**/*.yml', recursive=True)
+        config_files = glob.iglob(f'{self.path}/sigma/**/**/*.yml', recursive=True)
         for config in config_files:
             with open(config) as yamlfile:
                 yaml_objects = list(yaml.load_all(yamlfile, Loader=yaml.FullLoader))
@@ -58,12 +57,12 @@ class Validations:
         await self.session.close()
 
 
-async def main():
+async def import_sigma(*args, **kwargs):
     ''' Load all config files and import mapped techniques '''
-    async with Validations() as validation:
+    async with Validations(**kwargs) as validation:
         for config in validation.load_config():
             await validation.import_config(config)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(import_sigma())
 

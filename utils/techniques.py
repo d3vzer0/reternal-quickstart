@@ -1,25 +1,27 @@
 
-from environment import config
+from .environment import config
 import glob
 import yaml
 import asyncio
 import aiohttp
 
-class Tasks:
-    def __init__(self, file_path=config['TECHNIQUES_PATH'], api_url=config['API_URL']):
-        self.file_path = file_path
-        self.session = aiohttp.ClientSession()
+class Techniques:
+    def __init__(self, path=config['TECHNIQUES_PATH'], api_url=config['API_URL']):
+        self.path = path
+        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
         self.api_url = api_url
 
     async def import_config(self, mapping):
         ''' Create mapping via Reternal API '''
         async with self.session.post(f'{self.api_url}/mapping', json=mapping) as resp:
             if not resp.status == 200:
-                print(resp.status, resp)
+                error_message = await resp.json()
+                print(error_message)
+
 
     def load_config(self):
         ''' Find all technique config files '''
-        config_files = glob.iglob(f'{self.file_path}/**/*.yml', recursive=True)
+        config_files = glob.iglob(f'{self.path}/**/*.yml', recursive=True)
         for config in config_files:
             with open(config) as yamlfile:
                 yaml_object = yaml.load(yamlfile, Loader=yaml.FullLoader)
@@ -43,11 +45,11 @@ class Tasks:
         await self.session.close()
 
 
-async def main():
+async def import_techniques(*args, **kwargs):
     ''' Load all config files and import mapped techniques '''
-    async with Tasks() as tasks:
+    async with Techniques(**kwargs) as tasks:
         for config in tasks.load_config():
             await tasks.import_config(config)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(import_techniques())

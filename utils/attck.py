@@ -1,22 +1,22 @@
-from environment import config
+from .environment import config
 import json
 import aiohttp
 import json
 import asyncio
 
-def load_magma(magma_path=config['MAGMA_PATH']):
+def load_magma(path=config['MAGMA_PATH']):
     magma_mapping = { }
-    with open(magma_path, 'r') as magma_file:
+    with open(path, 'r') as magma_file:
         json_object = json.loads(magma_file.read())
         for mapping in json_object:
             magma_mapping[mapping['external_id']] = mapping
     return magma_mapping
 
 class MitreAttck:
-    def __init__(self, mitre_url=config['ATTCK_URL'],api_url=config['API_URL'], magma_mapping=None):
+    def __init__(self, cti_url=config['ATTCK_URL'], api_url=config['API_URL'], magma_mapping=None):
         ''' Import the MITRE ATTCK techniques and actors from Github '''
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
-        self.mitre_url = mitre_url
+        self.cti_url = cti_url
         self.api_url = api_url
         self.magma_mapping = magma_mapping
         self.actors = { }
@@ -26,7 +26,9 @@ class MitreAttck:
         ''' Create technique via Reternal API '''
         async with self.session.post(f'{self.api_url}/mitre/techniques', json=technique) as resp:
             if not resp.status == 200:
-                print(resp)
+                error_message = await resp.json()
+                print(error_message)
+
 
     def format_technique(self, technique_details):
         ''' Format technique to match expected API schema '''
@@ -73,7 +75,7 @@ class MitreAttck:
     
     async def __aenter__(self):
         ''' Initialize session and populate techniques and actors '''
-        async with self.session.get(self.mitre_url) as resp:
+        async with self.session.get(self.cti_url) as resp:
             # Directly loading resp as json will raise an aiohttp exception
             # Github returns json but with incorrect mimetype (text/html). Read response as text first
             all_techniques = await resp.text()
@@ -95,14 +97,14 @@ class MitreAttck:
         await self.session.close()
 
 
-async def main():
+async def import_attck(*args, **kwargs):
     ''' Retrieve MITRE ATTCK database and format data '''
-    magma_mapping = load_magma()
-    async with MitreAttck(magma_mapping=magma_mapping) as mitre:
+    magma_mapping = load_magma(kwargs['magma_path'])
+    async with MitreAttck(**kwargs, magma_mapping=magma_mapping) as mitre:
         for technique in mitre.techniques.values():
             await mitre.import_technique(technique)
         for actor in mitre.actors.values():
             await mitre.import_actor(actor)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(import_attack())

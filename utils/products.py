@@ -1,4 +1,5 @@
-from environment import config
+from copy import error
+from .environment import config
 import json
 import aiohttp
 import json
@@ -6,9 +7,9 @@ import asyncio
 
 
 class Products:
-    def __init__(self, products_path=config['PRODUCTS_PATH'],api_url=config['API_URL']):
+    def __init__(self, path=config['PRODUCTS_PATH'],api_url=config['API_URL']):
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
-        self.products_path = products_path
+        self.path = path
         self.api_url = api_url
 
     async def import_product(self, product):
@@ -16,9 +17,10 @@ class Products:
         async with self.session.post(f'{self.api_url}/products', json=product) as resp:
             if not resp.status == 200:
                 error_message = await resp.json()
+                print(error_message)
 
     def load_products(self):
-        with open(self.products_path, 'r') as productlist:
+        with open(self.path, 'r') as productlist:
             products_json = json.loads(productlist.read())
 
         for product in products_json:
@@ -32,10 +34,10 @@ class Products:
         await self.session.close()
 
 
-async def main():
-    async with Products() as products:
+async def import_products(*args, **kwargs):
+    async with Products(**kwargs) as products:
         for product in products.load_products():
             await products.import_product(product)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(import_products())
