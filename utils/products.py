@@ -7,14 +7,16 @@ import asyncio
 
 
 class Products:
-    def __init__(self, path=config['PRODUCTS_PATH'],api_url=config['API_URL']):
+    def __init__(self, path=config['PRODUCTS_PATH'],api_url=config['API_URL'], access_token=None):
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
         self.path = path
         self.api_url = api_url
+        self.access_token = access_token
 
     async def import_product(self, product):
         ''' Create product mapping via Reternal API '''
-        async with self.session.post(f'{self.api_url}/products', json=product) as resp:
+        headers = {'Authorization': f'Bearer {self.access_token}'}
+        async with self.session.post(f'{self.api_url}/products', json=product, headers=headers) as resp:
             if not resp.status == 200:
                 error_message = await resp.json()
                 print(error_message)

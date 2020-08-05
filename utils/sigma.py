@@ -21,14 +21,16 @@ def merge_dicts(default, override):
 
 
 class Validations:
-    def __init__(self, path=config['VALIDATIONS_PATH'], api_url=config['API_URL']):
+    def __init__(self, path=config['VALIDATIONS_PATH'], api_url=config['API_URL'], access_token=None):
         self.path = path
         self.api_url = api_url
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
+        self.access_token = access_token
 
     async def import_config(self, mapping):
         ''' Create mapping via Reternal API '''
-        async with self.session.post(f'{self.api_url}/sigma', json=mapping) as resp:
+        headers = {'Authorization': f'Bearer {self.access_token}'}
+        async with self.session.post(f'{self.api_url}/sigma', json=mapping, headers=headers) as resp:
             if not resp.status == 200:
                 error_message = await resp.json()
                 print(error_message)

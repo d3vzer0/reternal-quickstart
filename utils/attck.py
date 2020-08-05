@@ -1,3 +1,4 @@
+from os import access
 from .environment import config
 import json
 import aiohttp
@@ -13,18 +14,21 @@ def load_magma(path=config['MAGMA_PATH']):
     return magma_mapping
 
 class MitreAttck:
-    def __init__(self, cti_url=config['ATTCK_URL'], api_url=config['API_URL'], magma_mapping=None):
+    def __init__(self, cti_url=config['ATTCK_URL'], api_url=config['API_URL'], magma_path=None, access_token=None):
         ''' Import the MITRE ATTCK techniques and actors from Github '''
         self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
         self.cti_url = cti_url
         self.api_url = api_url
-        self.magma_mapping = magma_mapping
+        self.access_token = access_token
+        self.magma_path = magma_path
+        self.magma_mapping = { }
         self.actors = { }
         self.techniques = { }
 
     async def import_technique(self, technique):
         ''' Create technique via Reternal API '''
-        async with self.session.post(f'{self.api_url}/mitre/techniques', json=technique) as resp:
+        headers = {'Authorization': f'Bearer {self.access_token}'}
+        async with self.session.post(f'{self.api_url}/mitre/techniques', json=technique, headers=headers) as resp:
             if not resp.status == 200:
                 error_message = await resp.json()
                 print(error_message)
@@ -51,7 +55,8 @@ class MitreAttck:
 
     async def import_actor(self, actor):
         ''' Create actor via Reternal API '''
-        async with self.session.post(f'{self.api_url}/mitre/actors', json=actor) as resp:
+        headers = {'Authorization': f'Bearer {self.access_token}'}
+        async with self.session.post(f'{self.api_url}/mitre/actors', json=actor, headers=headers) as resp:
             if not resp.status == 200:
                 print(resp.status)
 
@@ -75,6 +80,9 @@ class MitreAttck:
     
     async def __aenter__(self):
         ''' Initialize session and populate techniques and actors '''
+        if self.magma_path:
+            self.magma_mapping = load_magma(self.magma_path)
+
         async with self.session.get(self.cti_url) as resp:
             # Directly loading resp as json will raise an aiohttp exception
             # Github returns json but with incorrect mimetype (text/html). Read response as text first
@@ -99,8 +107,7 @@ class MitreAttck:
 
 async def import_attck(*args, **kwargs):
     ''' Retrieve MITRE ATTCK database and format data '''
-    magma_mapping = load_magma(kwargs['magma_path'])
-    async with MitreAttck(**kwargs, magma_mapping=magma_mapping) as mitre:
+    async with MitreAttck(**kwargs) as mitre:
         for technique in mitre.techniques.values():
             await mitre.import_technique(technique)
         for actor in mitre.actors.values():
