@@ -30,7 +30,12 @@
       RT_OAUTH2_ISSUER: "{{ openid.issuer_url }}"
       RT_OAUTH2_AUDIENCE: "{{ openid.audience }}"
       RT_OAUTH2_OPENID_CONFIG: "{{ openid.config_url }}"
+      RT_C2_ENABLED: "{{ c2.enabled }}"
+      RT_SEARCH_ENABLED: "{{ search.enabled }}"
       FASTAPI_DEBUG: "True"
+    ports:
+      - "127.0.0.1:5000:5000"
+    
     networks:
       - name: backend_network
         aliases:

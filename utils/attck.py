@@ -1,4 +1,3 @@
-from os import access
 from environment import config
 import json
 import aiohttp
@@ -138,7 +137,7 @@ class MitreAttck:
 
         actors, techniques = cls.__make_related(actors, techniques, relationships)
         return cls(actors, techniques)
-    
+
 
 async def import_attck(*args, **kwargs):
     ''' Retrieve MITRE ATTCK database and format data '''

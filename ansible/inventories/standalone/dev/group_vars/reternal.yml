@@ -16,10 +16,10 @@ reternal:
   domain: "reternal.local"
 
 openid:
-  config_url: 'https://login.microsoftonline.com/<tenant_here>/.well-known/openid-configuration'
-  issuer_url: 'https://sts.windows.net/<tenant_here>'
-  authority_url: 'https://login.microsoftonline.com/<tenant_here>/v2.0/'
-  authorize_url: 'https://login.microsoftonline.com/<tenant_here>/v2.0/authorize'
+  config_url: 'https://login.microsoftonline.com/f97837ba-3ed6-4814-87b1-60cec14edb64/.well-known/openid-configuration'
+  issuer_url: 'https://sts.windows.net/f97837ba-3ed6-4814-87b1-60cec14edb64/'
+  authority_url: 'https://login.microsoftonline.com/f97837ba-3ed6-4814-87b1-60cec14edb64/v2.0/'
+  authorize_url: 'https://login.microsoftonline.com/f97837ba-3ed6-4814-87b1-60cec14edb64/v2.0/authorize'
   client_id: '<client_id_here>'
   redirect_url: "http://{{ reternal.domain }}:{{ proxy.port }}/login"
   audience: 'api://reternalApi'
@@ -39,12 +39,15 @@ frontend:
 
 c2:
   tag: dev
+  enabled: "true"
   empire_path: "https://empire2:1337/api/"
   build_path: "../../reternal-c2"
 
 search:
   tag: dev
-  splunk_path: ""
+  enabled: "true"
+  splunk_host: "od-bots-emea-223.splunkoxygen.com"
+  #splunk_host: "docker.for.mac.host.internal"
   build_path: "../../reternal-search"
 
 celery:
@@ -64,6 +67,10 @@ api:
 
 redis:
   tag: latest
+  path:
+    celery: "redis://:{{ vault.redis.password }}@redis:6379/0"
+    cache: "redis://:{{ vault.redis.password }}@redis:6379/1"
+    socketio: "redis://:{{ vault.redis.password }}@redis:6379/2"
   tls:
     path: "{{ reternal.install_dir }}/redis"
     common_name: "redis"

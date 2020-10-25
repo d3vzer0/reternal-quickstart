@@ -13,6 +13,8 @@
       RT_OAUTH_AUTHORIZE_URL: "{{ openid.authorize_url }}"
       RT_OAUTH_CLIENT_ID: "{{ openid.client_id }}"
       RT_OAUTH_REDIRECT_URL: "{{ openid.redirect_url }}"
+      RT_C2_ENABLED: "{{ c2.enabled }}"
+      RT_SEARCH_ENABLED: "{{ search.enabled }}"
     networks:
       - name: frontend_network
         aliases:
