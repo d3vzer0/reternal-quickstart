@@ -1,45 +1,26 @@
-from copy import error
-from .environment import config
-import json
-import aiohttp
 import json
 import asyncio
+from environment import config
+from reternalapi import ReternalAPI
 
 
 class Products:
-    def __init__(self, path=config['PRODUCTS_PATH'],api_url=config['API_URL'], access_token=None):
-        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
-        self.path = path
-        self.api_url = api_url
-        self.access_token = access_token
+    def __init__(self, products = None):
+        self.products = products if products else []
 
-    async def import_product(self, product):
-        ''' Create product mapping via Reternal API '''
-        headers = {'Authorization': f'Bearer {self.access_token}'}
-        async with self.session.post(f'{self.api_url}/products', json=product, headers=headers) as resp:
-            if not resp.status == 200:
-                error_message = await resp.json()
-                print(error_message)
-
-    def load_products(self):
-        with open(self.path, 'r') as productlist:
+    @classmethod
+    def from_file(cls, path = '../mitre/datasource_mapping.json'):
+        with open(path, 'r') as productlist:
             products_json = json.loads(productlist.read())
 
-        for product in products_json:
-            yield product
-
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, exc_type, exc_value, exc_traceback):
-        ''' Close aiothttp session '''
-        await self.session.close()
-
+        products = [product for product in products_json]
+        return cls(products)
 
 async def import_products(*args, **kwargs):
-    async with Products(**kwargs) as products:
-        for product in products.load_products():
-            await products.import_product(product)
+    products = Products.from_file(config['PRODUCTS_PATH'])
+    async with ReternalAPI(api_url=config['API_URL']) as reternal:
+        for product in products.products:
+            await reternal.save('/products', product)
 
 if __name__ == "__main__":
     asyncio.run(import_products())

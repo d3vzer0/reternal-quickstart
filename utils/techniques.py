@@ -1,58 +1,56 @@
 
-from .environment import config
 import glob
 import yaml
 import asyncio
 import aiohttp
+from environment import config
+from reternalapi import ReternalAPI
+
+class Technique:
+    def __init__(self, technique = None):
+        self.technique = technique
+
+    @property
+    def parsed_reternal(self):
+        return {
+            'name': self.technique['name'], 
+            'platform': self.technique['mitre_technique']['platform'],
+            'reference': self.technique.get('reference', None), 
+            'description': self.technique.get('description', None),
+            'author': self.technique.get('author', None),
+            'integration': self.technique['integration'],
+            'external_id': self.technique['mitre_technique']['id'],
+            'commands': [{"category":"Mitre", "module": command["module"], "input":command["input"],
+                "sleep":command["sleep"], 'integration': self.technique['integration'] } for command in self.technique['commands']],
+            'external_id': self.technique['mitre_technique']['id'],
+        }
+
 
 class Techniques:
-    def __init__(self, path=config['TECHNIQUES_PATH'], api_url=config['API_URL'], access_token=None):
-        self.path = path
-        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) #todo fix trusting custom ca
-        self.api_url = api_url
-        self.access_token = access_token
+    def __init__(self, techniques = None):
+       self.techniques = techniques if techniques else []
 
+    @staticmethod
+    def __parse_technique_file(technique_path):
+        with open(technique_path) as yamlfile:
+            yaml_object = yaml.load(yamlfile, Loader=yaml.FullLoader)
+            technique = Technique(yaml_object)
+            return technique.parsed_reternal
 
-    async def import_config(self, mapping):
-        ''' Create mapping via Reternal API '''
-        headers = {'Authorization': f'Bearer {self.access_token}'}
-        async with self.session.post(f'{self.api_url}/mapping', json=mapping, headers=headers) as resp:
-            if not resp.status == 200:
-                error_message = await resp.json()
-                print(error_message)
-
-
-    def load_config(self):
+    @classmethod
+    def from_path(cls, path = '../mitre/techniques'):
         ''' Find all technique config files '''
-        config_files = glob.iglob(f'{self.path}/**/*.yml', recursive=True)
-        for config in config_files:
-            with open(config) as yamlfile:
-                yaml_object = yaml.load(yamlfile, Loader=yaml.FullLoader)
-                mapping_data = {
-                    'name': yaml_object['name'], 'platform': yaml_object['mitre_technique']['platform'],
-                    'reference': yaml_object.get('reference', None), 'description': yaml_object.get('description', None),
-                    'author': yaml_object.get('author', None),
-                    'integration': yaml_object['integration'],
-                    'external_id': yaml_object['mitre_technique']['id'],
-                    'commands': [{"category":"Mitre", "module": command["module"], "input":command["input"],
-                        "sleep":command["sleep"], 'integration': yaml_object['integration'] } for command in yaml_object['commands']],
-                    'external_id': yaml_object['mitre_technique']['id'],
-                }
-                yield mapping_data
-          
-    async def __aenter__(self):
-        return self
-    
-    async def __aexit__(self, exc_type, exc_value, exc_traceback):
-        ''' Close aiothttp session '''
-        await self.session.close()
+        technique_files = glob.iglob(f'{path}/**/*.yml', recursive=True)
+        techniques = [cls.__parse_technique_file(technique) for technique in technique_files]
+        return cls(techniques)
 
 
 async def import_techniques(*args, **kwargs):
     ''' Load all config files and import mapped techniques '''
-    async with Techniques(**kwargs) as tasks:
-        for config in tasks.load_config():
-            await tasks.import_config(config)
+    techniques = Techniques.from_path(config['TECHNIQUES_PATH'])
+    async with ReternalAPI(api_url=config['API_URL']) as reternal:
+        for technique in techniques.techniques:
+            await reternal.save('/mapping', technique)
 
 if __name__ == "__main__":
     asyncio.run(import_techniques())

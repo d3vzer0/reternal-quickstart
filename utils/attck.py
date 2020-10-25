@@ -1,9 +1,8 @@
-from environment import config
 import json
 import aiohttp
-import json
 import asyncio
-
+from environment import config
+from reternalapi import ReternalAPI
 
 def load_magma(path=config['MAGMA_PATH']):
     magma_mapping = { }
@@ -61,40 +60,6 @@ class Actor:
         return cls(actor)
 
 
-class ImportAttck:
-    def __init__(self, api_url=None, api_token=None):
-        ''' Import the MITRE ATTCK techniques and actors from Github '''
-        self.session = None
-        self.api_url = api_url
-        self.api_token = api_token
-
-    async def import_technique(self, technique):
-        ''' Create technique via Reternal API '''
-        headers = {'Authorization': f'Bearer {self.api_token}'}
-        async with self.session.post(f'{self.api_url}/mitre/techniques', json=technique, headers=headers) as resp:
-            if not resp.status == 200:
-                error_message = await resp.json()
-                print(error_message)
-
-
-    async def import_actor(self, actor):
-        ''' Create actor via Reternal API '''
-        headers = {'Authorization': f'Bearer {self.api_token}'}
-        async with self.session.post(f'{self.api_url}/mitre/actors', json=actor, headers=headers) as resp:
-            if not resp.status == 200:
-                error_message = await resp.json()
-                print(error_message)
-    
-    async def __aenter__(self):
-        ''' Initialize session and populate techniques and actors '''
-        self.session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
-        return self
-
-    async def __aexit__(self, exc_type, exc_value, exc_traceback):
-        ''' Close aiothttp session '''
-        await self.session.close()
-
-
 class MitreAttck:
     def __init__(self, actors = None, techniques = None):
         self.actors = actors
@@ -142,12 +107,12 @@ class MitreAttck:
 async def import_attck(*args, **kwargs):
     ''' Retrieve MITRE ATTCK database and format data '''
     mitre_attck = await MitreAttck.from_cti(config['CTI_URL'])
-    async with ImportAttck(api_url=config['API_URL'], api_token=config['API_TOKEN']) as importer:
+    async with ReternalAPI(api_url=config['API_URL'], api_token=config['API_TOKEN']) as reternal:
         for technique in mitre_attck.techniques.values():
-            await importer.import_technique(technique.technique)
+            await reternal.save('/mitre/techniques', technique.technique)
 
         for actor in mitre_attck.actors.values():
-            await importer.import_actor(actor.actor)
+            await reternal.save('/mitre/actors', actor.actor)
 
 if __name__ == "__main__":
     asyncio.run(import_attck())
