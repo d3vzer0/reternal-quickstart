@@ -1,23 +1,12 @@
-- name: Build API image
-  docker_image:
-    build: 
-      path: "{{ api.build_path }}"
-    force: "{{ api.recreate | default('yes') }}"
-    name: reternal-dev/api
-    tag: latest
-    source: build
-
 - name: Run API container
   docker_container:
     name: apitasks
-    image: "reternal-dev/api:latest"
+    image: "reternal/backend:{{ api.tag }}"
     state: started
     purge_networks: yes
     networks_cli_compatible: yes
     recreate: "{{ api.recreate | default('yes') }}"
-    entrypoint: ["celery", "-A", "app.workers", "worker", "-Q", "api"]
-    volumes:
-      - "{{ api.build_path }}/app:/home/reternal/app"
+    entrypoint: ["celery", "--app", "app.workers", "worker", "-Q", "api"]
     env:
       RT_CELERY_BACKEND: "{{ celery.backend }}"
       RT_MONGO_HOST: "mongodb"

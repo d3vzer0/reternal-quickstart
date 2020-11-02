@@ -1,19 +1,23 @@
 - name: Installing Docker dependencies
+  become: yes
   apt:
     name: ["apt-transport-https", "python3-pip", "ca-certificates", "curl", "gnupg-agent", "software-properties-common"]
     state: present
 
 - name: Add Docker gpg key
+  become: yes
   apt_key:
     url:  https://download.docker.com/linux/ubuntu/gpg
     state: present
 
 - name: Adding Docker repo
+  become: yes
   apt_repository:
     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     state: present
 
 - name: Installing Docker 
+  become: yes
   apt:
     name: ["docker-ce", "docker-ce-cli", "containerd.io"]
     state: present
