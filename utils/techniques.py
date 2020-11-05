@@ -8,10 +8,23 @@ from reternalapi import ReternalAPI
 
 class Technique:
     def __init__(self, technique = None):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+            technique: (todo): write your description
+        """
         self.technique = technique
 
     @property
     def parsed_reternal(self):
+        """
+        Return a dict with the baseline variables.
+
+        Args:
+            self: (todo): write your description
+        """
         return {
             'name': self.technique['name'], 
             'platform': self.technique['mitre_technique']['platform'],
@@ -28,10 +41,23 @@ class Technique:
 
 class Techniques:
     def __init__(self, techniques = None):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+            techniques: (todo): write your description
+        """
        self.techniques = techniques if techniques else []
 
     @staticmethod
     def __parse_technique_file(technique_path):
+        """
+        Parse a yaml file.
+
+        Args:
+            technique_path: (str): write your description
+        """
         with open(technique_path) as yamlfile:
             yaml_object = yaml.load(yamlfile, Loader=yaml.FullLoader)
             technique = Technique(yaml_object)

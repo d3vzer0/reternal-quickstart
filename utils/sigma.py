@@ -11,6 +11,13 @@ import copy
 # regular dict update operation or {**dict1, **dict2}
 
 def merge_dicts(default, override):    
+    """
+    Merge a dictionary of a dictionary of dicts.
+
+    Args:
+        default: (todo): write your description
+        override: (bool): write your description
+    """
     for key in override:
         if key in default:
             if isinstance(default[key], dict) and isinstance(override[key], dict):
@@ -22,10 +29,24 @@ def merge_dicts(default, override):
 
 class Sigma:
     def __init__(self, rules = None):
+        """
+        Initialize the rules.
+
+        Args:
+            self: (todo): write your description
+            rules: (str): write your description
+        """
         self.rules = rules if rules else []
 
     @classmethod
     def from_path(cls, path = '../mitre/validations'):
+        """
+        Create a yamlrules from a yaml file.
+
+        Args:
+            cls: (todo): write your description
+            path: (str): write your description
+        """
         sigma_rules = []
         config_files = glob.iglob(f'{path}/sigma/**/**/*.yml', recursive=True)
         for config in config_files:
