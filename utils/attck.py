@@ -5,6 +5,13 @@ from environment import config
 from reternalapi import ReternalAPI
 
 def load_magma(path=config['MAGMA_PATH']):
+    """
+    Load magma from a dict.
+
+    Args:
+        path: (str): write your description
+        config: (todo): write your description
+    """
     magma_mapping = { }
     with open(path, 'r') as magma_file:
         json_object = json.loads(magma_file.read())
@@ -15,6 +22,13 @@ def load_magma(path=config['MAGMA_PATH']):
 
 class Technique:
     def __init__(self, technique):
+        """
+        Initialize the device.
+
+        Args:
+            self: (todo): write your description
+            technique: (todo): write your description
+        """
         self.technique = technique
 
     @classmethod
@@ -36,6 +50,13 @@ class Technique:
         return cls(technique)
 
     def set_magma(self, magma_mapping):
+        """
+        This function tomodifier for an external variables.
+
+        Args:
+            self: (todo): write your description
+            magma_mapping: (str): write your description
+        """
         external_id = self.technique['external_references'][0]['external_id']
         if external_id in self.magma_mapping:
             mapped_usecase = self.magma_mapping[external_id]
@@ -45,10 +66,24 @@ class Technique:
 
 class Actor:
     def __init__(self, actor):
+        """
+        Initialize the actor.
+
+        Args:
+            self: (todo): write your description
+            actor: (float): write your description
+        """
         self.actor = actor
 
     @classmethod
     def from_cti(cls, actor):
+        """
+        Create an actor object from an actor.
+
+        Args:
+            cls: (todo): write your description
+            actor: (dict): write your description
+        """
         actor = {
             'actor_id': actor['id'], 
             'name': actor['name'],
@@ -62,6 +97,14 @@ class Actor:
 
 class MitreAttck:
     def __init__(self, actors = None, techniques = None):
+        """
+        Initialize the consumer.
+
+        Args:
+            self: (todo): write your description
+            actors: (float): write your description
+            techniques: (todo): write your description
+        """
         self.actors = actors
         self.techniques = techniques
 
@@ -84,6 +127,13 @@ class MitreAttck:
 
     @classmethod
     async def from_cti(cls, cti_url='https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json'):
+          """
+          Create a cts : class
+
+          Args:
+              cls: (todo): write your description
+              cti_url: (str): write your description
+          """
         # Since github does not return a valid json response header
         # we have to load the response as text first and parse afterwards
         async with aiohttp.ClientSession() as session:
