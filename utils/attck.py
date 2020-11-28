@@ -1,10 +1,9 @@
 import json
 import aiohttp
 import asyncio
-from environment import config
-from reternalapi import ReternalAPI
+from .reternalapi import ReternalAPI
 
-def load_magma(path=config['MAGMA_PATH']):
+def load_magma(path='../mitre/magma_mapping.json'):
     magma_mapping = { }
     with open(path, 'r') as magma_file:
         json_object = json.loads(magma_file.read())
@@ -106,8 +105,8 @@ class MitreAttck:
 
 async def import_attck(*args, **kwargs):
     ''' Retrieve MITRE ATTCK database and format data '''
-    mitre_attck = await MitreAttck.from_cti(config['CTI_URL'])
-    async with ReternalAPI(api_url=config['API_URL'], api_token=config['API_TOKEN']) as reternal:
+    mitre_attck = await MitreAttck.from_cti(kwargs['cti_url'])
+    async with ReternalAPI(api_url=kwargs['api_url'], api_token=kwargs['access_token']) as reternal:
         for technique in mitre_attck.techniques.values():
             await reternal.save('/mitre/techniques', technique.technique)
 

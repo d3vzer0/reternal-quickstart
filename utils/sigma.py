@@ -1,6 +1,5 @@
 
-from environment import config
-from reternalapi import ReternalAPI
+from .reternalapi import ReternalAPI
 import glob
 import yaml
 import asyncio
@@ -46,8 +45,8 @@ class Sigma:
 
 async def import_sigma(*args, **kwargs):
     ''' Load all config files and import mapped techniques '''
-    sigma = Sigma.from_path(config['VALIDATIONS_PATH'])
-    async with ReternalAPI(api_url=config['API_URL']) as reternal:
+    sigma = Sigma.from_path(kwargs['path'])
+    async with ReternalAPI(kwargs['api_url'], api_token=kwargs['access_token']) as reternal:
         for rule in sigma.rules:
             await reternal.save('/sigma', rule)
 

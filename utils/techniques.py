@@ -3,8 +3,7 @@ import glob
 import yaml
 import asyncio
 import aiohttp
-from environment import config
-from reternalapi import ReternalAPI
+from .reternalapi import ReternalAPI
 
 class Technique:
     def __init__(self, technique = None):
@@ -47,8 +46,8 @@ class Techniques:
 
 async def import_techniques(*args, **kwargs):
     ''' Load all config files and import mapped techniques '''
-    techniques = Techniques.from_path(config['TECHNIQUES_PATH'])
-    async with ReternalAPI(api_url=config['API_URL']) as reternal:
+    techniques = Techniques.from_path(kwargs['path'])
+    async with ReternalAPI(api_url=kwargs['api_url'], api_token=kwargs['access_token']) as reternal:
         for technique in techniques.techniques:
             await reternal.save('/mapping', technique)
 

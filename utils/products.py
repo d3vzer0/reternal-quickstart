@@ -1,7 +1,6 @@
 import json
 import asyncio
-from environment import config
-from reternalapi import ReternalAPI
+from .reternalapi import ReternalAPI
 
 
 class Products:
@@ -17,8 +16,8 @@ class Products:
         return cls(products)
 
 async def import_products(*args, **kwargs):
-    products = Products.from_file(config['PRODUCTS_PATH'])
-    async with ReternalAPI(api_url=config['API_URL']) as reternal:
+    products = Products.from_file(kwargs['path'])
+    async with ReternalAPI(api_url=kwargs['api_url'], api_token=kwargs['access_token']) as reternal:
         for product in products.products:
             await reternal.save('/products', product)
 
