@@ -15,6 +15,8 @@ RE:TERNAL is a centralised purple team orchestration service to manage third-par
 red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
 the compose file in order to set up the reternal platform via docker. 
 
+There is a public preview available running the latest version @ https://reternal.d3vzer0.com (Github login required). Executing/saving campaigns and interacting with the C2 modules is disabled (for obvious reasons ;)).
+
 
 
 ## Reternal components
